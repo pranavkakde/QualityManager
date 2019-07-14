@@ -3,4 +3,4 @@ This is an open source test management tool written using ReactJS, NodeJS, Expre
 
 Refer to Client folder for ReactJS based client.
 
-Refer to Services folder for Services that any client can call.
+Refer to Services folder for Services that can be used by any client.
