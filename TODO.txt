@@ -1,0 +1,8 @@
+Split services into multiple folders
+For each services
+1) Create folder for service code
+2) Refer to ReportServer folder
+
+update gateway;
+to validate JWT
+to check the verb as per registry
