@@ -9,6 +9,8 @@ var port = process.env.PORT || '7777'
 var app = express();
 var user = require('./routes/user')
 var group = require('./routes/group')
+var uservalidator = require('./routes/validation/user')
+const expressValidator = require('express-validator')
 
 //Setup app
 app.use(express.static('public'));  
@@ -17,8 +19,10 @@ app.use(bodyParser.urlencoded({extended:true, limit:'5mb'}));
 app.use(bodyParser.text());                                    
 app.use(bodyParser.json({ type: 'application/json'}));
 app.use(cors())
+//app.use(expressValidator())
 
- // create a rotating access log
+
+// create a rotating access log
 var accessLogStream = rfs('access.log', {
     interval: '1d', // rotate daily
     path: path.join(__dirname, 'log')
@@ -29,10 +33,12 @@ app.use(morgan('combined', { stream: accessLogStream }))
 
 //########### User management routes ###############
 
-app.route("/user/:id")
-    .get(user.getUser)
+app.route("/user/:userid")
+    .get(expressValidator.oneOf(uservalidator.validate(user.getUser)),user.getUser)
     .delete(user.deleteUser)
-    .put(user.updateUser)
+    .put(expressValidator.oneOf(uservalidator.validate(user.updateUser)),user.updateUser)
+    
+app.route("/user")
     .post(user.addUser)
 
 app.route("/users")
@@ -40,7 +46,7 @@ app.route("/users")
 
 //################## Group Management Services ################
 
-app.route("/group/:id")
+app.route("/group/:groupid")
     .get(group.getGroup)
     .delete(group.deleteGroup)
     .put(group.updateGroup)
