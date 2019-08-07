@@ -1,2 +1,3 @@
-/Services/log
-/Services/node_modules
+/Services/GatewayServices/log
+/Services/GatewayServices/node_modules
+Services/GatewayServices/node_modules/
