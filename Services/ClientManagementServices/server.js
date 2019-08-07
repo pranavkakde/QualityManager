@@ -28,16 +28,16 @@ app.use(morgan('combined', { stream: accessLogStream }))
 
 //########### Client management routes ###############
 
-app.get("/client/:clientid", clientvalidation.validate('getClient'), client.getClient)    
-app.delete("/client/:clientid", clientvalidation.validate('deleteClient'), client.deleteClient)
-app.put("/client/:clientid", clientvalidation.validate('updateClient'), client.updateClient)
+app.get("/client/:clientname", clientvalidation.validate('getClient'), client.getClient)    
+app.delete("/client/:clientname", clientvalidation.validate('deleteClient'), client.deleteClient)
+app.put("/client/:clientname", clientvalidation.validate('updateClient'), client.updateClient)
 app.post("/client/",clientvalidation.validate('addClient'),client.addClient)
     //.get(client.getAllClients)
 app.post("/gettoken", clientvalidation.validate('gettoken'), client.gettoken)
 app.post("/validatetoken",clientvalidation.validate('validatetoken'), client.validatetoken)
 
 app.get("/isalive",(req,res)=>{
-  res.send("ok").status(200);
+  res.status(200);
 })
 
 app.listen(port,()=>{console.log(`Starting server on port ${port}`)})
