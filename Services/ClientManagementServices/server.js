@@ -8,6 +8,8 @@ var port = process.env.PORT || '7778'
 var app = express();
 var client = require('./routes/client')
 var clientvalidation = require('./routes/validation/client')
+const expressSwagger = require('express-swagger-generator')(app);
+
 //Setup app
 app.use(express.static('public'));  
 app.use(bodyParser.json({limit:'5mb'}));    
@@ -26,6 +28,34 @@ var accessLogStream = rfs('access.log', {
 // setup the logger
 app.use(morgan('combined', { stream: accessLogStream }))
 
+let options = {
+  swaggerDefinition: {
+      info: {
+          description: 'This is a sample server',
+          title: 'Swagger',
+          version: '1.0.0',
+      },
+      host: `localhost:${port}`,
+      basePath: '/v1',
+      produces: [
+          "application/json",
+          "application/xml"
+      ],
+      schemes: ['http', 'https'],
+      securityDefinitions: {
+          JWT: {
+              type: 'apiKey',
+              in: 'header',
+              name: 'Authorization',
+              description: "",
+          }
+      }
+  },
+  basedir: __dirname, //app absolute path
+  files: ['./routes/*.js'] //Path to the API handle folder
+};
+expressSwagger(options)
+
 //########### Client management routes ###############
 
 app.get("/client/:clientname", clientvalidation.validate('getClient'), client.getClient)    
@@ -43,3 +73,10 @@ app.get("/isalive",(req,res)=>{
 app.listen(port,()=>{console.log(`Starting server on port ${port}`)})
 
 module.exports = app
+
+
+
+
+
+
+app.listen(3000);

@@ -4,7 +4,7 @@ var lib = require('../lib/common')
 var bcrypt = require('bcrypt')
 var jwt = require('jsonwebtoken')
 
-var { check, param, query, cookies, header, body, validationResult } = require('express-validator')
+var {validationResult } = require('express-validator')
 
 function getAsciiPwd(password){
     return Buffer.from(password,'base64').toString('ascii')
@@ -37,7 +37,13 @@ var isClient=(async(clientname, secretkey)=>{
         });
     })
 })
-
+/**
+ * This function comment is parsed by doctrine
+ * @route GET /client/:clientname
+ * @group client - Operations about client
+ * @returns {object} 200 - An array of client info
+ * @returns {Error}  default - Unexpected error
+ */
 exports.getClient=(req,res)=>{
     try{
         const errors = validationResult(req);
@@ -55,7 +61,13 @@ exports.getClient=(req,res)=>{
         res.status(500).json(err)
     }
 }
-
+/**
+ * This function comment is parsed by doctrine
+ * @route DELETE /client/:clientname
+ * @group client - Operations about client
+ * @returns {object} 200 - An array of client info
+ * @returns {Error}  default - Unexpected error
+ */
 exports.deleteClient=(req,res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

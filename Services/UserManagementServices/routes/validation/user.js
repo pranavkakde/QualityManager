@@ -1,4 +1,4 @@
-const { body, param } = require('express-validator/check')
+const { body, param } = require('express-validator')
 
 exports.validate = (method) => {
     switch (method) {
@@ -6,25 +6,25 @@ exports.validate = (method) => {
        return [ 
           body('UserName', 'UserName doesn\'t exists').exists(),
           body('Password', 'Invalid email').exists().isEmail(),
-          body('GroupId', 'group id field is missing').required().isInt(),
+          body('GroupId', 'group id field is missing').exists(),
          ]   
       }
       case 'updateUser':{
         return [
-            param('userid', 'userid parameter is required').required().isInt(), 
+            param('username', 'username parameter is required').exists(), 
             body('UserName', 'UserName doesn\'t exists').exists(),
             body('Password', 'Invalid email').exists().isEmail(),
-            body('GroupId', 'Group id field is required').required().isInt(),
+            body('GroupId', 'Group id field is required').exists(),
             ]   
       }
       case 'getUser':{
         return [
-            param('userid',  'userid parameter is missing').required().isInt(), 
+            param('username',  'username parameter is missing').exists(), 
             ]   
       }
       case 'deleteUser':{
         return [
-            param('userid',  'userid parameter is missing').required().isInt(), 
+            param('username',  'username parameter is missing').exists(), 
             ]   
       }
     }

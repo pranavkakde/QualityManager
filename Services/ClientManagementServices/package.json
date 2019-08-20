@@ -24,6 +24,7 @@
     "cachejsorm": "^1.0.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-swagger-generator": "^1.1.15",
     "express-validator": "^6.1.1",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
@@ -31,6 +32,7 @@
     "rotating-file-stream": "^1.4.2"
   },
   "devDependencies": {
+    "eslint": "^6.2.1",
     "mocha": "^6.1.4",
     "supertest": "^4.0.2"
   }
