@@ -4,7 +4,7 @@ var lib = require('../lib/common')
 var bcrypt = require('bcrypt')
 var jwt = require('jsonwebtoken')
 
-var { check, param, query, cookies, header, body, validationResult } = require('express-validator')
+var {validationResult } = require('express-validator')
 
 function getAsciiPwd(password){
     return Buffer.from(password,'base64').toString('ascii')
