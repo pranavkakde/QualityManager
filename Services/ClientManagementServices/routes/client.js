@@ -38,11 +38,18 @@ var isClient=(async(clientname, secretkey)=>{
     })
 })
 /**
- * This function comment is parsed by doctrine
- * @route GET /client/:clientname
- * @group client - Operations about client
- * @returns {object} 200 - An array of client info
- * @returns {Error}  default - Unexpected error
+ * @route GET /client/{clientname}
+ * @param {string} clientname.path.required client name 
+ * @headers {string} secretkey.required
+ * @group Client Management Services
+ * @operationId getClient
+ * @produces application/json
+ * @consumes application/json
+ * @returns {Client.model} 200
+ * @returns {Response.model} 422 - validation failed
+ * @returns {Response.model} 406 - authorization failed 
+ * @returns {Error.model}  500 - Unexpected error
+ * @security JWT
  */
 exports.getClient=(req,res)=>{
     try{
@@ -62,11 +69,17 @@ exports.getClient=(req,res)=>{
     }
 }
 /**
- * This function comment is parsed by doctrine
- * @route DELETE /client/:clientname
- * @group client - Operations about client
- * @returns {object} 200 - An array of client info
- * @returns {Error}  default - Unexpected error
+ * @route DELETE /client/{clientname}
+ * @param {string} clientname.path.required
+ * @group Client Management Services
+ * @operationId deleteClient
+ * @produces application/json
+ * @consumes application/json
+ * @returns {Response.model} 200 - successful message
+ * @returns {Response.model} 422 - validation failed
+ * @returns {Response.model} 406 - authorization failed 
+ * @returns {Error.model}  500 - Unexpected error
+ * @security JWT
  */
 exports.deleteClient=(req,res)=>{
     const errors = validationResult(req);
@@ -92,7 +105,20 @@ exports.deleteClient=(req,res)=>{
         res.status(406).json(error);
     })
 }
-
+/**
+ * @route PUT /client/{clientname}
+ * @param {Client.model} client.body.required
+ * @param {string} clientname.path.required
+ * @group Client Management Services
+ * @operationId updateClient
+ * @produces application/json
+ * @consumes application/json
+ * @returns {Response.model} 200 - successful message
+ * @returns {Response.model} 422 - validation failed
+ * @returns {Response.model} 406 - authorization failed 
+ * @returns {Error.model}  500 - Unexpected error
+ * @security JWT
+ */
 exports.updateClient=(req,res)=>{
     try{
         const errors = validationResult(req);
@@ -126,7 +152,17 @@ exports.updateClient=(req,res)=>{
         res.status(500).jsonp(err)
     }
 }
-
+/**
+ * @route POST /client
+ * @param {Client.model} client.body.required
+ * @group Client Management Services
+ * @operationId addClient
+ * @produces application/json
+ * @consumes application/json
+ * @returns {Response.model} 201 - successful message
+ * @returns {Error.model}  500 - Unexpected error
+ * @security JWT
+ */
 exports.addClient=(req,res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -162,7 +198,19 @@ exports.getAllClients=(req,res)=>{
         }
     })
 }
-
+/**
+ * @route POST /gettoken
+ * @group Client Management Services
+ * @param {Client.model} clientname.body.required
+ * @operationId getToken
+ * @produces application/json
+ * @consumes application/json
+ * @returns {token.model} 200 - successful message
+ * @returns {tokenResponse.model} 422 - validation failed
+ * @returns {tokenResponse.model} 406 - authorization failed 
+ * @returns {Error.model}  500 - Unexpected error
+ * @security JWT
+ */
 exports.gettoken=(req,res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -188,7 +236,19 @@ exports.gettoken=(req,res)=>{
         res.status(406).json(error);
     })    
   }
-
+/**
+ * @route POST /validatetoken
+ * @group Client Management Services
+ * @param {token.model} token.body.required
+ * @operationId getToken
+ * @produces application/json
+ * @consumes application/json
+ * @returns {tokenResponse.model} 200 - token is verified
+ * @returns {tokenResponse.model} 400 - token not verified
+ * @returns {tokenResponse.model} 406 - authorization failed 
+ * @returns {Error.model}  500 - Unexpected error
+ * @security JWT
+ */
 exports.validatetoken=(req,res)=>{
     var token = req.body.token
     var isverified = jwt.verify(token,Buffer.from('clientkey').toString('base64'))
