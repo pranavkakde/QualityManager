@@ -31,12 +31,12 @@ app.use(morgan('combined', { stream: accessLogStream }))
 let options = {
   swaggerDefinition: {
       info: {
-          description: 'This is a sample server',
+          description: 'swagger specification for Client Management',
           title: 'Swagger',
           version: '1.0.0',
       },
       host: `localhost:${port}`,
-      basePath: '/v1',
+      basePath: '/',
       produces: [
           "application/json",
           "application/xml"
@@ -46,13 +46,13 @@ let options = {
           JWT: {
               type: 'apiKey',
               in: 'header',
-              name: 'Authorization',
+              name: 'secretkey',
               description: "",
           }
       }
   },
   basedir: __dirname, //app absolute path
-  files: ['./routes/*.js'] //Path to the API handle folder
+  files: ['./routes/*.js', './doc/api-schema.js'] //Path to the API handle folder
 };
 expressSwagger(options)
 
