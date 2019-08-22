@@ -5,7 +5,7 @@ exports.validate = (method) => {
       case 'addUser': {
        return [ 
           body('UserName', 'UserName doesn\'t exists').exists(),
-          body('Password', 'Invalid email').exists().isEmail(),
+          body('Password', 'Password doesn\'t exists').exists(),
           body('GroupId', 'group id field is missing').exists(),
          ]   
       }
@@ -13,7 +13,7 @@ exports.validate = (method) => {
         return [
             param('username', 'username parameter is required').exists(), 
             body('UserName', 'UserName doesn\'t exists').exists(),
-            body('Password', 'Invalid email').exists().isEmail(),
+            body('Password', 'Password doesn\'t exists').exists(),
             body('GroupId', 'Group id field is required').exists(),
             ]   
       }

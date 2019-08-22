@@ -9,7 +9,11 @@ var app = express();
 var user = require('./routes/user')
 var group = require('./routes/group')
 var uservalidator = require('./routes/validation/user')
-var uservalidator = require('./routes/validation/group')
+var groupvalidator = require('./routes/validation/group')
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./doc/doc.json');
+ 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //Setup app
 app.use(express.static('public'));  
@@ -39,10 +43,10 @@ app.get("/users",user.getAllUsers)
 
 //################## Group Management Services ################
 
-app.get("/group/:groupname", groupvalidator.validate('getGroup'), group.getGroup)
-app.delete("/group/:groupname",groupvalidator.validate('deleteGroup'),group.deleteGroup)
-app.put("/group/:groupname",groupvalidator.validate('updateGroup'),group.updateGroup)
-app.post("/group/:groupname",groupvalidator.validate('addGroup'),group.addGroup)
+app.get("/group/:groupid", groupvalidator.validate('getGroup'), group.getGroup)
+app.delete("/group/:groupid",groupvalidator.validate('deleteGroup'),group.deleteGroup)
+app.put("/group/:groupid",groupvalidator.validate('updateGroup'),group.updateGroup)
+app.post("/group",groupvalidator.validate('addGroup'),group.addGroup)
 
 app.get("/groups", group.getAllGroups)
 

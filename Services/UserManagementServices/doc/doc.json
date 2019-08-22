@@ -1,40 +1,23 @@
 {
     "swagger": "2.0",
     "info": {
-      "description": "This is a spec for User and Group Management services",
+      "description": "This is the spec for User and Group Management services",
       "version": "1.0.0",
-      "title": "User Management Services",
-      "termsOfService": "http://swagger.io/terms/",
+      "title": "User and Group Management Services",
       "contact": {
         "email": "pranavkakde@gmail.com"
-      },
-      "license": {
-        "name": "Apache 2.0",
-        "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
       }
     },
-    "host": "localhost",
-    "basePath": "",
+    "host": "localhost:7777",
+    "basePath": "/",
     "tags": [
       {
         "name": "user",
-        "description": "",
-        "externalDocs": {
-          "description": "Find out more",
-          "url": "http://localhost"
-        }
-      },
-      {
-        "name": "User Management",
-        "description": "user mgmt"
+        "description": "user management services"
       },
       {
         "name": "group",
-        "description": "Operations about group",
-        "externalDocs": {
-          "description": "Find out more about group",
-          "url": "http://localhost"
-        }
+        "description": "group management services"
       }
     ],
     "schemes": [
@@ -48,17 +31,16 @@
             "user"
           ],
           "summary": "Create user",
-          "description": "This can only be done by the logged in user.",
+          "description": "add user details",
           "operationId": "addUser",
           "produces": [
-            "application/xml",
             "application/json"
           ],
           "parameters": [
             {
               "in": "body",
               "name": "body",
-              "description": "Created user object",
+              "description": "User object",
               "required": true,
               "schema": {
                 "$ref": "#/definitions/User"
@@ -66,74 +48,11 @@
             }
           ],
           "responses": {
-            "default": {
-              "description": "successful operation"
-            }
-          }
-        }
-      },
-      "/user/createWithArray": {
-        "post": {
-          "tags": [
-            "user"
-          ],
-          "summary": "Creates list of users with given input array",
-          "description": "",
-          "operationId": "createUsersWithArrayInput",
-          "produces": [
-            "application/xml",
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "in": "body",
-              "name": "body",
-              "description": "List of user object",
-              "required": true,
+            "201": {
+              "description": "User record inserted succesfully",
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/definitions/User"
-                }
+                "$ref": "#/definitions/User"
               }
-            }
-          ],
-          "responses": {
-            "default": {
-              "description": "successful operation"
-            }
-          }
-        }
-      },
-      "/user/createWithList": {
-        "post": {
-          "tags": [
-            "user"
-          ],
-          "summary": "Creates list of users with given input array",
-          "description": "",
-          "operationId": "createUsersWithListInput",
-          "produces": [
-            "application/xml",
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "in": "body",
-              "name": "body",
-              "description": "List of user object",
-              "required": true,
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/definitions/User"
-                }
-              }
-            }
-          ],
-          "responses": {
-            "default": {
-              "description": "successful operation"
             }
           }
         }
@@ -147,7 +66,6 @@
           "description": "",
           "operationId": "loginUser",
           "produces": [
-            "application/xml",
             "application/json"
           ],
           "parameters": [
@@ -200,7 +118,6 @@
           "description": "",
           "operationId": "logoutUser",
           "produces": [
-            "application/xml",
             "application/json"
           ],
           "parameters": [],
@@ -218,32 +135,34 @@
           ],
           "summary": "Get user by user name",
           "description": "",
-          "operationId": "getUserByName",
+          "operationId": "getUser",
           "produces": [
-            "application/xml",
             "application/json"
           ],
           "parameters": [
             {
               "name": "username",
               "in": "path",
-              "description": "The name that needs to be fetched. Use user1 for testing. ",
+              "description": "user name",
               "required": true,
               "type": "string"
             }
           ],
           "responses": {
             "200": {
-              "description": "successful operation",
+              "description":"successful operation",
               "schema": {
                 "$ref": "#/definitions/User"
               }
             },
             "400": {
-              "description": "Invalid username supplied"
+              "description": "User details not found"
             },
-            "404": {
-              "description": "User not found"
+            "500": {
+              "description": "internal server error"
+            },
+            "422": {
+              "description": "validation failed"
             }
           }
         },
@@ -251,25 +170,24 @@
           "tags": [
             "user"
           ],
-          "summary": "Updated user",
-          "description": "This can only be done by the logged in user.",
+          "summary": "update user details",
+          "description": "update user details",
           "operationId": "updateUser",
           "produces": [
-            "application/xml",
             "application/json"
           ],
           "parameters": [
             {
               "name": "username",
               "in": "path",
-              "description": "name that need to be updated",
+              "description": "user name to be updated",
               "required": true,
               "type": "string"
             },
             {
               "in": "body",
               "name": "body",
-              "description": "Updated user object",
+              "description": "User object",
               "required": true,
               "schema": {
                 "$ref": "#/definitions/User"
@@ -277,11 +195,17 @@
             }
           ],
           "responses": {
-            "400": {
-              "description": "Invalid user supplied"
+            "200": {
+              "description": "User record updated succesfully"
             },
-            "404": {
-              "description": "User not found"
+            "400": {
+              "description": "user details not found"
+            },
+            "422": {
+              "description": "Validations failed"
+            },
+            "500": {
+              "description": "internal server error"
             }
           }
         },
@@ -290,10 +214,9 @@
             "user"
           ],
           "summary": "Delete user",
-          "description": "This can only be done by the logged in user.",
+          "description": "Delete user details",
           "operationId": "deleteUser",
           "produces": [
-            "application/xml",
             "application/json"
           ],
           "parameters": [
@@ -306,185 +229,204 @@
             }
           ],
           "responses": {
-            "400": {
-              "description": "Invalid username supplied"
+            "200": {
+              "description": "User record deleted successfully"
             },
-            "404": {
-              "description": "User not found"
+            "400": {
+              "description": "User details not found"
+            },
+            "500": {
+              "description": "internal server error"
+            }
+          }
+        }
+      },
+      "/group": {
+        "post": {
+          "tags": [
+            "group"
+          ],
+          "summary": "Create group",
+          "description": "add group details",
+          "operationId": "addGroup",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "User object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Group"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Group record inserted succesfully",
+              "schema": {
+                "$ref": "#/definitions/Group"
+              }
+            },
+            "400": {
+              "description": "Group record not found"
+            },
+            "500": {
+              "description": "internal server error"
+            }
+          }
+        }
+      },
+      "/group/{groupid}": {
+        "get": {
+          "tags": [
+            "group"
+          ],
+          "summary": "Get group by group id",
+          "description": "get group id",
+          "operationId": "getGroup",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "groupid",
+              "in": "path",
+              "description": "Group Id",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description" : "successful operation",
+              "schema": {
+                "$ref": "#/definitions/Group"
+              }
+            },
+            "400": {
+              "description": "Group details not found"
+            },
+            "500": {
+              "description": "internal server error"
+            },
+            "422": {
+              "description": "validation failed"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "group"
+          ],
+          "summary": "update group details",
+          "description": "update group details",
+          "operationId": "updateGroup",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "groupid",
+              "in": "path",
+              "description": "group idto be updated",
+              "required": true,
+              "type": "integer"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Group object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Group"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Group record updated succesfully",
+              "schema": {
+                "$ref": "#/definitions/Group"
+              }
+            },
+            "400": {
+              "description": "group details not found"
+            },
+            "422": {
+              "description": "Validations failed"
+            },
+            "500": {
+              "description": "internal server error"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "group"
+          ],
+          "summary": "Delete group",
+          "description": "Delete group details",
+          "operationId": "deleteGroup",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "groupid",
+              "in": "path",
+              "description": "The id that needs to be deleted",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Group record deleted successfully"
+            },
+            "400": {
+              "description": "Group details not found"
+            },
+            "500": {
+              "description": "internal server error"
             }
           }
         }
       }
     },
     "securityDefinitions": {
-      "petstore_auth": {
-        "type": "oauth2",
-        "authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
-        "flow": "implicit",
-        "scopes": {
-          "write:pets": "modify pets in your account",
-          "read:pets": "read your pets"
-        }
-      },
       "api_key": {
         "type": "apiKey",
-        "name": "api_key",
+        "name": "token",
         "in": "header"
       }
     },
     "definitions": {
-      "Order": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "petId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "quantity": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "shipDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "status": {
-            "type": "string",
-            "description": "Order Status",
-            "enum": [
-              "placed",
-              "approved",
-              "delivered"
-            ]
-          },
-          "complete": {
-            "type": "boolean",
-            "default": false
-          }
-        },
-        "xml": {
-          "name": "Order"
-        }
-      },
-      "Category": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "name": {
-            "type": "string"
-          }
-        },
-        "xml": {
-          "name": "Category"
-        }
-      },
       "User": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
           "username": {
-            "type": "string"
-          },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "email": {
             "type": "string"
           },
           "password": {
             "type": "string"
           },
-          "phone": {
-            "type": "string"
-          },
-          "userStatus": {
-            "type": "integer",
-            "format": "int32",
-            "description": "User Status"
+          "groupid": {
+            "type": "integer"
           }
-        },
-        "xml": {
-          "name": "User"
         }
       },
-      "Tag": {
+      "Group": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "name": {
+          "groupname": {
             "type": "string"
+          },
+          "groupid": {
+            "type": "integer"
           }
-        },
-        "xml": {
-          "name": "Tag"
-        }
-      },
-      "Pet": {
-        "type": "object",
-        "required": [
-          "name",
-          "photoUrls"
-        ],
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "category": {
-            "$ref": "#/definitions/Category"
-          },
-          "name": {
-            "type": "string",
-            "example": "doggie"
-          },
-          "photoUrls": {
-            "type": "array",
-            "xml": {
-              "name": "photoUrl",
-              "wrapped": true
-            },
-            "items": {
-              "type": "string"
-            }
-          },
-          "tags": {
-            "type": "array",
-            "xml": {
-              "name": "tag",
-              "wrapped": true
-            },
-            "items": {
-              "$ref": "#/definitions/Tag"
-            }
-          },
-          "status": {
-            "type": "string",
-            "description": "pet status in the store",
-            "enum": [
-              "available",
-              "pending",
-              "sold"
-            ]
-          }
-        },
-        "xml": {
-          "name": "Pet"
         }
       },
       "ApiResponse": {
@@ -502,9 +444,5 @@
           }
         }
       }
-    },
-    "externalDocs": {
-      "description": "Find out more about Swagger",
-      "url": "http://swagger.io"
     }
   }

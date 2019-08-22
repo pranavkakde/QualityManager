@@ -1,54 +1,107 @@
 var groupModel = require('../Model/group')
 var config = require('../config/config')
-
+var {validationResult } = require('express-validator')
+var lib = require('../lib/common')
 groupModel.setConfig(config)
 
 exports.getGroup=(req,res)=>{
-    groupModel.find({GroupId: req.params.groupid},(err,data)=>{
-        if(err){
-            res.send(err);
-        }else{
-            res.send(data);
+    try{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(422).json({ error: errors.array() });
+            return;
         }
-    })
+        groupModel.find({GroupId: req.params.groupid},(err,data)=>{
+            if(err){
+                if(lib.isEmptyObject(err)){
+                    res.status(400).json({error: `Group details not found for ${req.params.groupid}`});
+                }else{
+                    res.status(500).json({error: "internal server error", err});
+                }
+            }else{
+                res.status(200).json(data);
+            }
+        })
+    }catch(err){
+        res.status(500).json({error: "internal server error", err});
+    }
 }
-
+ 
 exports.deleteGroup=(req,res)=>{
-    groupModel.delete({GroupId: req.params.groupid},(err,data)=>{
-        if(err){
-            res.send(err);
-        }else{
-            res.send({message: "Group record deleted succesfully"});
+    try{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(422).json({ error: errors.array() });
+            return;
         }
-    })
+        groupModel.delete({GroupId: req.params.groupid},(err,data)=>{
+            if(err){
+                if(lib.isEmptyObject(err)){
+                    res.status(400).json({error: `Group details not found for ${req.params.groupid}`});
+                }else{
+                    res.status(500).json({error: "internal server error", err});
+                }
+            }else{
+                res.status(200).json({message: "Group record deleted succesfully"});
+            }
+        })
+    }catch(err){
+        res.status(500).json({error: "internal server error", err});
+    }
 }
 
 exports.updateGroup=(req,res)=>{
-    groupModel.update({GroupId: req.body.groupid},{GroupName: req.body.groupname},(err,data)=>{
-        if(err){
-            res.send(err);
-        }else{
-            res.send({message: "Group record updated succesfully"});
+    try{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(422).json({ error: errors.array() });
+            return;
         }
-    })
+        groupModel.update({GroupId: req.params.groupid},{GroupName: req.body.groupname},(err,data)=>{
+            if(err){
+                if(lib.isEmptyObject(err)){
+                    res.status(400).json({error: `Group details not found for ${req.params.groupid}`});
+                }else{
+                    res.status(500).json({error: "internal server error", err});
+                }
+            }else{
+                res.status(200).json({message: "Group record updated succesfully"});
+            }
+        })
+    }catch(err){
+        res.status(500).json({error: "internal server error", err});
+    }
 }
 
 exports.addGroup=(req,res)=>{
-    groupModel.insert({GroupId: req.body.groupid, GroupName: req.body.groupname},(err,data)=>{
-        if(err){
-            res.send(err);
-        }else{
-            res.send({message: "Group record inserted succesfully"});
+    try{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(422).json({ error: errors.array() });
+            return;
         }
-    })
+        groupModel.insert({GroupName: req.body.groupname},(err,data)=>{
+            if(err){
+                if(lib.isEmptyObject(err)){
+                    res.status(400).json({error: "error in inserting group data"});
+                }else{
+                    res.status(500).json({error: "internal server error", err});
+                }
+            }else{
+                res.status(201).json({message: "Group record inserted succesfully"});
+            }
+        })
+    }catch(err){
+        res.status(500).json({error: "internal server error", err});
+    }
 }
 
 exports.getAllGroups=(req,res)=>{
     groupModel.find({},(err,data)=>{
         if(err){
-            res.send(err);
+            res.status(400).json(err);
         }else{
-            res.send(data);
+            res.status(200).json(data);
         }
     })
 }
