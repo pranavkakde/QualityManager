@@ -27,5 +27,17 @@ exports.validate = (method) => {
             param('username',  'username parameter is missing').exists(), 
             ]   
       }
+      case 'login':{
+        return [
+          body('UserName', 'UserName doesn\'t exists').exists(),
+          body('Password', 'Password doesn\'t exists').exists(),
+          ]
+      }
+      case 'logout': {
+        return [
+          body('UserName', 'UserName doesn\'t exists').exists(),
+          body('Password', 'Password doesn\'t exists').exists(),
+          ]
+      }
     }
   }
