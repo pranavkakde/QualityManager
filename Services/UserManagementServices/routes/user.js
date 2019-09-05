@@ -10,13 +10,13 @@ function getAsciiPwd(password){
 function getBase64Pwd(password){
     return Buffer.from(password).toString('base64')
 }
-exports.isUser=(async(username, secretkey)=>{
-    return new Promise(async(resolve, reject)=>{
+function isUser(username, secretkey){
+    return new Promise((resolve, reject)=>{
         userModel.setConfig(config)
-        await userModel.find({UserName: username}, (err,data)=>{
+        userModel.find({UserName: username}, (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
-                    reject({error:"user name and password combination not found in database"})
+                    reject({error:"user name not found in database"})
                 }else{
                     reject({error:"internal server error", err})
                 }
@@ -33,7 +33,7 @@ exports.isUser=(async(username, secretkey)=>{
             }
         });
     })
-})
+}
 exports.getUser= (req,res)=>{
     try{
         const errors = validationResult(req);
@@ -43,7 +43,7 @@ exports.getUser= (req,res)=>{
         }
         userModel.setConfig(config)
         userModel.find({UserName: req.params.username},(err,data)=>{
-            if(err){
+            if(data){
                 if(lib.isEmptyObject(err)){
                     res.status(400).json({error: `user details not found for ${req.params.username}`});
                 }else{
@@ -94,8 +94,8 @@ exports.updateUser=(req,res)=>{
                 return ({error: "secretkey encrypytion failed"})
             }
         });
-        isUser(req.params.clientname,encryptedSecretKey).then(data =>{
-            userModel.update({UserName: req.params.username},{UserName: req.body.UserName, Password: encryptedSecretKey, GroupId: req.body.GroupId},(err,data)=>{
+        isUser(req.params.username,encryptedSecretKey).then(data =>{
+            userModel.update({UserName: req.params.username},{UserName: req.body.UserName, Password: encryptedSecretKey, GroupId: req.body.groupid},(err,data)=>{
                 if(err){
                     if(lib.isEmptyObject(err)){
                         res.status(400).json({error:`User details not found for ${req.params.username}`});
@@ -126,7 +126,7 @@ exports.addUser=(req,res)=>{
                 return ({error: "secretkey encrypytion failed"})
             }
         });
-        userModel.insert({UserName: req.body.UserName, Password: encryptedPassword, GroupId: req.body.GroupId},(err,data)=>{
+        userModel.insert({UserName: req.body.username, Password: encryptedPassword, GroupId: req.body.groupid},(err,data)=>{
             if(err){
                     res.status(500).json({error:"internal server error", err});
             }else{
@@ -163,9 +163,10 @@ exports.login=(req,res)=>{
         }
         userModel.setConfig(config)
         var password = getAsciiPwd(req.body.password)
-        isClient(req.params.clientname,password).then(data =>{
-            req.session.userid = data[0].userid;
-            res.status(200).json(data[0]);
+        //checkSecretKey(req.body.password,)
+        isUser(req.body.username,password).then(data =>{
+            req.session.userid = data[0].UserId;
+            res.status(200).json({"data":"data[0]"});
         }).catch(error=>{
             res.status(406).json(error);
         })
@@ -173,14 +174,26 @@ exports.login=(req,res)=>{
         res.status(500).json({error: "internal server error", err});
     }
 }
-exports.logout=(req,res,next)=>{
+exports.logout=(req,res)=>{
     if (req.session) {
-        req.session.destroy(function(err) {
+        destroySession(req.session).then(data=>{
+            res.status(200).json({"message":"logout successful"})
+        }).catch(err=>{
+            res.status(500).json({"error":"internal server error", err})
+        })
+    }else{
+        return res.status(403).json({"error":"user is not logged in"})
+    }
+}
+
+function destroySession(session){
+    return new Promise((resolve, reject)=>{
+        session.destroy(function(err) {
             if(err) {
-                return next(err);
+                reject("error in deleting session")
             }else {
-                return res.status(200).json({"message":"logout successful"})
+                resolve("done")
             }
         });
-    }
+    })
 }

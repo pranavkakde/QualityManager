@@ -13,7 +13,7 @@ var groupvalidator = require('./routes/validation/group')
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./doc/doc.json');
 var auth = require('./routes/auth')
-
+const session = require('express-session')
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //Setup app
@@ -40,17 +40,18 @@ var accessLogStream = rfs('access.log', {
   
 // setup the logger
 app.use(morgan('combined', { stream: accessLogStream }))
-
+app.use(auth.checkLogin)
+app.use(auth.checkRequiredRole)
 //########### User management routes ###############
-
-app.get("/user/:username", [uservalidator.validate('getUser'),auth.checkLogin()] ,user.getUser)
-app.delete("/user/:username",[uservalidator.validate('deleteUser'),auth.checkLogin(),auth.checkRequiredRole()],user.deleteUser)
-app.put("/user/:username",[uservalidator.validate('updateUser'),auth.checkLogin(),auth.checkRequiredRole()],user.updateUser)
-app.put("/user/:username/group/:groupname", [uservalidator.validate('assignRole'),auth.checkLogin(),auth.checkRequiredRole()],user.assignRole);    
-app.post("/user",[uservalidator.validate('addUser'),auth.checkLogin(),auth.checkRequiredRole()],user.addUser)
+//var x =[uservalidator.validate('getUser'),auth.checkLogin]
+app.get("/user/:username", uservalidator.validate('getUser') ,user.getUser)
+app.delete("/user/:username",uservalidator.validate('deleteUser'),user.deleteUser)
+app.put("/user/:username",uservalidator.validate('updateUser'),user.updateUser)
+//app.put("/user/:username/group/:groupname",uservalidator.validate('assignRole'),user.assignRole)   
+app.post("/user",uservalidator.validate('addUser'),user.addUser)
 app.get("/users",user.getAllUsers)
 app.post("/user/login", uservalidator.validate('login'),user.login)
-app.get("/user/logout", [uservalidator.validate('logout'),auth.checkLogin(),auth.checkRequiredRole()],user.logout)
+app.post("/user/logout", uservalidator.validate('logout'),user.logout)
 
 //################## Group Management Services ################
 
