@@ -6,6 +6,7 @@ var schema = new table(
     {
         GroupId: {type: Number}, 
         GroupName: {type: String},
+        IsAdmin:{type: Boolean}
     }
 );
 var groupModel = new tableMapping(tableName, schema);

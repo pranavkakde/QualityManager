@@ -57,7 +57,7 @@ exports.updateGroup=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        groupModel.update({GroupId: req.params.groupid},{GroupName: req.body.groupname},(err,data)=>{
+        groupModel.update({GroupId: req.params.groupid},{GroupName: req.body.groupname, IsAdmin: req.body.isadmin},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
                     res.status(400).json({error: `Group details not found for ${req.params.groupid}`});
@@ -80,7 +80,7 @@ exports.addGroup=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        groupModel.insert({GroupName: req.body.groupname},(err,data)=>{
+        groupModel.insert({GroupName: req.body.groupname, IsAdmin: req.body.isadmin},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
                     res.status(400).json({error: "error in inserting group data"});
@@ -103,5 +103,21 @@ exports.getAllGroups=(req,res)=>{
         }else{
             res.status(200).json(data);
         }
+    })
+}
+//check if user belongs to admin group
+exports.isAdmin=(groupid)=>{
+    return new Promise(async(resolve, reject)=>{
+        groupModel.find({GroupId:groupid},(err,data)=>{
+            if(err){
+                res.status(400).json({"error": err})
+            }else{
+                if(data[0].IsAdmin===true){
+                    resolve(true)
+                }else{
+                    reject(false)
+                }
+            }
+        })
     })
 }
