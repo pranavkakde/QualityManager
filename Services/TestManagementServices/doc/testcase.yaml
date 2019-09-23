@@ -1,0 +1,132 @@
+openapi: 3.0.0
+info:
+  title: test case management
+  version: '1.0'
+  description: apis for test case management
+  contact:
+    name: Pranav
+    url: 'https://github.com/pranavkakde'
+    email: pranavkakde@gmail.com
+  license:
+    name: MIT
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  '/testcase/{testcaseid}':
+    get:
+      summary: 'GET /testcase/{testcaseid}'
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/testcaseall'
+              examples:
+                application/json:
+                  value:
+                    testcaseid: 1
+                    name: sample test case
+                    description: this is a test description
+                    versionid: v1
+                    prerequisite: sample prerequisite
+                    statusid: 1
+                    author: 1
+          headers: {}
+      description: get all test cases from db
+      parameters: []
+    parameters:
+      - schema:
+          type: number
+        name: testcaseid
+        in: path
+        required: true
+    put:
+      summary: 'PUT /testcase/{testcaseid}'
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/testcase_add'
+            examples:
+              application/json:
+                value:
+                  testcaseid: 1
+                  name: sample test case
+                  description: this is a test description
+                  versionid: v1
+                  prerequisite: sample prerequisite
+                  statusid: 1
+                  author: 1
+    delete:
+      summary: 'DELETE /testcase/{testcaseid}'
+      responses:
+        '200':
+          description: OK
+      description: ''
+  /testcase:
+    post:
+      summary: POST /testcase
+      responses:
+        '201':
+          description: Created
+      description: save test case details in db
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/testcaseall'
+            examples:
+              application/json:
+                value:
+                  testcaseid: 1
+                  name: sample test case
+                  description: this is a test description
+                  versionid: v1
+                  prerequisite: sample prerequisite
+                  statusid: 1
+                  author: 1
+        description: ''
+components:
+  schemas:
+    testcaseall:
+      type: object
+      properties:
+        testcaseid:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        prerequisite:
+          type: string
+        versionid:
+          type: string
+        statusid:
+          type: number
+        author:
+          type: number
+    testcase_add:
+      title: testcase_update
+      type: object
+      properties:
+        testcaseid:
+          type: integer
+          format: int64
+        author:
+          type: number
+        statusid:
+          type: number
+        versionid:
+          type: string
+        prerequisite:
+          type: string
+        description:
+          type: string
+        name:
+          type: string
