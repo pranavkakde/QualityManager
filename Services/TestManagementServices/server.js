@@ -7,6 +7,14 @@ var rfs = require("rotating-file-stream");
 var port = process.env.PORT || '7777'  
 var jwt = require('jsonwebtoken')
 var app = express();
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./doc/openapi.yaml');
+//var auth = require('./routes/auth');
+const session = require('express-session');
+
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(express.static('public'));  
 app.use(bodyParser.json({limit:'5mb'}));    

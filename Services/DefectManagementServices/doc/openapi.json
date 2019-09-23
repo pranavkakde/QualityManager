@@ -1,0 +1,167 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "defect management",
+    "version": "1.0",
+    "contact": {
+      "name": "Pranav",
+      "email": "pranavkakde@gmail.com"
+    },
+    "description": "APIs for CRUD operation on Defects"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:7779"
+    }
+  ],
+  "paths": {
+    "/defect": {
+      "post": {
+        "summary": "",
+        "tags": [
+          "postdefects"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/defects_add"
+              }
+            }
+          }
+        },
+        "description": "post defect object to database"
+      }
+    },
+    "/defect/{defectid}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "defectid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "getdefects"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/defects_all"
+                }
+              }
+            }
+          }
+        },
+        "description": "get a defect object from database"
+      },
+      "put": {
+        "summary": "",
+        "tags": [
+          "putdefects"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/defects_add"
+              }
+            }
+          }
+        },
+        "description": "update a defect object from database"
+      },
+      "delete": {
+        "summary": "",
+        "tags": [
+          "defectdefects"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "delete a defect object from database"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "defects_add": {
+        "title": "defects_add",
+        "type": "object",
+        "properties": {
+          "subject": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "assignedto": {
+            "type": "integer"
+          },
+          "createdby": {
+            "type": "integer"
+          },
+          "createdate": {
+            "type": "string"
+          },
+          "defectstatusid": {
+            "type": "integer"
+          },
+          "closedby": {
+            "type": "integer"
+          }
+        }
+      },
+      "defects_all": {
+        "title": "defects_all",
+        "type": "object",
+        "properties": {
+          "defectid": {
+            "type": "integer"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "assignedto": {
+            "type": "integer"
+          },
+          "createdby": {
+            "type": "integer"
+          },
+          "createdate": {
+            "type": "string"
+          },
+          "defectstatusid": {
+            "type": "integer"
+          },
+          "closedby": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}
