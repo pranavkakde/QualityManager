@@ -1,0 +1,314 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "test suite management",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/testsuite": {
+      "post": {
+        "summary": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/testsuite_add"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/testsuite/{testsuiteid}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testsuiteid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/testsuite_all"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/testsuite_add"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/testsuite/{testsuiteid}/testcases": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testsuiteid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/testcaseall"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "get list of all test cases based on test suite id"
+      }
+    },
+    "/testsuite/{testsuiteid}/testcases/{testcaseid}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testsuiteid",
+          "in": "path",
+          "required": true
+        },
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testcaseid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "get test case object based on test suite and test case id"
+      },
+      "post": {
+        "summary": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "description": "write an association of test suite and test case id to database"
+      },
+      "delete": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/testsuite/{testcasesuiteid}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testcasesuiteid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "put": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "testcaseid": {
+                    "type": "number"
+                  },
+                  "testsuiteid": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "testcaseid",
+                  "testsuiteid"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "testsuite_all": {
+        "type": "object",
+        "properties": {
+          "testsuiteid": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "statusid": {
+            "type": "number"
+          },
+          "releaseid": {
+            "type": "number"
+          }
+        }
+      },
+      "testsuite_add": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "statusid": {
+            "type": "number"
+          },
+          "releaseid": {
+            "type": "number"
+          }
+        }
+      },
+      "testcase_add": {
+        "title": "testcase_update",
+        "type": "object",
+        "properties": {
+          "testcaseid": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "author": {
+            "type": "number"
+          },
+          "statusid": {
+            "type": "number"
+          },
+          "versionid": {
+            "type": "string"
+          },
+          "prerequisite": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "testcaseall": {
+        "type": "object",
+        "properties": {
+          "testcaseid": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "prerequisite": {
+            "type": "string"
+          },
+          "versionid": {
+            "type": "string"
+          },
+          "statusid": {
+            "type": "number"
+          },
+          "author": {
+            "type": "number"
+          }
+        }
+      },
+      "testcasesuite": {
+        "title": "testcasesuite",
+        "type": "object",
+        "properties": {
+          "testcaseid": {
+            "type": "number"
+          },
+          "testsuiteid": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}
