@@ -55,7 +55,7 @@ app.get("/testsuite/:testsuiteid/testcases",testsuite.getTestCases)
 app.get("/testsuite/:testsuiteid/testcases/:testcaseid", casevalidator.validate('getCase'),caseSuite.getCase)
 app.post("/testsuite/:testsuiteid/testcases/:testcaseid", casevalidator.validate('addCase'),caseSuite.addCase)
 app.delete("/testsuite/:testsuiteid/testcases/:testcaseid", casevalidator.validate('deleteCase'),caseSuite.deleteCase)
-app.put("/testsuite/:testcasesuiteid", casevalidator.validate('updateCase'),caseSuite.updateCase)
+app.put("/testcasesuite/:testcasesuiteid", casevalidator.validate('updateCase'),caseSuite.updateCase)
 
 app.get("/isalive",(req,res)=>{
   res.send("ok").status(200);

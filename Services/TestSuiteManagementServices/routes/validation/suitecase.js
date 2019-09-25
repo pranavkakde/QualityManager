@@ -10,7 +10,7 @@ exports.validate = (method) => {
       }
       case 'updateCase':{
         return [
-            param('testsuitecaseid', 'Test Suite Case Id parameter is required').exists(), 
+            param('testcasesuiteid', 'Test Suite Case Id parameter is required').exists(), 
             body('testsuiteid', 'Test Suite Id is required').exists(),
             body('testcaseid', 'Test Case Id is required').exists()
             ]   

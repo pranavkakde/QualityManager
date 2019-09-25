@@ -50,9 +50,10 @@ exports.updateCase=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
+        console.log(req.params.testcasesuiteid)
         caseModel.setConfig(config)
-        isSuite(req.params.testcasesuiteid).then(data =>{
-            caseModel.update({testcasesuiteid: req.params.testcasesuiteid},{testsuiteid: req.body.testsuiteid, testcaseid: req.body.testcaseid
+        isCase(req.params.testcasesuiteid).then(data =>{
+            caseModel.update({id: req.params.testcasesuiteid},{testsuiteid: req.body.testsuiteid, testcaseid: req.body.testcaseid
             },(err,data)=>{
                 if(err){
                     if(lib.isEmptyObject(err)){
@@ -65,7 +66,7 @@ exports.updateCase=(req,res)=>{
                 }
             })
         }).catch(error=>{
-            res.status(406).json(error);
+            res.status(400).json(error);
         })
     }catch(err){
         res.status(500).json({error:"internal server error", err});
@@ -95,6 +96,26 @@ function isSuite(testsuiteid){
     return new Promise((resolve, reject)=>{
         caseModel.setConfig(config)
         caseModel.find({testsuiteid: testsuiteid, testcaseid: testcaseid}, (err,data)=>{
+            if(err){
+                if(lib.isEmptyObject(err)){
+                    reject({error:"test suite id and associated test case is not found in database"})
+                }else{
+                    reject({error:"internal server error", err})
+                }
+            }else{
+                if(lib.isEmptyObject(data)){
+                    reject({error:"test suite id and associated test case is not found in database"})
+                }else{
+                    resolve(data)    
+                }
+            }
+        });
+    })
+}
+function isCase(testcasesuiteid){
+    return new Promise((resolve, reject)=>{
+        caseModel.setConfig(config)
+        caseModel.find({testcasesuiteid: testcasesuiteid}, (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
                     reject({error:"test suite id and associated test case is not found in database"})

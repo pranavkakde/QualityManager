@@ -66,7 +66,7 @@ exports.updateSuite=(req,res)=>{
                 }
             })
         }).catch(error=>{
-            res.status(406).json(error);
+            res.status(400).json(error);
         })
     }catch(err){
         res.status(500).json({error:"internal server error", err});
