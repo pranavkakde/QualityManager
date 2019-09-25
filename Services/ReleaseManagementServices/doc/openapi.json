@@ -1,0 +1,391 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "release management",
+    "version": "1.0",
+    "description": "release or iteration management"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/release": {
+      "post": {
+        "summary": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/release_add"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/release/{releaseid}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "releaseid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/release_all"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/release_add"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/release/{releaseid}/testsuite": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "releaseid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/testsuite_all"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/release/{releaseid}/testsuite/{testsuiteid}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "releaseid",
+          "in": "path",
+          "required": true
+        },
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testsuiteid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/testsuite_all"
+                }
+              }
+            }
+          }
+        },
+        "description": "get test suite object which is associated with a test suite id"
+      },
+      "delete": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "delete an association of testsuite with release id - delete in releasesuites table"
+      },
+      "post": {
+        "summary": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "description": "add an association of testsuite with release id - add in releasesuites table"
+      }
+    },
+    "/release/{releaseid}/testcases": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "releaseid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/testcase_all"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/release/{releaseid}/defects": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "releaseid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/defects_all"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/release/{releasesuiteid}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "releasesuiteid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "put": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "releaseid": {
+                    "type": "number"
+                  },
+                  "testsuiteid": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "release_all": {
+        "title": "release_all",
+        "type": "object",
+        "properties": {
+          "releaseid": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "release_add": {
+        "title": "release_add",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "testsuite_all": {
+        "title": "testsuite_all",
+        "type": "object",
+        "properties": {
+          "testsuiteid": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "statusid": {
+            "type": "number"
+          },
+          "releaseid": {
+            "type": "number"
+          }
+        }
+      },
+      "releasetestsuite": {
+        "title": "releasetestsuite",
+        "type": "object",
+        "properties": {
+          "releaseid": {
+            "type": "number"
+          },
+          "testsuiteid": {
+            "type": "number"
+          }
+        }
+      },
+      "testcase_all": {
+        "type": "object",
+        "properties": {
+          "testcaseid": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "prerequisite": {
+            "type": "string"
+          },
+          "versionid": {
+            "type": "string"
+          },
+          "statusid": {
+            "type": "number"
+          },
+          "author": {
+            "type": "number"
+          }
+        }
+      },
+      "defects_all": {
+        "title": "defects_all",
+        "type": "object",
+        "properties": {
+          "defectid": {
+            "type": "integer"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "assignedto": {
+            "type": "integer"
+          },
+          "createdby": {
+            "type": "integer"
+          },
+          "createddate": {
+            "type": "string"
+          },
+          "defectstatusid": {
+            "type": "integer"
+          },
+          "closedby": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}
