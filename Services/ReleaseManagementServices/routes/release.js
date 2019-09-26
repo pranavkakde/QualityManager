@@ -112,6 +112,3 @@ function isRelease(testrelid){
         });
     })
 }
-exports.getTestCases=(req,res)=>{
-    res.status(200).json({"message":"This service is still in progress. This will be completed once CRUD on Test Case Service is complete."})
-}

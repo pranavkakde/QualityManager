@@ -49,13 +49,14 @@ app.get("/testsuite/:testsuiteid", testsuitevalidator.validate('getSuite') ,test
 app.delete("/testsuite/:testsuiteid",testsuitevalidator.validate('deleteSuite'),testsuite.deleteSuite)
 app.put("/testsuite/:testsuiteid",testsuitevalidator.validate('updateSuite'),testsuite.updateSuite)
 app.post("/testsuite",testsuitevalidator.validate('addSuite'),testsuite.addSuite)
-app.get("/testsuite/:testsuiteid/testcases",testsuite.getTestCases)
+app.post("/testsuites",testsuitevalidator.validate('filterSuites'),testsuite.filterSuite)
 
 //########### Test Case and Test Suite associative routes ######################
 app.get("/testsuite/:testsuiteid/testcases/:testcaseid", casevalidator.validate('getCase'),caseSuite.getCase)
 app.post("/testsuite/:testsuiteid/testcases/:testcaseid", casevalidator.validate('addCase'),caseSuite.addCase)
 app.delete("/testsuite/:testsuiteid/testcases/:testcaseid", casevalidator.validate('deleteCase'),caseSuite.deleteCase)
 app.put("/testcasesuite/:testcasesuiteid", casevalidator.validate('updateCase'),caseSuite.updateCase)
+app.get("/testsuite/:testsuiteid/testcases",testsuite.getTestCases)
 
 app.get("/isalive",(req,res)=>{
   res.send("ok").status(200);

@@ -12,7 +12,7 @@ exports.validate = (method) => {
       }
       case 'updateSuite':{
         return [
-            param('testsuiteid', 'Defect Id parameter is required').exists(), 
+            param('testsuiteid', 'Test Suite Id parameter is required').exists(), 
             body('name', 'Test Suite doesn\'t exists').exists(),
             body('description', 'Description doesn\'t exists').exists(),
             body('statusid', 'Status Id field is missing').exists(),
@@ -28,6 +28,11 @@ exports.validate = (method) => {
         return [
             param('testsuiteid',  'testsuiteid parameter is missing').exists(), 
             ]   
+      }
+      case 'filterSuites':{
+        return [
+          body('testsuites', 'test suite id is missing').exists()
+        ]
       }
     }
   }

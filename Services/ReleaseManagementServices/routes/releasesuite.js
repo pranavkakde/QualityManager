@@ -11,7 +11,7 @@ exports.getCase= (req,res)=>{
             return;
         }
         caseModel.setConfig(config)
-        isRel(req.params.releaseid).then(data=>{
+        isRel(req.params.releaseid, req.params.testsuiteid).then(data=>{
             res.status(200).json(data);
         }).catch(error=>{
             res.status(400).json(error);
@@ -95,16 +95,16 @@ function isRel(releaseid, testsuiteid){
     return new Promise((resolve, reject)=>{
         caseModel.setConfig(config)
         //rewrite this to get release id and test suite id by calling GET Test suite by id service. 
-        caseModel.find({releaseid: testsuiteid, testcaseid: testcaseid}, (err,data)=>{
+        caseModel.find({releaseid: releaseid, testsuiteid: testsuiteid}, (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
-                    reject({error:"test suite id and associated test case is not found in database"})
+                    reject({error:"Release Id and associated Test Suite is not found in database"})
                 }else{
                     reject({error:"internal server error", err})
                 }
             }else{
                 if(lib.isEmptyObject(data)){
-                    reject({error:"test suite id and associated test case is not found in database"})
+                    reject({error:"Release Id and associated Test Suite is not found in database"})
                 }else{
                     resolve(data)    
                 }
@@ -131,4 +131,16 @@ function isCase(releasesuiteid){
             }
         });
     })
+}
+exports.getTestCases=(req,res)=>{
+    res.status(200).json({"message":"This service is still in progress. This will be completed once CRUD on Test Case Service is complete."})
+}
+exports.getTestSuites=(req,res)=>{
+    //get release id and suites from releasesuites table
+    //fetch test suites one by one for 
+
+    res.status(200).json({"message":"This service is still in progress. This will be completed once CRUD on Test Case Service is complete."})
+}
+exports.getDefects=(req,res)=>{
+    res.status(200).json({"message":"This service is still in progress. This will be completed once CRUD on Test Case Service is complete."})
 }

@@ -12,7 +12,7 @@ exports.getSuite= (req,res)=>{
         }
         suiteModel.setConfig(config)
         isSuite(req.params.testsuiteid).then(data=>{
-            res.status(200).json(data);
+            res.status(200).json(data[0]);
         }).catch(error=>{
             res.status(400).json(error);
         })
@@ -115,4 +115,32 @@ function isSuite(testsuiteid){
 }
 exports.getTestCases=(req,res)=>{
     res.status(200).json({"message":"This service is still in progress. This will be completed once CRUD on Test Case Service is complete."})
+}
+exports.filterSuite=(req,res)=>{
+    suiteModel.setConfig(config)
+    var sArray = req.body.testsuites
+    console.log(sArray)
+    /*suiteModel.aggregate(
+        {
+            _field: 
+                [
+                    {
+                        _name: '_local.all'
+                    }
+                ],
+            _filter:[       
+                {
+                    _field:[{_name:'testsuiteid'}],
+                    _in: sArray    
+                }
+            ]
+            }*/
+        suiteModel.find({testsuiteid: sArray}
+        ,function(err,data){
+            if(err){
+                res.status(400).json({"error": "internal server error",err})
+            }else{
+                res.status(200).json(data)
+            }
+    });
 }

@@ -49,13 +49,15 @@ app.get("/release/:releaseid", releasevalidator.validate('getRelease') ,release.
 app.delete("/release/:releaseid",releasevalidator.validate('deleteRelease'),release.deleteRelease)
 app.put("/release/:releaseid",releasevalidator.validate('updateRelease'),release.updateRelease)
 app.post("/release",releasevalidator.validate('addRelease'),release.addRelease)
-app.get("/release/:releaseid/testsuites",release.getTestCases)
 
 //########### Release and Test Suite associative routes ######################
 app.get("/release/:releaseid/testsuite/:testsuiteid", casevalidator.validate('getCase'),caseSuite.getCase)
 app.post("/release/:releaseid/testsuite/:testsuiteid", casevalidator.validate('addCase'),caseSuite.addCase)
 app.delete("/release/:releaseid/testsuite/:testsuiteid", casevalidator.validate('deleteCase'),caseSuite.deleteCase)
 app.put("/releasesuite/:releasesuiteid", casevalidator.validate('updateCase'),caseSuite.updateCase)
+app.get("/release/:releaseid/testsuites",caseSuite.getTestSuites)
+app.get("/release/:releaseid/testcases",caseSuite.getTestCases)
+app.get("/release/:releaseid/defects",caseSuite.getDefects)
 
 app.get("/isalive",(req,res)=>{
   res.send("ok").status(200);
