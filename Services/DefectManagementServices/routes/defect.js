@@ -1,7 +1,6 @@
 var defectModel = require('../Model/defect')
 var config = require('../config/config')
 var lib = require('../lib/common')
-var bcrypt = require('bcrypt')
 var {validationResult } = require('express-validator')
 
 exports.getDefect= (req,res)=>{

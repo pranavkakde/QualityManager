@@ -25,5 +25,10 @@ exports.validate = (method) => {
             param('releaseid',  'Release Id parameter is missing').exists() 
             ]   
       }
+      case 'filterReleases':{
+        return [
+          body('releases', 'release ids are missing').exists()
+        ]
+      }
     }
   }
