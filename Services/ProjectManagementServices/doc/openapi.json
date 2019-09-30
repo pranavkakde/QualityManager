@@ -1,0 +1,272 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "project management",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:7782"
+    }
+  ],
+  "paths": {
+    "/project": {
+      "post": {
+        "summary": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/project_add"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/project/{projectid}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "projectid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/project_all"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/project_add"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/project/{projectid}/releases": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "projectid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/release_all"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/project/{projectid}/release/{releaseid}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "projectid",
+          "in": "path",
+          "required": true
+        },
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "releaseid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/release_all"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "description": "add an association of project and release id - add an entry in project releases table"
+      },
+      "delete": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "delete an association of project and release id - delete an entry in project releases table"
+      }
+    },
+    "/projectreleases/{projectreleaseid}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "projectreleaseid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "put": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/project_releases"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "project_add": {
+        "title": "project_add",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "project_all": {
+        "title": "project_all",
+        "type": "object",
+        "properties": {
+          "projectid": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "release_all": {
+        "title": "release_all",
+        "type": "object",
+        "properties": {
+          "releaseid": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "release_add": {
+        "title": "release_add",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "project_releases": {
+        "title": "project_releases",
+        "type": "object",
+        "properties": {
+          "projectid": {
+            "type": "number"
+          },
+          "releaseid": {
+            "type": "number"
+          }
+        },
+        "description": "Project and Releases association from ProjectReleases table"
+      }
+    }
+  }
+}

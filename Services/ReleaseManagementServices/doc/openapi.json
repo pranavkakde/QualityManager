@@ -83,7 +83,7 @@
         }
       }
     },
-    "/release/{releaseid}/testsuite": {
+    "/release/{releaseid}/testsuites": {
       "parameters": [
         {
           "schema": {
@@ -230,7 +230,7 @@
         }
       }
     },
-    "/release/{releasesuiteid}": {
+    "/releasesuite/{releasesuiteid}": {
       "parameters": [
         {
           "schema": {

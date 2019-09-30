@@ -1,4 +1,4 @@
-var caseModel = require('../Model/releasesuite')
+var caseModel = require('../Model/projectreleases')
 var config = require('../config/config')
 var lib = require('../lib/common')
 var {validationResult } = require('express-validator')
@@ -13,7 +13,7 @@ exports.getCase= (req,res)=>{
             return;
         }
         caseModel.setConfig(config)
-        isRel(req.params.releaseid, req.params.testsuiteid).then(data=>{
+        isProject(req.params.releaseid, req.params.projectid).then(data=>{
             res.status(200).json(data);
         }).catch(error=>{
             res.status(400).json(error);
@@ -30,15 +30,15 @@ exports.deleteCase=(req,res)=>{
             return;
         }
         caseModel.setConfig(config)
-        caseModel.delete({testsuiteid: req.params.testsuiteid, releaseid: req.params.releaseid },(err,data)=>{
+        caseModel.delete({projectid: req.params.projectid, releaseid: req.params.releaseid },(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
-                    res.status(400).json({error: `Release and associated Test Suite details not found for ${req.params.releaseid}`});
+                    res.status(400).json({error: `Project and associated Release details not found for ${req.params.releaseid}`});
                 }else{
                     res.status(500).json({error:"internal server error", err});
                 }
             }else{
-                res.status(200).json({message: "Release and associated Test Suite record deleted succesfully", data});
+                res.status(200).json({message: "Project and associated Release record deleted succesfully", data});
             }
         })
     }catch(err){
@@ -54,16 +54,16 @@ exports.updateCase=(req,res)=>{
         }
         caseModel.setConfig(config)
         isCase(req.params.releasesuiteid).then(data =>{
-            caseModel.update({id: req.params.releasesuiteid},{testsuiteid: req.body.testsuiteid, releaseid: req.body.releaseid
+            caseModel.update({id: req.params.releasesuiteid},{projectid: req.body.projectid, releaseid: req.body.releaseid
             },(err,data)=>{
                 if(err){
                     if(lib.isEmptyObject(err)){
-                        res.status(400).json({error:`Release and associated Test Suite id details not found for ${req.params.releaseid}`});
+                        res.status(400).json({error:`Project and associated Release Id details are not found for ${req.params.releaseid}`});
                     }else{
                         res.status(500).json({error:"internal server error", err});
                     }
                 }else{
-                    res.status(200).json({message: "Release and associated Test Suite record updated succesfully", data});
+                    res.status(200).json({message: "Project and associated Release Id record updated succesfully", data});
                 }
             })
         }).catch(error=>{
@@ -81,32 +81,31 @@ exports.addCase=(req,res)=>{
             return;
         }
         caseModel.setConfig(config)
-        caseModel.insert({testsuiteid: req.params.testsuiteid, releaseid: req.params.releaseid
+        caseModel.insert({projectid: req.params.projectid, releaseid: req.params.releaseid
         },(err,data)=>{
             if(err){
                     res.status(500).json({error:"internal server error", err});
             }else{
-                res.status(201).json({message: "Release and Test Suite record inserted succesfully", data});
+                res.status(201).json({message: "Project Release record inserted succesfully", data});
             }
         })
     }catch(err){
         res.status(500).json({error:"internal server error", err});
     }
 }
-function isRel(releaseid, testsuiteid){
+function isProject(releaseid, projectid){
     return new Promise((resolve, reject)=>{
         caseModel.setConfig(config)
-        //rewrite this to get release id and test suite id by calling GET Test suite by id service. 
-        caseModel.find({releaseid: releaseid, testsuiteid: testsuiteid}, (err,data)=>{
+        caseModel.find({releaseid: releaseid, projectid: projectid}, (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
-                    reject({error:"Release Id and associated Test Suite is not found in database"})
+                    reject({error:"Project Id and associated Release Id is not found in database"})
                 }else{
                     reject({error:"internal server error", err})
                 }
             }else{
                 if(lib.isEmptyObject(data)){
-                    reject({error:"Release Id and associated Test Suite is not found in database"})
+                    reject({error:"Project Id and associated Release Id is not found in database"})
                 }else{
                     resolve(data)    
                 }
@@ -114,7 +113,7 @@ function isRel(releaseid, testsuiteid){
         });
     })
 }
-async function getTestSuites(releaseid){
+async function getRels(projectid){
     return new Promise((resolve, reject)=>{
         caseModel.setConfig(config)
         caseModel.aggregate(
@@ -122,26 +121,26 @@ async function getTestSuites(releaseid){
                 _field: 
                     [
                         {
-                            _name: '_local.testsuiteid',
+                            _name: '_local.releaseid',
                         }
                     ],
                 _filter: [      
                         {
-                            _field:[{_name:'_local.releaseid'}],
-                            _eq: releaseid
+                            _field:[{_name:'_local.projectid'}],
+                            _eq: projectid
                         }
                     ]
             }
             , (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
-                    reject({error:"Release Id and associated Test Suite is not found in database"})
+                    reject({error:"Project Id and associated Release Id is not found in database"})
                 }else{
                     reject({error:"internal server error", err})
                 }
             }else{
                 if(lib.isEmptyObject(data)){
-                    reject({error:"Release Id and associated Test Suite is not found in database"})
+                    reject({error:"Project Id and associated Release Id is not found in database"})
                 }else{
                     resolve(data)    
                 }
@@ -149,19 +148,19 @@ async function getTestSuites(releaseid){
         });
     })
 }
-function isCase(releasesuiteid){
+function isCase(projectreleaseid){
     return new Promise((resolve, reject)=>{
         caseModel.setConfig(config)
-        caseModel.find({id: releasesuiteid}, (err,data)=>{
+        caseModel.find({projectreleaseid: projectreleaseid}, (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
-                    reject({error:"Release Id and Test Sutie association is not found in database"})
+                    reject({error:"Project Id and Release Id association is not found in database"})
                 }else{
                     reject({error:"internal server error", err})
                 }
             }else{
                 if(lib.isEmptyObject(data)){
-                    reject({error:"Release Id and Test Sutie association is not found in database"})
+                    reject({error:"Project Id and Release Id association is not found in database"})
                 }else{
                     resolve(data)    
                 }
@@ -172,7 +171,7 @@ function isCase(releasesuiteid){
 exports.getTestCases=(req,res)=>{
     res.status(200).json({"message":"This service is still in progress. This will be completed once CRUD on Test Case Service is complete."})
 }
-exports.getTestSuites = async function(req,res){
+exports.getReleases = async function(req,res){
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -180,17 +179,17 @@ exports.getTestSuites = async function(req,res){
             return;
         }
         caseModel.setConfig(config)
-        const data = await getTestSuites(req.params.releaseid)
+        const data = await getRels(req.params.projectid)
         var arr = []
         if(JSON.stringify(data).indexOf("error")>0){
-            res.status(400).json({"error":"Could not find Test Suites for Release Id "+ req.params.releaseid});
+            res.status(400).json({"error":"Could not find Release Id for Project Id "+ req.params.projectid});
         }else{
             for (const key in data) {
-                const element = data[key].testsuiteid;
+                const element = data[key].releaseid;
                 arr.push(element)       
             }
-            const url = `${services.testsuite}testsuites`
-            const body = {"testsuites": arr}
+            const url = `${services.releases}releases`
+            const body = {"releases": arr}
             const resp = await request
                 .post(url)
                 .send(body)
