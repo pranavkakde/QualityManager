@@ -1,0 +1,873 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "test case management",
+    "version": "1.0",
+    "description": "apis for test case management",
+    "contact": {
+      "name": "Pranav",
+      "url": "https://github.com/pranavkakde",
+      "email": "pranavkakde@gmail.com"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:7784"
+    }
+  ],
+  "paths": {
+    "/testcase/{testcaseid}": {
+      "get": {
+        "summary": "GET /testcase/{testcaseid}",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/testcaseall"
+                },
+                "examples": {
+                  "application/json": {
+                    "value": {
+                      "testcaseid": 1,
+                      "name": "sample test case",
+                      "description": "this is a test description",
+                      "versionid": "v1",
+                      "prerequisite": "sample prerequisite",
+                      "statusid": 1,
+                      "author": 1
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "description": "get all test cases from db",
+        "parameters": []
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testcaseid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "put": {
+        "summary": "PUT /testcase/{testcaseid}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/testcase_add"
+              },
+              "examples": {
+                "application/json": {
+                  "value": {
+                    "testcaseid": 1,
+                    "name": "sample test case",
+                    "description": "this is a test description",
+                    "versionid": "v1",
+                    "prerequisite": "sample prerequisite",
+                    "statusid": 1,
+                    "author": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "DELETE /testcase/{testcaseid}",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": ""
+      }
+    },
+    "/testcase": {
+      "post": {
+        "summary": "POST /testcase",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "description": "save test case details in db",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/testcase_add"
+              },
+              "examples": {
+                "application/json": {
+                  "value": {
+                    "name": "sample test case",
+                    "description": "this is a test description",
+                    "versionid": "v1",
+                    "prerequisite": "sample prerequisite",
+                    "statusid": 1,
+                    "author": 1
+                  }
+                }
+              }
+            }
+          },
+          "description": ""
+        }
+      }
+    },
+    "/testcasesteps/{testcaseid}/steps/{stepid}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testcaseid",
+          "in": "path",
+          "required": true
+        },
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "stepid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/steps_all"
+                }
+              }
+            }
+          }
+        },
+        "description": "get test step object based on test case id"
+      },
+      "put": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/steps_add"
+              }
+            }
+          }
+        },
+        "description": "update test step object based on a test case id"
+      },
+      "delete": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "delete test step object based on a test case id"
+      }
+    },
+    "/testcaseruns/{testcaseid}/testrun": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testcaseid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/testrun_all"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "get array of all test run objects with in a test case"
+      },
+      "post": {
+        "summary": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/testrun_add"
+              }
+            }
+          }
+        },
+        "description": "write a test run object to database for a test case id"
+      }
+    },
+    "/testcaseruns/{testcaseid}/testrun/{testrunid}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testcaseid",
+          "in": "path",
+          "required": true
+        },
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testrunid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/testrun_all"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/testrun_add"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/testcasedefects/{testcaseid}/defects/{defectid}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testcaseid",
+          "in": "path",
+          "required": true
+        },
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "defectid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/defects_all"
+                }
+              }
+            }
+          }
+        },
+        "description": "get a defect object associated with a test case id"
+      },
+      "delete": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "delete a defect object associated with a test case id - delete from testcasedefects table"
+      },
+      "put": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/defects_add"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/teststepdefects/{testcaseid}/steps/{stepid}/defects": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testcaseid",
+          "in": "path",
+          "required": true
+        },
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "stepid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "post": {
+        "summary": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/defects_add"
+              }
+            }
+          }
+        },
+        "description": "write a defect object to database which is associated with a testcase id"
+      },
+      "get": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/defects_all"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "get list of all defect objects which are associated with a step and test case id"
+      }
+    },
+    "/teststepdefects/{testcaseid}/steps/{stepid}/defects/{defectid}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testcaseid",
+          "in": "path",
+          "required": true
+        },
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "stepid",
+          "in": "path",
+          "required": true
+        },
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "defectid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/defects_all"
+                }
+              }
+            }
+          }
+        },
+        "description": "get defect details for a step id which is associated with a test case id"
+      },
+      "put": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/defects_all"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/defects_add"
+              }
+            }
+          }
+        },
+        "description": "associate a defect id with a step id and test case id - update in stepdefects table"
+      },
+      "delete": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "delete the association of defect id with a step id and test case id  - delete from stepdefects table"
+      }
+    },
+    "/testcasesteps/{testcaseid}/steps": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testcaseid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "post": {
+        "summary": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/steps_add"
+              }
+            }
+          }
+        },
+        "description": "write a test step object to based on a test case id"
+      },
+      "get": {
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/steps_all"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "get list of all test step objects for a test case id"
+      }
+    },
+    "/testcasedefects/{testcaseid}/defects": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testcaseid",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/defects_all"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "get list of defect objects associated with a test case id"
+      },
+      "post": {
+        "summary": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "description": "write a defect object associated with a test case id",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/defects_add"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/testcaseruns/{testcaseid}/testruns": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "testcaseid",
+          "in": "path",
+          "required": true,
+          "description": ""
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/testrun_all"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/testrun_add"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "testcaseall": {
+        "type": "object",
+        "properties": {
+          "testcaseid": {
+            "type": "number",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "prerequisite": {
+            "type": "string"
+          },
+          "versionid": {
+            "type": "string"
+          },
+          "statusid": {
+            "type": "number"
+          },
+          "author": {
+            "type": "number"
+          }
+        }
+      },
+      "testcase_add": {
+        "title": "testcase_update",
+        "type": "object",
+        "properties": {
+          "testcaseid": {
+            "type": "number",
+            "format": "int64"
+          },
+          "author": {
+            "type": "number"
+          },
+          "statusid": {
+            "type": "number"
+          },
+          "versionid": {
+            "type": "string"
+          },
+          "prerequisite": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "steps_add": {
+        "title": "steps_add",
+        "type": "object",
+        "properties": {
+          "stepname": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "verification": {
+            "type": "string"
+          },
+          "testcaseid": {
+            "type": "number"
+          },
+          "statusid": {
+            "type": "number"
+          }
+        }
+      },
+      "steps_all": {
+        "title": "steps_all",
+        "type": "object",
+        "properties": {
+          "statusid": {
+            "type": "number"
+          },
+          "testcaseid": {
+            "type": "number"
+          },
+          "verification": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "stepname": {
+            "type": "string"
+          },
+          "stepid": {
+            "type": "number"
+          }
+        }
+      },
+      "testrun_add": {
+        "title": "testrun_add",
+        "type": "object",
+        "properties": {
+          "testrunname": {
+            "type": "string"
+          },
+          "runtypeid": {
+            "type": "number"
+          },
+          "startdate": {
+            "type": "string"
+          },
+          "enddate": {
+            "type": "string"
+          },
+          "userid": {
+            "type": "number"
+          },
+          "testrunstatusid": {
+            "type": "number"
+          }
+        }
+      },
+      "testrun_all": {
+        "title": "testrun_add",
+        "type": "object",
+        "properties": {
+          "testrunname": {
+            "type": "string"
+          },
+          "runtypeid": {
+            "type": "number"
+          },
+          "startdate": {
+            "type": "string"
+          },
+          "enddate": {
+            "type": "string"
+          },
+          "userid": {
+            "type": "number"
+          },
+          "testrunstatusid": {
+            "type": "number"
+          },
+          "testrunid": {
+            "type": "number"
+          }
+        }
+      },
+      "defects_all": {
+        "title": "defects_all",
+        "type": "object",
+        "properties": {
+          "defectid": {
+            "type": "number"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "assignedto": {
+            "type": "number"
+          },
+          "createdby": {
+            "type": "number"
+          },
+          "createdate": {
+            "type": "string"
+          },
+          "defectstatusid": {
+            "type": "number"
+          },
+          "closedby": {
+            "type": "number"
+          }
+        }
+      },
+      "defects_add": {
+        "title": "defects_add",
+        "type": "object",
+        "properties": {
+          "subject": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "assignedto": {
+            "type": "number"
+          },
+          "createdby": {
+            "type": "number"
+          },
+          "createdate": {
+            "type": "string"
+          },
+          "defectstatusid": {
+            "type": "number"
+          },
+          "closedby": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}
