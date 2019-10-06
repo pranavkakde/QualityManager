@@ -8,6 +8,10 @@ var port = process.env.PORT || '7784'
 var app = express();
 var testcase = require('./routes/testcase')
 var testvalidator = require('./routes/validation/testcase')
+var teststep = require('./routes/steps')
+var stepvalidator = require('./routes/validation/steps')
+var testrun = require('./routes/testrun')
+var runvalidator = require('./routes/validation/testrun')
 var caseSuite = require('./routes/releasesuite')
 var casevalidator = require('./routes/validation/releasesuite')
 const swaggerUi = require('swagger-ui-express');
@@ -49,7 +53,21 @@ app.get("/testcase/:testcaseid", testvalidator.validate('getTestCase') ,testcase
 app.delete("/testcase/:testcaseid",testvalidator.validate('deleteTestCase'),testcase.deleteTestCase)
 app.put("/testcase/:testcaseid",testvalidator.validate('updateTestCase'),testcase.updateTestCase)
 app.post("/testcase",testvalidator.validate('addTestCase'),testcase.addTestCase)
-//app.post("/releases",testvalidator.validate('filterReleases'),release.filterReleases)
+
+//########### Test Steps routes ######################
+app.get("/testcasesteps/:testcaseid/steps/:stepid", stepvalidator.validate('getTestStep') ,teststep.getTestStep)
+app.delete("/testcasesteps/:testcaseid/steps/:stepid",stepvalidator.validate('deleteTestStep'),teststep.deleteTestStep)
+app.put("/testcasesteps/:testcaseid/steps/:stepid",stepvalidator.validate('updateTestStep'),teststep.updateTestStep)
+app.post("/testcasesteps/:testcaseid/steps",stepvalidator.validate('addTestStep'),teststep.addTestStep)
+app.get("/testcasesteps/:testcaseid/steps",stepvalidator.validate('getAllSteps'),teststep.getAllSteps)
+//########### Test Run routes ######################
+app.get("/testcaseruns/:testcaseid/testruns/:testrunid", runvalidator.validate('getTestRun') ,testrun.getTestRun)
+app.delete("/testcaseruns/:testcaseid/testruns/:testrunid",runvalidator.validate('deleteTestRun'),testrun.deleteTestRun)
+app.put("/testcaseruns/:testcaseid/testruns/:testrunid",runvalidator.validate('updateTestRun'),testrun.updateTestRun)
+app.post("/testcaseruns/:testcaseid/testruns",runvalidator.validate('addTestRun'),testrun.addTestRun)
+app.get("/testcaseruns/:testcaseid/testruns",runvalidator.validate('getAllRuns'),testrun.getAllRuns)
+//########### Defect routes ######################
+
 //########### Release and Test Suite associative routes ######################
 app.get("/release/:releaseid/testsuite/:testsuiteid", casevalidator.validate('getCase'),caseSuite.getCase)
 app.post("/release/:releaseid/testsuite/:testsuiteid", casevalidator.validate('addCase'),caseSuite.addCase)
