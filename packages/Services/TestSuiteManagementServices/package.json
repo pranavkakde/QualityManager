@@ -1,5 +1,5 @@
 {
-  "name": "defectmanagement",
+  "name": "testsuitemanagement",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -12,7 +12,7 @@
   "dependencies": {
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
-    "cachejsorm": "^1.0.6",
+    "cachejsorm": "cachejsorm^1.0.9",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-session": "^1.16.2",

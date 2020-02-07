@@ -1,6 +1,6 @@
 ###Quality Manager
-This is an open source test management tool written using ReactJS, NodeJS, Express and SQL Server.
+Quality Manager is an open source test management tool written using ReactJS, NodeJS, Express and mySQL.
 
-Refer to Client folder for ReactJS based client.
+Refer to packages/Client folder for ReactJS based client - TBD.
 
-Refer to Services folder for Services that can be used by any client.
+Refer to pacakges/Services folder for APIs that can be used by any client.
