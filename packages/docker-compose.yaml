@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  mainbuild:
+    build:
+      context: .
+  ClientManagementServices:
+    build:
+      context: .
+      dockerfile: ./packages/Services/ClientManagementServices/Dockerfile
+  DefectManagementServices:
+    build:
+      context: .
+      dockerfile: ./packages/Services/DefectManagementServices/Dockerfile

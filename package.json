@@ -1,0 +1,33 @@
+{
+  "name": "qualitymanager",
+  "version": "0.0.1",
+  "description": "open source test management tool",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "diff": "lerna diff",
+    "new-version": "lerna version --conventional-commit --yes"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pranavkakde/QualityManager.git"
+  },
+  "keywords": [
+    "test",
+    "management",
+    "quality",
+    "management"
+  ],
+  "author": "pranav kakde",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pranavkakde/QualityManager/issues"
+  },
+  "homepage": "https://github.com/pranavkakde/QualityManager#readme",
+  "devDependencies": {
+    "lerna": "^3.20.2"
+  }
+}

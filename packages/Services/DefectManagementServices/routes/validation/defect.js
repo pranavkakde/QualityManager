@@ -15,7 +15,8 @@ exports.validate = (method) => {
       }
       case 'updateDefect':{
         return [
-            param('defectid', 'Defect Id parameter is required').exists(), 
+            param('defectid', 'Defect Id parameter is required').exists(),
+            param('defectid', 'Defect Id parameter must be greater than 0').isNumeric(), 
             body('subject', 'Subject doesn\'t exists').exists(),
             body('description', 'Description doesn\'t exists').exists(),
             body('assignedto', 'Assigned To field is missing').exists(),
@@ -27,25 +28,15 @@ exports.validate = (method) => {
       }
       case 'getDefect':{
         return [
-            param('defectid',  'defectid parameter is missing').exists(), 
+            param('defectid',  'defectid parameter is missing').exists(),
+            param('defectid',  'defectid parameter must be greater than 0').isNumeric() 
             ]   
       }
       case 'deleteDefect':{
         return [
             param('defectid',  'defectid parameter is missing').exists(), 
+            param('defectid',  'defectid parameter must be greater than 0').isNumeric()
             ]   
       }
-      /*case 'login':{
-        return [
-          body('username', 'UserName doesn\'t exists').exists(),
-          body('password', 'Password doesn\'t exists').exists(),
-          ]
-      }
-      case 'logout': {
-        return [
-          body('UserName', 'UserName doesn\'t exists').exists(),
-          body('Password', 'Password doesn\'t exists').exists(),
-          ]
-      }*/
     }
   }
