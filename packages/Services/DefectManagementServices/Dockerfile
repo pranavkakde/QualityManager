@@ -1,3 +1,4 @@
-FROM mainbuild
+FROM qualitymanager_mainbuild:latest
+COPY . . 
 EXPOSE 7779
-CMD [ "node", "server.js" ]
+CMD [ "npm", "--prefix", "./", "start" ]
