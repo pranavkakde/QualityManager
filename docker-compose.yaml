@@ -4,44 +4,70 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: "pranavkakde/qualitymanager_mainbuild"
   client-services:
     build:
       context: ./packages/Services/ClientManagementServices
       dockerfile: Dockerfile
+    image: "pranavkakde/qualitymanager_client-services"
+    ports:
+      - "7778:7778"
+    depends_on:
+      - mainbuild      
   defect-services:
     build:
       context: ./packages/Services/DefectManagementServices
       dockerfile: Dockerfile
+    ports:
+      - "7779:7779"
+    depends_on:
+      - mainbuild
+    image: "pranavkakde/qualitymanager_defect-services"
   project-services:
     build:
       context: ./packages/Services/ProjectManagementServices
       dockerfile: Dockerfile
     ports:
       - "7782:7782"
+    depends_on:
+      - mainbuild
+    image: "pranavkakde/qualitymanager_project-services"
   release-services:
     build:
       context: ./packages/Services/ReleaseManagementServices
       dockerfile: Dockerfile
     ports:
       - "7781:7781"
+    depends_on:
+      - mainbuild
+    image: "pranavkakde/qualitymanager_release-services"
   testcase-services:    
     build:
       context: ./packages/Services/TestManagementServices
       dockerfile: Dockerfile
     ports:
       - "7784:7784"        
-  testcase-services:
+    depends_on:
+      - mainbuild      
+    image: "pranavkakde/qualitymanager_testcase-services"
+  testsuite-services:
     build:
-      context: ./packages/Services/TestManagementServices
+      context: ./packages/Services/TestSuiteManagementServices
       dockerfile: Dockerfile
     ports:
       - "7780:7780"
+    depends_on:
+      - mainbuild
+    image: "pranavkakde/qualitymanager_testsuite-services"
   user-services:
     build:
       context: ./packages/Services/UserManagementServices
       dockerfile: Dockerfile
     ports:
       - "7777:7777"
+    depends_on:
+      - mainbuild
+    image: "pranavkakde/qualitymanager_user-services"
 networks:
   default:
     driver: host
