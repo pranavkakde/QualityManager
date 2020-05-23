@@ -25,7 +25,7 @@ stages:
         containerregistrytype: 'Container Registry'
         dockerRegistryEndpoint: 'docker_hub_qm'
         dockerComposeFile: '**/docker-compose.yaml'
-        projectName: 'qualitymanager'
+        projectName: 'pranavkakde'
         action: 'Build services'
         includeSourceTags: true
     - task: DockerCompose@0
@@ -33,6 +33,6 @@ stages:
         containerregistrytype: 'Container Registry'
         dockerRegistryEndpoint: 'docker_hub_qm'
         dockerComposeFile: '**/docker-compose.yaml'
-        projectName: 'qualitymanager'
+        projectName: 'pranavkakde'
         action: 'Push services'
         includeSourceTags: true
