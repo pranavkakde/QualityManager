@@ -2,7 +2,7 @@ var groupModel = require('../Model/group')
 var config = require('../config/config')
 var {validationResult } = require('express-validator')
 var lib = require('../lib/common')
-groupModel.setConfig(config)
+groupModel.setConfig(config.database)
 
 exports.getGroup=(req,res)=>{
     try{

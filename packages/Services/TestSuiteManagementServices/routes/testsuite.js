@@ -10,7 +10,7 @@ exports.getSuite= (req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        suiteModel.setConfig(config)
+        suiteModel.setConfig(config.database)
         isSuite(req.params.testsuiteid).then(data=>{
             res.status(200).json(data[0]);
         }).catch(error=>{
@@ -27,7 +27,7 @@ exports.deleteSuite=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        suiteModel.setConfig(config)
+        suiteModel.setConfig(config.database)
         suiteModel.delete({testsuiteid: req.params.testsuiteid},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -50,7 +50,7 @@ exports.updateSuite=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        suiteModel.setConfig(config)
+        suiteModel.setConfig(config.database)
         isSuite(req.params.testsuiteid).then(data =>{
             suiteModel.update({testsuiteid: req.params.testsuiteid},{name: req.body.name, description: req.body.description, 
                 statusid: req.body.statusid, releaseid: req.body.releaseid
@@ -79,7 +79,7 @@ exports.addSuite=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        suiteModel.setConfig(config)
+        suiteModel.setConfig(config.database)
         suiteModel.insert({name: req.body.name, description: req.body.description, 
             statusid: req.body.statusid, releaseid: req.body.releaseid
         },(err,data)=>{
@@ -95,7 +95,7 @@ exports.addSuite=(req,res)=>{
 }
 function isSuite(testsuiteid){
     return new Promise((resolve, reject)=>{
-        suiteModel.setConfig(config)
+        suiteModel.setConfig(config.database)
         suiteModel.find({testsuiteid: testsuiteid}, (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -117,7 +117,7 @@ exports.getTestCases=(req,res)=>{
     res.status(200).json({"message":"This service is still in progress. This will be completed once CRUD on Test Case Service is complete."})
 }
 exports.filterSuite=(req,res)=>{
-    suiteModel.setConfig(config)
+    suiteModel.setConfig(config.database)
     var sArray = req.body.testsuites
     console.log(sArray)
     /*suiteModel.aggregate(

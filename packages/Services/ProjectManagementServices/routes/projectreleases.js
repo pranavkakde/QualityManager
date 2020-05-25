@@ -3,7 +3,6 @@ var config = require('../config/config')
 var lib = require('../lib/common')
 var {validationResult } = require('express-validator')
 var request = require('superagent')
-var services = require('../config/apiconfig')
 
 exports.getCase= (req,res)=>{
     try{
@@ -12,7 +11,7 @@ exports.getCase= (req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         isProject(req.params.releaseid, req.params.projectid).then(data=>{
             res.status(200).json(data);
         }).catch(error=>{
@@ -29,7 +28,7 @@ exports.deleteCase=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         caseModel.delete({projectid: req.params.projectid, releaseid: req.params.releaseid },(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -52,7 +51,7 @@ exports.updateCase=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         isCase(req.params.releasesuiteid).then(data =>{
             caseModel.update({id: req.params.releasesuiteid},{projectid: req.body.projectid, releaseid: req.body.releaseid
             },(err,data)=>{
@@ -80,7 +79,7 @@ exports.addCase=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         caseModel.insert({projectid: req.params.projectid, releaseid: req.params.releaseid
         },(err,data)=>{
             if(err){
@@ -95,7 +94,7 @@ exports.addCase=(req,res)=>{
 }
 function isProject(releaseid, projectid){
     return new Promise((resolve, reject)=>{
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         caseModel.find({releaseid: releaseid, projectid: projectid}, (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -115,7 +114,7 @@ function isProject(releaseid, projectid){
 }
 async function getRels(projectid){
     return new Promise((resolve, reject)=>{
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         caseModel.aggregate(
             {
                 _field: 
@@ -150,7 +149,7 @@ async function getRels(projectid){
 }
 function isCase(projectreleaseid){
     return new Promise((resolve, reject)=>{
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         caseModel.find({projectreleaseid: projectreleaseid}, (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -178,7 +177,7 @@ exports.getReleases = async function(req,res){
             res.status(422).json({ error: errors.array() });
             return;
         }
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         const data = await getRels(req.params.projectid)
         var arr = []
         if(JSON.stringify(data).indexOf("error")>0){
@@ -188,7 +187,7 @@ exports.getReleases = async function(req,res){
                 const element = data[key].releaseid;
                 arr.push(element)       
             }
-            const url = `${services.releases}releases`
+            const url = `${config.services.releases}releases`
             const body = {"releases": arr}
             const resp = await request
                 .post(url)

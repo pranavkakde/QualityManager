@@ -6,7 +6,7 @@ exports.checkRequiredRole=(req,res,next)=>{
     if(req){
         if(!req.path.indexOf('login')){
             if(req.body.username){
-                userModel.setConfig(config)
+                userModel.setConfig(config.database)
                 userModel.find({UserName: req.body.username},(err,data)=>{
                     if(err){
                         if(lib.isEmptyObject(err)){

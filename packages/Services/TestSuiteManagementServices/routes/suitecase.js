@@ -10,7 +10,7 @@ exports.getCase= (req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         isSuite(req.params.testsuiteid).then(data=>{
             res.status(200).json(data);
         }).catch(error=>{
@@ -27,7 +27,7 @@ exports.deleteCase=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         caseModel.delete({testsuiteid: req.params.testsuiteid, testcaseid: req.params.testcaseid },(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -51,7 +51,7 @@ exports.updateCase=(req,res)=>{
             return;
         }
         console.log(req.params.testcasesuiteid)
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         isCase(req.params.testcasesuiteid).then(data =>{
             caseModel.update({id: req.params.testcasesuiteid},{testsuiteid: req.body.testsuiteid, testcaseid: req.body.testcaseid
             },(err,data)=>{
@@ -79,7 +79,7 @@ exports.addCase=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         caseModel.insert({testsuiteid: req.params.testsuiteid, testcaseid: req.params.testcaseid
         },(err,data)=>{
             if(err){
@@ -94,7 +94,7 @@ exports.addCase=(req,res)=>{
 }
 function isSuite(testsuiteid){
     return new Promise((resolve, reject)=>{
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         caseModel.find({testsuiteid: testsuiteid, testcaseid: testcaseid}, (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -114,7 +114,7 @@ function isSuite(testsuiteid){
 }
 function isCase(testcasesuiteid){
     return new Promise((resolve, reject)=>{
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         caseModel.find({testcasesuiteid: testcasesuiteid}, (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
