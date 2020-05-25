@@ -10,7 +10,7 @@ exports.getTestCase= (req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        testModel.setConfig(config)
+        testModel.setConfig(config.database)
         isTestCase(req.params.testcaseid).then(data=>{
             res.status(200).json(data);
         }).catch(error=>{
@@ -27,7 +27,7 @@ exports.deleteTestCase=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        testModel.setConfig(config)
+        testModel.setConfig(config.database)
         testModel.delete({testcaseid: req.params.testcaseid},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -50,7 +50,7 @@ exports.updateTestCase=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        testModel.setConfig(config)
+        testModel.setConfig(config.database)
         isTestCase(req.params.testcaseid).then(data =>{
             testModel.update({testcaseid: req.params.testcaseid},{name: req.body.name, description: req.body.description,
                 versionid: req.body.versionid, prerequisite: req.body.prerequisite, statusid: req.body.statusid,
@@ -80,7 +80,7 @@ exports.addTestCase=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        testModel.setConfig(config)
+        testModel.setConfig(config.database)
         testModel.insert({name: req.body.name, description: req.body.description,
             versionid: req.body.versionid, prerequisite: req.body.prerequisite, statusid: req.body.statusid,
             author: req.body.author
@@ -97,7 +97,7 @@ exports.addTestCase=(req,res)=>{
 }
 function isTestCase(testid){
     return new Promise((resolve, reject)=>{
-        testModel.setConfig(config)
+        testModel.setConfig(config.database)
 
         testModel.find({testcaseid: testid}, (err,data)=>{
             if(err){
@@ -117,7 +117,7 @@ function isTestCase(testid){
     })
 }
 exports.filterReleases=(req,res)=>{
-    relModel.setConfig(config)
+    relModel.setConfig(config.database)
     var sArray = req.body.releases
     /*suiteModel.aggregate(
         {

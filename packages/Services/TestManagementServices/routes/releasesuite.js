@@ -3,7 +3,6 @@ var config = require('../config/config')
 var lib = require('../lib/common')
 var {validationResult } = require('express-validator')
 var request = require('superagent')
-var services = require('../config/apiconfig')
 
 exports.getCase= (req,res)=>{
     try{
@@ -12,7 +11,7 @@ exports.getCase= (req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         isRel(req.params.releaseid, req.params.testsuiteid).then(data=>{
             res.status(200).json(data);
         }).catch(error=>{
@@ -29,7 +28,7 @@ exports.deleteCase=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         caseModel.delete({testsuiteid: req.params.testsuiteid, releaseid: req.params.releaseid },(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -52,7 +51,7 @@ exports.updateCase=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         isCase(req.params.releasesuiteid).then(data =>{
             caseModel.update({id: req.params.releasesuiteid},{testsuiteid: req.body.testsuiteid, releaseid: req.body.releaseid
             },(err,data)=>{
@@ -80,7 +79,7 @@ exports.addCase=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         caseModel.insert({testsuiteid: req.params.testsuiteid, releaseid: req.params.releaseid
         },(err,data)=>{
             if(err){
@@ -95,7 +94,7 @@ exports.addCase=(req,res)=>{
 }
 function isRel(releaseid, testsuiteid){
     return new Promise((resolve, reject)=>{
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         //rewrite this to get release id and test suite id by calling GET Test suite by id service. 
         caseModel.find({releaseid: releaseid, testsuiteid: testsuiteid}, (err,data)=>{
             if(err){
@@ -116,7 +115,7 @@ function isRel(releaseid, testsuiteid){
 }
 async function getTestSuites(releaseid){
     return new Promise((resolve, reject)=>{
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         caseModel.aggregate(
             {
                 _field: 
@@ -151,7 +150,7 @@ async function getTestSuites(releaseid){
 }
 function isCase(releasesuiteid){
     return new Promise((resolve, reject)=>{
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         caseModel.find({id: releasesuiteid}, (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -179,7 +178,7 @@ exports.getTestSuites = async function(req,res){
             res.status(422).json({ error: errors.array() });
             return;
         }
-        caseModel.setConfig(config)
+        caseModel.setConfig(config.database)
         const data = await getTestSuites(req.params.releaseid)
         var arr = []
         if(JSON.stringify(data).indexOf("error")>0){
@@ -189,7 +188,7 @@ exports.getTestSuites = async function(req,res){
                 const element = data[key].testsuiteid;
                 arr.push(element)       
             }
-            const url = `${services.testsuite}testsuites`
+            const url = `${config.services.testsuite}testsuites`
             const body = {"testsuites": arr}
             const resp = await request
                 .post(url)

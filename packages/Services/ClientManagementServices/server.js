@@ -67,16 +67,10 @@ app.post("/gettoken", clientvalidation.validate('gettoken'), client.gettoken)
 app.post("/validatetoken",clientvalidation.validate('validatetoken'), client.validatetoken)
 
 app.get("/isalive",(req,res)=>{
-  res.status(200);
+  res.status(200).json({"status":"ok"});
 })
 
 app.listen(port,'0.0.0.0',()=>{console.log(`Starting server on port ${port}`)})
 
 module.exports = app
-
-
-
-
-
-
 app.listen(3000);

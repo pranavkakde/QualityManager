@@ -10,7 +10,7 @@ exports.getTestStep= (req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        stepModel.setConfig(config)
+        stepModel.setConfig(config.database)
         isTestStep(req.params.testcaseid,req.params.stepid).then(data=>{
             res.status(200).json(data);
         }).catch(error=>{
@@ -27,7 +27,7 @@ exports.deleteTestStep=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        stepModel.setConfig(config)
+        stepModel.setConfig(config.database)
         stepModel.delete({testcaseid: req.params.testcaseid,stepid: req.params.stepid},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -50,7 +50,7 @@ exports.updateTestStep=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        stepModel.setConfig(config)
+        stepModel.setConfig(config.database)
         isTestStep(req.params.testcaseid, req.params.stepid).then(data =>{
             stepModel.update({testcaseid: req.params.testcaseid, stepid: req.params.stepid},{stepname: req.body.stepname,
                 action: req.body.action, verification: req.body.verification, statusid: req.body.statusid
@@ -79,7 +79,7 @@ exports.addTestStep=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        stepModel.setConfig(config)
+        stepModel.setConfig(config.database)
         stepModel.insert({stepname: req.body.stepname, action: req.body.action,
             verification: req.body.verification, testcaseid: req.params.testcaseid, statusid: req.body.statusid
         },(err,data)=>{
@@ -95,7 +95,7 @@ exports.addTestStep=(req,res)=>{
 }
 function isTestStep(testid, stepid){
     return new Promise((resolve, reject)=>{
-        stepModel.setConfig(config)
+        stepModel.setConfig(config.database)
         stepModel.find({testcaseid: testid, stepid: stepid}, (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -120,7 +120,7 @@ exports.getAllSteps=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        stepModel.setConfig(config)
+        stepModel.setConfig(config.database)
         stepModel.find({testcaseid: req.params.testcaseid}, (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){

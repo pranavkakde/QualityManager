@@ -10,7 +10,7 @@ exports.getRelease= (req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        relModel.setConfig(config)
+        relModel.setConfig(config.database)
         isRelease(req.params.releaseid).then(data=>{
             res.status(200).json(data);
         }).catch(error=>{
@@ -27,7 +27,7 @@ exports.deleteRelease=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        relModel.setConfig(config)
+        relModel.setConfig(config.database)
         relModel.delete({releaseid: req.params.releaseid},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -50,7 +50,7 @@ exports.updateRelease=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        relModel.setConfig(config)
+        relModel.setConfig(config.database)
         isRelease(req.params.releaseid).then(data =>{
             relModel.update({releaseid: req.params.releaseid},{name: req.body.name, description: req.body.description
             },(err,data)=>{
@@ -78,7 +78,7 @@ exports.addRelease=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        relModel.setConfig(config)
+        relModel.setConfig(config.database)
         relModel.insert({name: req.body.name, description: req.body.description
         },(err,data)=>{
             if(err){
@@ -93,7 +93,7 @@ exports.addRelease=(req,res)=>{
 }
 function isRelease(testrelid){
     return new Promise((resolve, reject)=>{
-        relModel.setConfig(config)
+        relModel.setConfig(config.database)
 
         relModel.find({releaseid: testrelid}, (err,data)=>{
             if(err){
@@ -113,7 +113,7 @@ function isRelease(testrelid){
     })
 }
 exports.filterReleases=(req,res)=>{
-    relModel.setConfig(config)
+    relModel.setConfig(config.database)
     var sArray = req.body.releases
     /*suiteModel.aggregate(
         {

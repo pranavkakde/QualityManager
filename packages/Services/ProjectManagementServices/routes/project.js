@@ -10,7 +10,7 @@ exports.getProject= (req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        projectModel.setConfig(config)
+        projectModel.setConfig(config.database)
         isProject(req.params.projectid).then(data=>{
             res.status(200).json(data);
         }).catch(error=>{
@@ -27,7 +27,7 @@ exports.deleteProject=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        projectModel.setConfig(config)
+        projectModel.setConfig(config.database)
         projectModel.delete({projectid: req.params.projectid},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -50,7 +50,7 @@ exports.updateProject=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        projectModel.setConfig(config)
+        projectModel.setConfig(config.database)
         isProject(req.params.projectid).then(data =>{
             projectModel.update({projectid: req.params.projectid},{name: req.body.name, description: req.body.description
             },(err,data)=>{
@@ -78,7 +78,7 @@ exports.addProject=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        projectModel.setConfig(config)
+        projectModel.setConfig(config.database)
         projectModel.insert({name: req.body.name, description: req.body.description
         },(err,data)=>{
             if(err){
@@ -93,7 +93,7 @@ exports.addProject=(req,res)=>{
 }
 function isProject(pid){
     return new Promise((resolve, reject)=>{
-        projectModel.setConfig(config)
+        projectModel.setConfig(config.database)
 
         projectModel.find({projectid: pid}, (err,data)=>{
             if(err){

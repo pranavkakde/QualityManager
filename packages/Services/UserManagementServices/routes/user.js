@@ -12,7 +12,7 @@ function getBase64Pwd(password){
 }
 function isUser(username, secretkey){
     return new Promise((resolve, reject)=>{
-        userModel.setConfig(config)
+        userModel.setConfig(config.database)
         userModel.find({UserName: username}, (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -41,7 +41,7 @@ exports.getUser= (req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        userModel.setConfig(config)
+        userModel.setConfig(config.database)
         userModel.find({UserName: req.params.username},(err,data)=>{
             if(data){
                 if(lib.isEmptyObject(err)){
@@ -64,7 +64,7 @@ exports.deleteUser=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        userModel.setConfig(config)
+        userModel.setConfig(config.database)
         userModel.delete({UserName: req.params.username},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -87,7 +87,7 @@ exports.updateUser=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        userModel.setConfig(config)
+        userModel.setConfig(config.database)
         var password = getAsciiPwd(req.body.password)
         var encryptedSecretKey = bcrypt.hashSync(password, 10, function(err, hash) {
             if (err){
@@ -138,7 +138,7 @@ exports.addUser=(req,res)=>{
     }
 }
 exports.getAllUsers=(req,res)=>{
-    userModel.setConfig(config)
+    userModel.setConfig(config.database)
     userModel.find({},function(err,data){
         if(err){
             if(lib.isEmptyObject(err)){
@@ -161,7 +161,7 @@ exports.login=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        userModel.setConfig(config)
+        userModel.setConfig(config.database)
         var password = getAsciiPwd(req.body.password)
         //checkSecretKey(req.body.password,)
         isUser(req.body.username,password).then(data =>{

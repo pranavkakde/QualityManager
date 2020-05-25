@@ -3,7 +3,6 @@ var config = require('../config/config')
 var lib = require('../lib/common')
 var {validationResult } = require('express-validator')
 var request = require('superagent')
-var services = require('../config/apiconfig')
 
 exports.getCase= (req,res)=>{
     try{
@@ -189,7 +188,7 @@ exports.getTestSuites = async function(req,res){
                 const element = data[key].testsuiteid;
                 arr.push(element)       
             }
-            const url = `${services.testsuite}testsuites`
+            const url = `${config.services.testsuite}testsuites`
             const body = {"testsuites": arr}
             const resp = await request
                 .post(url)

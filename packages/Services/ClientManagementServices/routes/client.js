@@ -15,7 +15,7 @@ function getBase64Pwd(password){
 
 var isClient=(async(clientname, secretkey)=>{
     return new Promise(async(resolve, reject)=>{
-        clientModel.setConfig(config)
+        clientModel.setConfig(config.database)
         await clientModel.find({ClientName: clientname}, (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -89,7 +89,7 @@ exports.deleteClient=(req,res)=>{
     }
     var password = req.header('secretkey')
     isClient(req.params.clientname,password).then(data =>{
-        clientModel.setConfig(config)
+        clientModel.setConfig(config.database)
         clientModel.delete({ClientName: req.params.clientname},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
@@ -133,7 +133,7 @@ exports.updateClient=(req,res)=>{
         });
         var password = req.header('secretkey')
         isClient(req.params.clientname,password).then(data =>{                
-                clientModel.setConfig(config)
+                clientModel.setConfig(config.database)
                 clientModel.update({ClientId: data[0].ClientId},{ClientName: req.params.clientname, SecretKey: encryptedSecretKey },(err,data)=>{
                     if(err){
                         if(lib.isEmptyObject(err)){
@@ -174,7 +174,7 @@ exports.addClient=(req,res)=>{
             return ({error: "secretkey encrypytion failed"})
         }
     });
-    clientModel.setConfig(config)
+    clientModel.setConfig(config.database)
     clientModel.insert({ClientName: req.body.clientname, SecretKey: encryptedSecretKey},(err,data)=>{
         if(err){
             res.status(500).json({error:"internal server error", err});
@@ -185,7 +185,7 @@ exports.addClient=(req,res)=>{
 }
 
 exports.getAllClients=(req,res)=>{
-    clientModel.setConfig(config)
+    clientModel.setConfig(config.database)
     clientModel.find({},function(err,data){
         if(err){
             if(lib.isEmptyObject(err)){

@@ -7,3 +7,4 @@ packages\Services\ClientManagementServices\node_modules
 packages\Services\ClientManagementServices\log
 packages\Services\DefectManagementServices\node_modules
 /keyfile
+/packages/Services/ClientManagementServices/dbsetup.bat
