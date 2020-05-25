@@ -27,7 +27,8 @@ stages:
         dockerComposeFile: '**/docker-compose.yaml'
         projectName: 'pranavkakde'
         action: 'Build services'
-        includeSourceTags: true
+        includeSourceTags: false
+        additionalImageTags: $(Build.BuildId)
     - task: DockerCompose@0
       inputs:
         containerregistrytype: 'Container Registry'
@@ -35,4 +36,5 @@ stages:
         dockerComposeFile: '**/docker-compose.yaml'
         projectName: 'pranavkakde'
         action: 'Push services'
-        includeSourceTags: true
+        includeSourceTags: false
+        additionalImageTags: $(Build.BuildId)
