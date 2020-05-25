@@ -7,7 +7,7 @@ var config={
         username:process.env.DBUSER,
         password:process.env.DBPASSWORD,
         driverOptions:{
-            trustedConnection: true
+            trustedConnection: false
         }
     }
 }
