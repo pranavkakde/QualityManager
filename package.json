@@ -29,5 +29,13 @@
   "homepage": "https://github.com/pranavkakde/QualityManager#readme",
   "devDependencies": {
     "lerna": "^3.20.2"
+  },
+  "dependencies": {
+    "@types/react-redux": "^7.1.9",
+    "@types/redux": "^3.6.0",
+    "react-hook-form": "^5.7.2",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8"
   }
 }
