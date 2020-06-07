@@ -211,7 +211,7 @@ exports.getAllClients=(req,res)=>{
  * @returns {Error.model}  500 - Unexpected error
  * @security JWT
  */
-exports.gettoken=(req,res)=>{
+/*exports.gettoken=(req,res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         res.status(422).json({ error: errors.array() });
@@ -235,7 +235,7 @@ exports.gettoken=(req,res)=>{
     }).catch(error=>{
         res.status(406).json(error);
     })    
-  }
+  }*/
 /**
  * @route POST /validatetoken
  * @group Client Management Services
@@ -249,7 +249,7 @@ exports.gettoken=(req,res)=>{
  * @returns {Error.model}  500 - Unexpected error
  * @security JWT
  */
-exports.validatetoken=(req,res)=>{
+/*exports.validatetoken=(req,res)=>{
     var token = req.body.token
     var isverified = jwt.verify(token,Buffer.from('clientkey').toString('base64'))
     if (isverified){
@@ -257,7 +257,7 @@ exports.validatetoken=(req,res)=>{
     }else{
         res.status(400).json({"error":"Token not verified"})
     }
-}
+}*/
 function checkSecretKey(reqseckey,dbseckey){
     return bcrypt.compareSync(reqseckey, dbseckey)
 }

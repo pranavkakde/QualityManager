@@ -63,8 +63,8 @@ app.delete("/client/:clientname", clientvalidation.validate('deleteClient'), cli
 app.put("/client/:clientname", clientvalidation.validate('updateClient'), client.updateClient)
 app.post("/client/",clientvalidation.validate('addClient'),client.addClient)
     //.get(client.getAllClients)
-app.post("/gettoken", clientvalidation.validate('gettoken'), client.gettoken)
-app.post("/validatetoken",clientvalidation.validate('validatetoken'), client.validatetoken)
+/*app.post("/gettoken", clientvalidation.validate('gettoken'), client.gettoken)
+app.post("/validatetoken",clientvalidation.validate('validatetoken'), client.validatetoken)*/
 
 app.get("/isalive",(req,res)=>{
   res.status(200).json({"status":"ok"});

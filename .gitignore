@@ -8,3 +8,5 @@ packages\Services\ClientManagementServices\log
 packages\Services\DefectManagementServices\node_modules
 /keyfile
 /packages/Services/ClientManagementServices/dbsetup.bat
+/copyOnServer.ps1
+/lib

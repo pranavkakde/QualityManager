@@ -1,0 +1,454 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "This is the spec for User and Group Management services",
+      "version": "1.0.0",
+      "title": "User and Group Management Services",
+      "contact": {
+        "email": "pranavkakde@gmail.com"
+      }
+    },
+    "host": "localhost:7777",
+    "basePath": "/",
+    "tags": [
+      {
+        "name": "user",
+        "description": "user management services"
+      },
+      {
+        "name": "group",
+        "description": "group management services"
+      }
+    ],
+    "schemes": [
+      "https",
+      "http"
+    ],
+    "paths": {
+      "/user": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Create user",
+          "description": "add user details",
+          "operationId": "addUser",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "User object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "User record inserted succesfully",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      },
+      "/user/login": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Logs user into the system",
+          "description": "",
+          "operationId": "loginUser",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "User object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Login"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "schema": {
+                "type": "string"
+              },
+              "headers": {
+                "X-Rate-Limit": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "calls per hour allowed by the user"
+                },
+                "X-Expires-After": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "date in UTC when token expires"
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid username/password supplied"
+            }
+          }
+        }
+      },
+      "/user/logout": {
+        "get": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Logs out current logged in user session",
+          "description": "",
+          "operationId": "logoutUser",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [],
+          "responses": {
+            "default": {
+              "description": "successful operation"
+            }
+          }
+        }
+      },
+      "/user/{username}": {
+        "get": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Get user by user name",
+          "description": "",
+          "operationId": "getUser",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "username",
+              "in": "path",
+              "description": "user name",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description":"successful operation",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            },
+            "400": {
+              "description": "User details not found"
+            },
+            "500": {
+              "description": "internal server error"
+            },
+            "422": {
+              "description": "validation failed"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "user"
+          ],
+          "summary": "update user details",
+          "description": "update user details",
+          "operationId": "updateUser",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "username",
+              "in": "path",
+              "description": "user name to be updated",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "User object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User record updated succesfully"
+            },
+            "400": {
+              "description": "user details not found"
+            },
+            "422": {
+              "description": "Validations failed"
+            },
+            "500": {
+              "description": "internal server error"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Delete user",
+          "description": "Delete user details",
+          "operationId": "deleteUser",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "username",
+              "in": "path",
+              "description": "The name that needs to be deleted",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User record deleted successfully"
+            },
+            "400": {
+              "description": "User details not found"
+            },
+            "500": {
+              "description": "internal server error"
+            }
+          }
+        }
+      },
+      "/group": {
+        "post": {
+          "tags": [
+            "group"
+          ],
+          "summary": "Create group",
+          "description": "add group details",
+          "operationId": "addGroup",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "User object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Group"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Group record inserted succesfully",
+              "schema": {
+                "$ref": "#/definitions/Group"
+              }
+            },
+            "400": {
+              "description": "Group record not found"
+            },
+            "500": {
+              "description": "internal server error"
+            }
+          }
+        }
+      },
+      "/group/{groupid}": {
+        "get": {
+          "tags": [
+            "group"
+          ],
+          "summary": "Get group by group id",
+          "description": "get group id",
+          "operationId": "getGroup",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "groupid",
+              "in": "path",
+              "description": "Group Id",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description" : "successful operation",
+              "schema": {
+                "$ref": "#/definitions/Group"
+              }
+            },
+            "400": {
+              "description": "Group details not found"
+            },
+            "500": {
+              "description": "internal server error"
+            },
+            "422": {
+              "description": "validation failed"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "group"
+          ],
+          "summary": "update group details",
+          "description": "update group details",
+          "operationId": "updateGroup",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "groupid",
+              "in": "path",
+              "description": "group idto be updated",
+              "required": true,
+              "type": "integer"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Group object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Group"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Group record updated succesfully",
+              "schema": {
+                "$ref": "#/definitions/Group"
+              }
+            },
+            "400": {
+              "description": "group details not found"
+            },
+            "422": {
+              "description": "Validations failed"
+            },
+            "500": {
+              "description": "internal server error"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "group"
+          ],
+          "summary": "Delete group",
+          "description": "Delete group details",
+          "operationId": "deleteGroup",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "groupid",
+              "in": "path",
+              "description": "The id that needs to be deleted",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Group record deleted successfully"
+            },
+            "400": {
+              "description": "Group details not found"
+            },
+            "500": {
+              "description": "internal server error"
+            }
+          }
+        }
+      }
+    },
+    "securityDefinitions": {
+      "api_key": {
+        "type": "apiKey",
+        "name": "token",
+        "in": "header"
+      }
+    },
+    "definitions": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "groupid": {
+            "type": "integer"
+          }
+        }
+      },
+      "Login":{
+        "type": "object",
+        "properties":{
+          "username":{
+            "type":"string"
+          },
+          "password":{
+            "type":"string"
+          }
+        }
+      },
+      "Group": {
+        "type": "object",
+        "properties": {
+          "groupname": {
+            "type": "string"
+          },
+          "groupid": {
+            "type": "integer"
+          }
+        }
+      },
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }

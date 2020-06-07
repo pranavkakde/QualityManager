@@ -25,12 +25,12 @@ app.use(bodyParser.json({ type: 'application/json'}));
 app.use(cors())
 
 //create a session
-app.use(session({
+/*app.use(session({
   secret: 'new session',
   resave: true,
   saveUninitialized: false,
   cookie: { maxAge: 60000 }}
-));
+));*/
 
 // create a rotating access log
 var accessLogStream = rfs('access.log', {
@@ -40,7 +40,7 @@ var accessLogStream = rfs('access.log', {
   
 // setup the logger
 app.use(morgan('combined', { stream: accessLogStream }))
-app.use(auth.checkLogin)
+app.use(auth.checkAuthToken)
 app.use(auth.checkRequiredRole)
 //########### User management routes ###############
 //var x =[uservalidator.validate('getUser'),auth.checkLogin]
@@ -50,8 +50,8 @@ app.put("/user/:username",uservalidator.validate('updateUser'),user.updateUser)
 //app.put("/user/:username/group/:groupname",uservalidator.validate('assignRole'),user.assignRole)   
 app.post("/user",uservalidator.validate('addUser'),user.addUser)
 app.get("/users",user.getAllUsers)
-app.post("/user/login", uservalidator.validate('login'),user.login)
-app.post("/user/logout", uservalidator.validate('logout'),user.logout)
+/*app.post("/user/login", uservalidator.validate('login'),user.login)
+app.post("/user/logout", uservalidator.validate('logout'),user.logout)*/
 
 //################## Group Management Services ################
 

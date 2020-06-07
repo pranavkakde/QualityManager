@@ -1,6 +1,5 @@
 var test = require('supertest')
 var server = require('../server')
-var should = require("should")
 var assert = require("assert")
 
 var userdata={
@@ -29,7 +28,7 @@ var groupuserdata2={
 }
 var groupid = 0
 var userid = 0
-describe('Verify if Group CRUD is successful', () => {
+/*describe('Verify if Group CRUD is successful', () => {
     
     it('post group by group id',  (done) => {
          test(server)
@@ -68,8 +67,6 @@ describe('Verify if Group CRUD is successful', () => {
           .set('Accept','application/json')
           .expect(200)
           .expect((res)=>{
-            /*res.body.groupid = groupuserdata.GroupId;
-            res.body.groupname = groupuserdata.GroupName;*/
             console.log(res.body);
             assert(res.body.groupname,groupuserdata2.GroupName)
           })
@@ -83,9 +80,9 @@ describe('Verify if Group CRUD is successful', () => {
             .end((res)=>{assert(res.body.message, 'Group record deleted successfully');done()})
             //.end(done())
     })
-})
+})*/
 
-/*describe('Verify if User CRUD is successful', () => {
+describe('Verify if User CRUD is successful', () => {
     
     it('post user by user id', (done) => {
          test(server)
@@ -130,4 +127,4 @@ describe('Verify if Group CRUD is successful', () => {
             .expect(200)
             .end((res)=>{res.body.message.should('User record deleted successfully');done()})
     })
-})*/
+})
