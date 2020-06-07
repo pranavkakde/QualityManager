@@ -8,6 +8,10 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { LoginPage } from "./loginPage";
+import {clientActions, userActions} from '../actions';
+//import {userActions} from '../actions/userActions';
+import { connect } from 'react-redux';
+
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
   
@@ -38,21 +42,22 @@ function TabPanel(props) {
 class LandingPage extends Component {
     
     constructor(props){
-        super(props);        
+        super(props); 
+        this.props.logout();        
         this.state = {            
             value: 0            
         };
         this.handleChange=this.handleChange.bind(this)
-        //this.handleChangeIndex=this.handleChangeIndex.bind(this)
+        this.handleChangeIndex=this.handleChangeIndex.bind(this)
     }    
     handleChange(event, newValue){
         this.setState({value: newValue});
-      };
-    render() {        
-          
-        const handleChangeIndex = (index) => {
-            this.setState({value: index});
-          };
+    };
+    handleChangeIndex (index) {
+      this.setState({value: index});
+    };
+    render() {                
+
         function a11yProps(index) {
             return {
                 id: `full-width-tab-${index}`,
@@ -77,7 +82,7 @@ class LandingPage extends Component {
             <SwipeableViews
                 //axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 index={this.state.value}
-                onChangeIndex={handleChangeIndex}
+                onChangeIndex={this.handleChangeIndex}
             >
                 <TabPanel value={this.state.value} index={0}>
                 <LoginPage />
@@ -90,4 +95,19 @@ class LandingPage extends Component {
         )
     }
 }
-export default LandingPage;
+
+function mapState(state) {
+  const { loggingIn } = state.authentication;
+  return { loggingIn };
+}
+
+const actionCreators = {
+  logout: userActions.logout,
+  gettoken: clientActions.gettoken,
+  validatetoken: clientActions.validatetoken,
+  removetoken: clientActions.removetoken
+};
+
+//const conLandingPage = connect(mapState, actionCreators)(LandingPage);
+export default connect(mapState, actionCreators)(LandingPage);
+//export { conLandingPage as LandingPage};

@@ -2,11 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { userActions } from '../actions/userActions';
+import { userActions } from '../actions';
 
 class HomePage extends React.Component {
     componentDidMount() {
-        this.props.getUsers();
+        //this.props.getUsers();
     }
 
     handleDeleteUser(id) {
@@ -20,7 +20,7 @@ class HomePage extends React.Component {
                 <h1>Hi !</h1>
                 <p>You're logged in with React!!</p>                
                 <p>
-                    <Link to="/login">Logout</Link>
+                    <Link to="/">Logout</Link>
                 </p>
             </div>
         );

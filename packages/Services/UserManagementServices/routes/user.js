@@ -43,9 +43,9 @@ exports.getUser= (req,res)=>{
         }
         userModel.setConfig(config.database)
         userModel.find({UserName: req.params.username},(err,data)=>{
-            if(data){
+            if(err){
                 if(lib.isEmptyObject(err)){
-                    res.status(400).json({error: `user details not found for ${req.params.username}`});
+                    res.status(404).json({error: `user details not found for ${req.params.username}`});
                 }else{
                     res.status(500).json({error: "internal server error", err});
                 }
@@ -68,7 +68,7 @@ exports.deleteUser=(req,res)=>{
         userModel.delete({UserName: req.params.username},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
-                    res.status(400).json({error: `user details not found for ${req.params.username}`});
+                    res.status(404).json({error: `user details not found for ${req.params.username}`});
                 }else{
                     res.status(500).json({error:"internal server error", err});
                 }
@@ -98,7 +98,7 @@ exports.updateUser=(req,res)=>{
             userModel.update({UserName: req.params.username},{UserName: req.body.UserName, Password: encryptedSecretKey, GroupId: req.body.groupid},(err,data)=>{
                 if(err){
                     if(lib.isEmptyObject(err)){
-                        res.status(400).json({error:`User details not found for ${req.params.username}`});
+                        res.status(404).json({error:`User details not found for ${req.params.username}`});
                     }else{
                         res.status(500).json({error:"internal server error", err});
                     }
@@ -120,12 +120,13 @@ exports.addUser=(req,res)=>{
             res.status(422).json({ error: errors.array() });
             return;
         }
-        var password = getAsciiPwd(req.body.password)
+        //var password = getAsciiPwd(req.body.password)
+        var password = req.body.password
         var encryptedPassword = bcrypt.hashSync(password, 10, function(err, hash) {
             if (err){
                 return ({error: "secretkey encrypytion failed"})
             }
-        });
+        });        
         userModel.insert({UserName: req.body.username, Password: encryptedPassword, GroupId: req.body.groupid},(err,data)=>{
             if(err){
                     res.status(500).json({error:"internal server error", err});
@@ -137,12 +138,12 @@ exports.addUser=(req,res)=>{
         res.status(500).json({error:"internal server error", err});
     }
 }
-exports.getAllUsers=(req,res)=>{
+exports.getAllUsers=(req,res)=>{    
     userModel.setConfig(config.database)
     userModel.find({},function(err,data){
         if(err){
             if(lib.isEmptyObject(err)){
-                res.status(500).json({error:"no data found"});
+                res.status(404).json({error:"no data found"});
             }else{
                 res.status(500).json({error:"internal server error", err});
             }
@@ -154,7 +155,7 @@ exports.getAllUsers=(req,res)=>{
 function checkSecretKey(reqseckey,dbseckey){
     return bcrypt.compareSync(reqseckey, dbseckey)
 }
-exports.login=(req,res)=>{
+/*exports.login=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -166,7 +167,7 @@ exports.login=(req,res)=>{
         //checkSecretKey(req.body.password,)
         isUser(req.body.username,password).then(data =>{
             req.session.userid = data[0].UserId;
-            res.status(200).json({"data":"data[0]"});
+            res.status(200).json({"data":data[0]});
         }).catch(error=>{
             res.status(406).json(error);
         })
@@ -197,3 +198,4 @@ function destroySession(session){
         });
     })
 }
+*/

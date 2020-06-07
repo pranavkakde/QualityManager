@@ -17,3 +17,10 @@ export const userConstants = {
     DELETE_SUCCESS: 'USERS_DELETE_SUCCESS',
     DELETE_FAILURE: 'USERS_DELETE_FAILURE'    
 };
+
+export const clientConstants = {
+    TOKEN_REQUEST: 'TOKEN_REQUEST',
+    TOKEN_SUCCESS: 'TOKEN_SUCCESS',
+    TOKEN_FAILURE: 'TOKEN_FAILURE',    
+    VALIDATE_TOKEN: 'VALIDATE_TOKEN'
+};

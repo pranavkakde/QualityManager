@@ -3,7 +3,6 @@ import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import { history } from './store/history';
 import { PrivateRoute } from './components/PrivateRoute';
 import { HomePage } from './pages/homePage';
-import { LoginPage } from './pages/loginPage';
 import LandingPage  from './pages/landingPage';
 
 export default class App extends React.Component {
@@ -20,7 +19,7 @@ export default class App extends React.Component {
                   <Router history={history}>
                       <Switch>
                           <PrivateRoute exact path="/home" component={HomePage} />
-                          <Route exact path="/login" component={LandingPage} />                          
+                          <Route exact path="/" component={LandingPage} />                          
                           <Redirect from="*" to="/" />
                       </Switch>
                   </Router>

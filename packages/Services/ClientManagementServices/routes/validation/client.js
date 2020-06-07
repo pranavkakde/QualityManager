@@ -26,7 +26,7 @@ exports.validate = (method) => {
           param('clientname',  'Client Name parameter must be an integer').exists()
             ]   
       }
-      case 'gettoken':{
+      /*case 'gettoken':{
         return [
             body('clientname',  'Client Name doesn\'t exists').exists()
             //body('secretkey',  'Secret Key doesn\'t exists').exists()
@@ -36,6 +36,6 @@ exports.validate = (method) => {
         return [
             body('token',  'token doesn\'t exists').exists(), 
           ]   
-      }
+      }*/
     }
   }

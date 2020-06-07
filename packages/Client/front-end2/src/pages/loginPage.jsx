@@ -1,8 +1,8 @@
 import React, { Component} from 'react'
-import { userActions } from "../actions/userActions";
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
+import { clientActions, userActions } from '../actions';
 
 class LoginPage extends Component {    
     constructor(props){
@@ -25,7 +25,7 @@ class LoginPage extends Component {
         event.preventDefault();
         this.setState({ submitted: true, isvalidated:true});                
         if (username && password) {
-            this.props.login(username, password);
+            this.props.gettoken(username, password);
         }
     }
       
@@ -78,7 +78,8 @@ function mapState(state) {
 
 const actionCreators = {
     login: userActions.login,
-    logout: userActions.logout
+    logout: userActions.logout,
+    gettoken: clientActions.gettoken
 };
 
 const connectedLoginPage = connect(mapState, actionCreators)(LoginPage);
