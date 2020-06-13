@@ -1,19 +1,20 @@
+require('dotenv').config();
 var express = require("express");  
 var path = require("path");  
-var bodyParser = require('body-parser');   
-var db = require("./config.js");  
+var bodyParser = require('body-parser');
 const cors = require('cors')  
 var app = express();  
 var port = process.env.PORT || '10104'  
-var testRunModel = require('./Model/TestRun')
 var serviceModel = require('./Model/Service')
 var morgan = require('morgan')
 var rfs = require("rotating-file-stream");
-var apiHandler=require('./router/router');
-
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var servicemgmt = require('./router/servicemgmt');
+var proxy = require('./router/proxy');
+var auth = require('./auth/auth');
+var disc = require('./router/servicedisc');
 app.use(express.static('public'));  
 app.use(bodyParser.json({limit:'5mb'}));    
 app.use(bodyParser.urlencoded({extended:true, limit:'5mb'}));  
@@ -28,126 +29,47 @@ var accessLogStream = rfs('access.log', {
 // setup the logger
 app.use(morgan('combined', { stream: accessLogStream }))
 
-//#$################### ---TestRun ----##############
+app.use(express.static('public'));  
+app.use(bodyParser.json({limit:'5mb'}));    
+app.use(bodyParser.urlencoded({extended:true, limit:'5mb'}));  
+app.use(bodyParser.text());                                    
+app.use(bodyParser.json({ type: 'application/json'}));
+app.use(cors())
+
+//middleware
+//app.use(disc.serviceExists);
+app.use(auth.checkAuthToken);
+
+//##################### --- Service Management ----##############
 //api for get data from database  
-app.get("/services/service",function(req,res){   
-    serviceModel.find({},function(err,data){  
-            if(err){  
-                res.send(err);  
-            }  
-            else{             
-                res.send(data);  
-                }  
-        });  
-})  
+app.get("/services/service",servicemgmt.getAllServices);
     
 //api for Delete data from database  
-app.delete("/services/service/:name",function(req,res){   
-    console.log(req.params.name)
-    serviceModel.deleteOne({ name: req.params.name }, function(err) {  
-            if(err){  
-                res.send(err);  
-            }  
-            else{    
-                   res.send({data:"Service has been deleted from registry..!!"});             
-               }  
-        });  
-})  
+app.delete("/services/service/:name",servicemgmt.deleteService);
     
 //api for Update data from database  
-app.put("/services/service",function(req,res){ 
-    serviceModel.findOneAndUpdate(
-        {_id:req.body._id}, 
-        { name:  req.body.name, 
-            serviceEndpoint: req.body.serviceEndpoint, 
-            path: req.body.path, 
-        },
-        {new:true},
-        (err,doc)=> {  
-        if (err) {  
-            res.send(err);  
-            return;  
-        }  
-        res.send({success:true,data:"Service data has been successfully inserted..!!",doc});  
-    });  
-})    
+app.put("/services/service",servicemgmt.updateService);
     
 //api for Insert data from database  
-app.post("/services/service",function(req,res){   
-    var mod = new serviceModel(req.body);  
-        mod.save(function(err,data){  
-            if(err){  
-                res.send(err);                
-            }  
-            else{        
-                 res.send({data:"Service Record has been Inserted..!!"});  
-            }  
-        });  
-})
-app.get("/services/getservice/:name",function(req,res){   
-    serviceModel.find({name: req.params.name},function(err,data){  
-            if(err){  
-                res.send(err);  
-            }  
-            else{             
-                res.send(data);  
-                }  
-        });  
-}) 
+app.post("/services/service",servicemgmt.saveService);
 
-app.get("/api/:servicename/:path*",function(req,res){   
-    console.log(req.params.path);
-    serviceModel.findOne({name:req.params.servicename},function(err,data){
-        if (err){
-            var err = "Service name " + req.params.servicename + " not found in gateway registry"
-            res.send({err});
-        }else{
-            if (data!=null){
-                const uri = data.serviceEndpoint + "/"+ req.params.servicename +"/"+ req.params.path;
-                console.log(uri);
-                apiHandler(uri)
-                    .then(response => {
-                        res.json(response)
-                    })
-                    .catch(error => {
-                        res.send(error)
-                    })
-            }
-        }
-    })
-})
-app.delete("/api/:servicename/:path*",function(req,res){   
-    console.log(req.params.path);
-    serviceModel.findOne({name:req.params.servicename},function(err,data){
-        if (err){
-            var err = "Service name " + req.params.servicename + " not found in gateway registry"
-            res.send({err});
-        }else{
-            if (data!=null){
-                const uri = data.serviceEndpoint + "/"+ req.params.servicename +"/"+ req.params.path;
-                console.log(uri);
-                apiHandler(uri)
-                    .then(response => {
-                        res.json(response)
-                    })
-                    .catch(error => {
-                        res.send(error)
-                    })
-            }
-        }
-    })
-})
-////#########---End Services------##########
+//get a service
+app.get("/services/getservice/:name",servicemgmt.getService);
 
-//const server = http.createServer(app);
 
-//const io = socketIo(server);
-//io.listen(10100);
+//############### Routing Service Calls ################################
+app.get("/api/:servicename/:path*",proxy.getProxy);
+app.put("/api/:servicename/:path*",proxy.putProxy);
+app.post("/api/:servicename/:path*",proxy.postProxy);
+app.delete("/api/:servicename/:path*",proxy.deleteProxy);
+////#########---End Routing Service calls------##########
+
+//#region Service Health Check
 //start server on port  
 http.listen(port,function(){   
     console.log("server started on port "+ port);  
 })
-io.set("origins", "*:*");
+/*io.set("origins", "*:*");
 io.on("connection", socket => {
     console.log("New client connected"), setInterval(
       () => checkIsAlive(socket),
@@ -181,4 +103,5 @@ const checkIsAlive = async socket => {
         console.error(`Error: ${error.code}`);
     }
 };
-  
+*/
+//#endregion  

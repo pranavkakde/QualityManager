@@ -1,23 +1,23 @@
-import { clientConstants } from '../constants/constants';
+import { authConstants } from '../constants/constants';
 
 export function client(state = {}, action) {
   switch (action.type) {
-    case clientConstants.TOKEN_REQUEST:
+    case authConstants.TOKEN_REQUEST:
       return {
         ...state,
         action
       };
-    case clientConstants.TOKEN_SUCCESS:
+    case authConstants.TOKEN_SUCCESS:
       return {
         ...state,
         action
       };
-    case clientConstants.VALIDATE_TOKEN:
+    case authConstants.VALIDATE_TOKEN:
       return {
         ...state,
         action
       };
-    case clientConstants.TOKEN_FAILURE:
+    case authConstants.TOKEN_FAILURE:
       return { 
         error: action.error
       };

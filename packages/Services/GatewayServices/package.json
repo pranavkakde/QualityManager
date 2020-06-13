@@ -1,35 +1,34 @@
 {
-  "name": "reportserver",
+  "name": "gatewayservices",
   "version": "1.0.0",
-  "description": "Test automation reporting project",
-  "main": "index.js",
+  "description": "qualityManager project",
+  "main": "server.js",
   "scripts": {
-    "test": "test",
-    "start": "nodemon server.js"
+    "test": "test"    
   },
   "repository": {
     "type": "git",
     "url": "none"
   },
   "keywords": [
-    "Katalon"
+    "Quality Manager"
   ],
   "author": "pranav kakde",
   "license": "MIT",
   "devDependencies": {
     "body-parser": "^1.18.3",
+    "dotenv": "^8.2.0",
     "express": "^4.16.4",
     "gulp": "^4.0.0",
     "gulp-zip": "^4.2.0",
-    "mongoose": "^5.7.5",
     "morgan": "^1.9.1",
-    "nodemon": "^1.18.10",
+    "nodemon": "^1.19.4",
     "serve-static": "^1.13.2"
   },
   "dependencies": {
+    "axios": "^0.19.2",
+    "cachejsorm": "^1.1.2",
     "cors": "^2.8.5",
-    "mssql": "^5.0.3",
-    "request": "^2.88.0",
     "rotating-file-stream": "^1.4.0",
     "socket.io": "^2.2.0"
   }

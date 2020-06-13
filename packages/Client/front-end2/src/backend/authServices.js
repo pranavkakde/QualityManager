@@ -1,7 +1,7 @@
 import config from 'config';
-import {userServices} from './userServices';
+import {handleResponse} from './checkResponse';
 
-export const clientServices = {    
+export const authServices = {    
     getToken,
     validateToken
 };
@@ -28,11 +28,11 @@ function validateToken(token){
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify( {"token": token })
     };    
-    return fetch(`${config.auth_services_url}/gettoken`, requestOptions)
+    return fetch(`${config.auth_services_url}/validatetoken`, requestOptions)
         .then(handleResponse)
-        .then(response => {            
-            localStorage.setItem('token', JSON.stringify(response.token));
-            return response.token;
+        .then(response => {
+            console.log(response);
+            return response.contains('success')?response:null;             
         });
 }
 
@@ -41,16 +41,3 @@ function refreshToken(){
 
 }
 
-function handleResponse(response) {
-    return response.text().then(text => {
-        const data = text && JSON.parse(text);
-        if (!response.ok) {
-            if (response.status === 401) {                
-                location.reload(true);
-            }
-            const error = (data && data.message) || response.statusText;
-            return Promise.reject(error);
-        }
-        return data;
-    });
-}

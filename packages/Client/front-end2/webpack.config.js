@@ -24,7 +24,8 @@ module.exports = {
         // global app config object
         config: JSON.stringify({
             user_services_url: 'http://192.168.99.101:30344',
-            auth_services_url: 'http://localhost:8181'
+            auth_services_url: 'http://localhost:8181',
+            ts_services_url: 'http://localhost:7780'
             //auth_services_url: 'http://192.168.99.101:31552'
         })
     }
