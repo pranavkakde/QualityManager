@@ -39,7 +39,7 @@ exports.getUser= (req,res)=>{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             res.status(422).json({ error: errors.array() });
-            return;
+            //return;
         }
         userModel.setConfig(config.database)
         userModel.find({UserName: req.params.username},(err,data)=>{

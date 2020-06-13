@@ -1,3 +1,4 @@
+require('dotenv').config()
 var express = require("express");  
 var path = require("path");  
 var bodyParser = require('body-parser');   
@@ -40,7 +41,7 @@ var accessLogStream = rfs('access.log', {
   
 // setup the logger
 app.use(morgan('combined', { stream: accessLogStream }))
-app.use(auth.checkAuthToken)
+//app.use(auth.checkAuthToken)
 app.use(auth.checkRequiredRole)
 //########### User management routes ###############
 //var x =[uservalidator.validate('getUser'),auth.checkLogin]

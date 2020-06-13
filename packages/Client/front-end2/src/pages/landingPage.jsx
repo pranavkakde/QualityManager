@@ -8,8 +8,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { LoginPage } from "./loginPage";
-import {clientActions, userActions} from '../actions';
-//import {userActions} from '../actions/userActions';
+import {authActions } from '../actions';
 import { connect } from 'react-redux';
 
 function TabPanel(props) {
@@ -101,11 +100,10 @@ function mapState(state) {
   return { loggingIn };
 }
 
-const actionCreators = {
-  logout: userActions.logout,
-  gettoken: clientActions.gettoken,
-  validatetoken: clientActions.validatetoken,
-  removetoken: clientActions.removetoken
+const actionCreators = {  
+  login: authActions.gettoken,
+  validatetoken: authActions.validatetoken,
+  logout: authActions.removetoken
 };
 
 //const conLandingPage = connect(mapState, actionCreators)(LandingPage);

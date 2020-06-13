@@ -1,3 +1,4 @@
+require('dotenv').config()
 var express = require("express");  
 var path = require("path");  
 var bodyParser = require('body-parser');   
@@ -31,12 +32,12 @@ app.use(morgan('combined', { stream: accessLogStream }))
 
 //########### Auth management routes ###############
 
-app.post("/gettoken", authvalidator.validate('gettoken'), auth.gettoken)
-app.post("/validatetoken",authvalidator.validate('validatetoken'), auth.validatetoken)
+app.post("/auth/gettoken", authvalidator.validate('gettoken'), auth.gettoken)
+app.post("/auth/validatetoken",authvalidator.validate('validatetoken'), auth.validatetoken)
 //update password
 
 
-app.get("/isalive",(req,res)=>{
+app.get("/auth/isalive",(req,res)=>{
   res.send("ok").status(200);
 })
 

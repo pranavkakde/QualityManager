@@ -1,8 +1,8 @@
-import { clientConstants } from '../constants/constants';
+import { authConstants } from '../constants/constants';
 import { history } from '../store/history';
-import {clientServices} from '../backend/clientServices';
+import {authServices} from '../backend/authServices';
 
-export const clientActions = {
+export const authActions = {
     gettoken,
     validatetoken,
     removetoken    
@@ -11,7 +11,7 @@ export const clientActions = {
 function gettoken(username, password) {
     return dispatch => {        
         dispatch(request());                     
-        clientServices.getToken(username, password)
+        authServices.getToken(username, password)
             .then(
                 token => { 
                     dispatch(success(token));
@@ -19,13 +19,12 @@ function gettoken(username, password) {
                 },                
                 error => {
                     dispatch(failure(error.toString()));
-                    //dispatch(alertActions.error(error.toString()));
                 }
-            );        
+            );
     };
-    function request(token) { return { type: clientConstants.TOKEN_REQUEST, token } }
-    function success(token) { return { type: clientConstants.TOKEN_SUCCESS, token } }
-    function failure(error) { return { type: clientConstants.TOKEN_FAILURE , error } }
+    function request(token) { return { type: authConstants.TOKEN_REQUEST, token } }
+    function success(token) { return { type: authConstants.TOKEN_SUCCESS, token } }
+    function failure(error) { return { type: authConstants.TOKEN_FAILURE , error } }
 }
 
 /*function register(user) {
@@ -53,20 +52,21 @@ function gettoken(username, password) {
 */
 function removetoken() {
     localStorage.removeItem('token');
+    history.push('/');
+    return { type: authConstants.TOKEN_REMOVED };
 }
 function validatetoken() {
     return dispatch => {
         dispatch(request());        
-        dispatch(success(users));
-        /*services.validatetoken()
+        dispatch(success(token));
+        authServices.validatetoken()
             .then(
-                users => dispatch(success(users)),
+                token => dispatch(success(token)),
                 error => dispatch(failure(error.toString()))
-            ); 
-            */
+            );            
     };
 
-    function request() { return { type: userConstants.GETALL_REQUEST } }
-    function success(users) { return { type: userConstants.GETALL_SUCCESS, users } }
-    function failure(error) { return { type: userConstants.GETALL_FAILURE, error } }
+    function request(token) { return { type: authConstants.TOKEN_REQUEST, token } }
+    function success(token) { return { type: authConstants.TOKEN_SUCCESS, token } }
+    function failure(error) { return { type: authConstants.TOKEN_FAILURE , error } }
 }

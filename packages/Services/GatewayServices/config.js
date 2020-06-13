@@ -1,9 +1,20 @@
-var mongo = require("mongoose");  
-var db =  'gateway'; 
-mongo.connect("mongodb://127.0.0.1:27017/"+db, { useNewUrlParser: true }, function(err, response){  
-   if(err){ console.log('Failed to connect to ' + db); }  
-   else{ console.log('Connected to ' + db); }  
-});  
-  
-  
-module.exports =db;  
+var config={
+   database:{
+       driverType: "mssql",    
+       server:process.env.DBINSTANCE,
+       database:process.env.DATABASE,
+       cacheDuration: 10,
+       username:process.env.DBUSER,
+       password:process.env.DBPASSWORD,
+       driverOptions:{
+           trustedConnection: true
+       }
+   },
+   services:{
+      auth_services:`${process.env.AUTH_SERVICES_URL}/`
+   },
+   authkey:{
+         key: 'clientkey'
+   }
+}
+module.exports = config;
