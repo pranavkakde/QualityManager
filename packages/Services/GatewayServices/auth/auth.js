@@ -7,18 +7,16 @@ exports.checkAuthToken= async(req,res,next)=>{
             const url = `${config.services.auth_services}auth/validatetoken`
             const tokenHeader = req.header('Authorization')            
             if(tokenHeader){
-                var token = tokenHeader.split(" ")[1]
-                console.log(token)
+                var token = tokenHeader.split(" ")[1]                
                 if(token===undefined){
                     res.status(403).json({"error":"Missing Token", err});
                 }
                 var body = {"token": token }                
                 axios.post(url, {...body})
-                    .then(resp=>{
-                        //console.log(JSON.stringify(resp));
+                    .then(resp=>{                        
                         next();
                     }).catch(err=>{
-                        res.status(401).json({"error": "Invalid Login Credentials", err});
+                        res.status(401).json({"error": "Invalid Login Credentials"});
                     })
             }else{
                 res.status(403).json({"error":"Missing Authorization Header"});

@@ -39,7 +39,7 @@ function getBase64Pwd(password){
 exports.gettoken=(req,res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.status(422).json({ error: errors.array() });
+        next(lib.error(422,errors.array()));
         return;
     }
     //var password = getAsciiPwd(req.body.password)    
@@ -55,10 +55,10 @@ exports.gettoken=(req,res)=>{
                     token
                 })
         }else{
-            res.status(500).json({"errors":{"message": "password does not match"}})
+            next(lib.error(400,"password does not match"));
         }
     }).catch(error=>{
-        res.status(406).json(error);
+        next(lib.error(404,`Not found`));
     })    
   }
 
@@ -66,9 +66,9 @@ exports.validatetoken=(req,res)=>{
     var token = req.body.token
     var isverified = jwt.verify(token,Buffer.from(config.authkey.key).toString('base64'))
     if (isverified){
-        res.status(200).json({"success":"token is verified"})
+        res.status(200).json({"success":"token is verified"});
     }else{
-        res.status(400).json({"error":"Token not verified"})
+        next(lib.error(403,"Token not verified"));
     }
 }
 

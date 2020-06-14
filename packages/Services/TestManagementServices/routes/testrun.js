@@ -7,24 +7,24 @@ exports.getTestRun= (req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         runModel.setConfig(config.database)
         isTestRun(req.params.testcaseid,req.params.testrunid).then(data=>{
             res.status(200).json(data);
         }).catch(error=>{
-            res.status(400).json(error);
+            next(lib.error(404,"No data found"));
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.deleteTestRun=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         runModel.setConfig(config.database)
@@ -33,21 +33,21 @@ exports.deleteTestRun=(req,res)=>{
                 if(lib.isEmptyObject(err)){
                     res.status(400).json({error: `Test Run Details not found for ${req.params.testcaseid}`});
                 }else{
-                    res.status(500).json({error:"internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
                 }
             }else{
-                res.status(200).json({message: "Test Run Details deleted succesfully"});
+                res.status(200).json({success: "Test Run Details deleted succesfully"});
             }
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.updateTestRun=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         runModel.setConfig(config.database)
@@ -60,24 +60,24 @@ exports.updateTestRun=(req,res)=>{
                     if(lib.isEmptyObject(err)){
                         res.status(400).json({error:`Test Run Details not found for ${req.params.testcaseid}`});
                     }else{
-                        res.status(500).json({error:"internal server error", err});
+                        next(lib.error(500,`internal server error ${err}`));
                     }
                 }else{
-                    res.status(200).json({message: "Test Run record updated succesfully", data});
+                    res.status(200).json({success: "Test Run record updated succesfully", data});
                 }
             })
         }).catch(error=>{
-            res.status(400).json(error);
+            next(lib.error(404,"No data found"));
         })
     }catch(err){
-        res.status(500).json({error:"internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.addTestRun=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         runModel.setConfig(config.database)
@@ -90,13 +90,13 @@ exports.addTestRun=(req,res)=>{
             testcaseid: req.params.testcaseid
         },(err,data)=>{
             if(err){
-                    res.status(500).json({error:"internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
             }else{
-                res.status(201).json({message: "Test Run record inserted succesfully", data});
+                res.status(201).json({success: "Test Run record inserted succesfully", data});
             }
         })
     }catch(err){
-        res.status(500).json({error:"internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 function isTestRun(testid, runid){
@@ -123,7 +123,7 @@ exports.getAllRuns=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         runModel.setConfig(config.database)
@@ -143,6 +143,6 @@ exports.getAllRuns=(req,res)=>{
             }
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }

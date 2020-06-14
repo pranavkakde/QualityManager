@@ -5,9 +5,9 @@ exports.serviceExists= async(req,res)=>{
     return new Promise((resolve, reject) => {        
         serviceModel.setConfig(config.database);
         var retval;        
-        serviceModel.find({name:req.params.servicename},function(err,data){
-            if (err){            
-                var err = "Service name " + req.params.servicename + " not found in gateway registry"
+        serviceModel.find({name:req.params[0]},function(err,data){
+            if (!(Array.isArray(data) && data.length)){
+                var err = {"error": "Service name " + req.params[0] + " not found in gateway registry"}
                 reject(err);
             }else{                            
                 retval = data;

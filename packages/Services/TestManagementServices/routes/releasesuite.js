@@ -8,24 +8,24 @@ exports.getCase= (req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         caseModel.setConfig(config.database)
         isRel(req.params.releaseid, req.params.testsuiteid).then(data=>{
             res.status(200).json(data);
         }).catch(error=>{
-            res.status(400).json(error);
+            next(lib.error(404,"No data found"));
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.deleteCase=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         caseModel.setConfig(config.database)
@@ -34,21 +34,21 @@ exports.deleteCase=(req,res)=>{
                 if(lib.isEmptyObject(err)){
                     res.status(400).json({error: `Release and associated Test Suite details not found for ${req.params.releaseid}`});
                 }else{
-                    res.status(500).json({error:"internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
                 }
             }else{
-                res.status(200).json({message: "Release and associated Test Suite record deleted succesfully", data});
+                res.status(200).json({success: "Release and associated Test Suite record deleted succesfully", data});
             }
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.updateCase=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         caseModel.setConfig(config.database)
@@ -59,37 +59,37 @@ exports.updateCase=(req,res)=>{
                     if(lib.isEmptyObject(err)){
                         res.status(400).json({error:`Release and associated Test Suite id details not found for ${req.params.releaseid}`});
                     }else{
-                        res.status(500).json({error:"internal server error", err});
+                        next(lib.error(500,`internal server error ${err}`));
                     }
                 }else{
-                    res.status(200).json({message: "Release and associated Test Suite record updated succesfully", data});
+                    res.status(200).json({success: "Release and associated Test Suite record updated succesfully", data});
                 }
             })
         }).catch(error=>{
-            res.status(400).json(error);
+            next(lib.error(404,"No data found"));
         })
     }catch(err){
-        res.status(500).json({error:"internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.addCase=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         caseModel.setConfig(config.database)
         caseModel.insert({testsuiteid: req.params.testsuiteid, releaseid: req.params.releaseid
         },(err,data)=>{
             if(err){
-                    res.status(500).json({error:"internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
             }else{
-                res.status(201).json({message: "Release and Test Suite record inserted succesfully", data});
+                res.status(201).json({success: "Release and Test Suite record inserted succesfully", data});
             }
         })
     }catch(err){
-        res.status(500).json({error:"internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 function isRel(releaseid, testsuiteid){
@@ -175,7 +175,7 @@ exports.getTestSuites = async function(req,res){
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         caseModel.setConfig(config.database)
@@ -198,7 +198,7 @@ exports.getTestSuites = async function(req,res){
             res.status(200).json(resp.body);
         }
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.getDefects=(req,res)=>{

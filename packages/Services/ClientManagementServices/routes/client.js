@@ -55,17 +55,17 @@ exports.getClient=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         var password = req.header('secretkey')
         isClient(req.params.clientname,password).then(data =>{
             res.status(200).json(data);
         }).catch(error=>{
-            res.status(406).json(error);
+            next(lib.error(404,`Not found`));
         })
     }catch(err){
-        res.status(500).json(err)
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 /**
@@ -84,7 +84,7 @@ exports.getClient=(req,res)=>{
 exports.deleteClient=(req,res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.status(422).json({ error: errors.array() });
+        next(lib.error(422,errors.array()));
         return;
     }
     var password = req.header('secretkey')
@@ -93,16 +93,16 @@ exports.deleteClient=(req,res)=>{
         clientModel.delete({ClientName: req.params.clientname},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
-                    res.status(422).json({error:"no data found"});
+                    next(lib.error(404,`No client info found for ${req.params.clientname}`));
                 }else{
-                    res.status(500).json({error:"internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
                 }
             }else{
-                res.status(200).json({message: "client record deleted succesfully"});
+                res.status(200).json({success: "client record deleted succesfully"});
             }
         })
     }).catch(error=>{
-        res.status(406).json(error);
+        next(lib.error(404,`Not found`));
     })
 }
 /**
@@ -123,7 +123,7 @@ exports.updateClient=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         var encryptedSecretKey = bcrypt.hashSync(req.body.secretkey, 10, function(err, hash) {
@@ -137,19 +137,19 @@ exports.updateClient=(req,res)=>{
                 clientModel.update({ClientId: data[0].ClientId},{ClientName: req.params.clientname, SecretKey: encryptedSecretKey },(err,data)=>{
                     if(err){
                         if(lib.isEmptyObject(err)){
-                            res.status(500).json({error:"no data found"});
+                            next(lib.error(404,"no data found"));
                         }else{
-                            res.status(500).json({error:"internal server error", err});
+                            next(lib.error(500,`internal server error ${err}`));
                         }
                     }else{
-                        res.status(200).json({message: "client record updated succesfully"});
+                        res.status(200).json({success: "client record updated succesfully"});
                     }
                 })
         }).catch(error=>{
-            res.status(406).json(error);
+            next(lib.error(404,`Not found`));
         })
     }catch(err){
-        res.status(500).jsonp(err)
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 /**
@@ -166,7 +166,7 @@ exports.updateClient=(req,res)=>{
 exports.addClient=(req,res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.status(422).json({ error: errors.array() });
+        next(lib.error(422,errors.array()));
         return;
     }
     var encryptedSecretKey = bcrypt.hashSync(req.body.secretkey, 10, function(err, hash) {
@@ -177,9 +177,9 @@ exports.addClient=(req,res)=>{
     clientModel.setConfig(config.database)
     clientModel.insert({ClientName: req.body.clientname, SecretKey: encryptedSecretKey},(err,data)=>{
         if(err){
-            res.status(500).json({error:"internal server error", err});
+            next(lib.error(500,`internal server error ${err}`));
         }else{
-            res.status(201).json({message: "Client record inserted succesfully"});
+            res.status(201).json({success: "Client record inserted succesfully"});
         }
     })
 }
@@ -189,9 +189,9 @@ exports.getAllClients=(req,res)=>{
     clientModel.find({},function(err,data){
         if(err){
             if(lib.isEmptyObject(err)){
-                res.status(500).json({error:"no data found"});
+                next(lib.error(404,"no data found"));
             }else{
-                res.status(500).json({error:"internal server error", err});
+                next(lib.error(500,`internal server error ${err}`));
             }
         }else{
             res.status(200).json(data);
@@ -214,7 +214,7 @@ exports.getAllClients=(req,res)=>{
 /*exports.gettoken=(req,res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.status(422).json({ error: errors.array() });
+        next(lib.error(422,errors.array()));
         return;
     }
     var password = req.header('secretkey')
@@ -233,7 +233,7 @@ exports.getAllClients=(req,res)=>{
             res.status(500).json({"errors":{"message": "secretekey does not match"}})
         }
     }).catch(error=>{
-        res.status(406).json(error);
+        next(lib.error(404,`Not found`));
     })    
   }*/
 /**

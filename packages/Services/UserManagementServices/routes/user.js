@@ -38,53 +38,53 @@ exports.getUser= (req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             //return;
         }
         userModel.setConfig(config.database)
         userModel.find({UserName: req.params.username},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
-                    res.status(404).json({error: `user details not found for ${req.params.username}`});
+                    next(lib.error(404,`user details not found for ${req.params.username}`));
                 }else{
-                    res.status(500).json({error: "internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
                 }
             }else{
                 res.status(200).json(data);
             }
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.deleteUser=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         userModel.setConfig(config.database)
         userModel.delete({UserName: req.params.username},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
-                    res.status(404).json({error: `user details not found for ${req.params.username}`});
+                    next(lib.error(404,`user details not found for ${req.params.username}`));
                 }else{
-                    res.status(500).json({error:"internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
                 }
             }else{
-                res.status(200).json({message: "User record deleted succesfully"});
+                res.status(204).json({success: "User record deleted succesfully"});
             }
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.updateUser=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         userModel.setConfig(config.database)
@@ -98,26 +98,26 @@ exports.updateUser=(req,res)=>{
             userModel.update({UserName: req.params.username},{UserName: req.body.UserName, Password: encryptedSecretKey, GroupId: req.body.groupid},(err,data)=>{
                 if(err){
                     if(lib.isEmptyObject(err)){
-                        res.status(404).json({error:`User details not found for ${req.params.username}`});
+                        next(lib.error(404,`user details not found for ${req.params.username}`));
                     }else{
-                        res.status(500).json({error:"internal server error", err});
+                        next(lib.error(500,`internal server error ${err}`));
                     }
                 }else{
-                    res.status(200).json({message: "User record updated succesfully"});
+                    res.status(200).json({success: "User record updated succesfully"});
                 }
             })
         }).catch(error=>{
-            res.status(406).json(error);
+            next(lib.error(404,`Not found`));
         })
     }catch(err){
-        res.status(500).json({error:"internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.addUser=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         //var password = getAsciiPwd(req.body.password)
@@ -129,13 +129,13 @@ exports.addUser=(req,res)=>{
         });        
         userModel.insert({UserName: req.body.username, Password: encryptedPassword, GroupId: req.body.groupid},(err,data)=>{
             if(err){
-                    res.status(500).json({error:"internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
             }else{
-                res.status(201).json({message: "User record inserted succesfully"});
+                res.status(201).json({success: "User record inserted succesfully"});
             }
         })
     }catch(err){
-        res.status(500).json({error:"internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.getAllUsers=(req,res)=>{    
@@ -145,7 +145,7 @@ exports.getAllUsers=(req,res)=>{
             if(lib.isEmptyObject(err)){
                 res.status(404).json({error:"no data found"});
             }else{
-                res.status(500).json({error:"internal server error", err});
+                next(lib.error(500,`internal server error ${err}`));
             }
         }else{
             res.status(200).json(data);
@@ -159,7 +159,7 @@ function checkSecretKey(reqseckey,dbseckey){
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         userModel.setConfig(config.database)
@@ -169,16 +169,16 @@ function checkSecretKey(reqseckey,dbseckey){
             req.session.userid = data[0].UserId;
             res.status(200).json({"data":data[0]});
         }).catch(error=>{
-            res.status(406).json(error);
+            next(lib.error(404,`Not found`));
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.logout=(req,res)=>{
     if (req.session) {
         destroySession(req.session).then(data=>{
-            res.status(200).json({"message":"logout successful"})
+            res.status(200).json({"success":"logout successful"})
         }).catch(err=>{
             res.status(500).json({"error":"internal server error", err})
         })

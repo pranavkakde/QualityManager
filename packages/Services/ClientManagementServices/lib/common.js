@@ -7,3 +7,6 @@ exports.isEmptyObject=(obj)=>{
     }
     return true;
   }
+  exports.error=(status, message )=>{
+    return error = {"error":{ message,status}}     
+  }

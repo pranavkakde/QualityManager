@@ -7,24 +7,24 @@ exports.getProject= (req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         projectModel.setConfig(config.database)
         isProject(req.params.projectid).then(data=>{
             res.status(200).json(data);
         }).catch(error=>{
-            res.status(400).json(error);
+            next(lib.error(404,"No data found"));
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.deleteProject=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         projectModel.setConfig(config.database)
@@ -33,21 +33,21 @@ exports.deleteProject=(req,res)=>{
                 if(lib.isEmptyObject(err)){
                     res.status(400).json({error: `Project details not found for ${req.params.projectid}`});
                 }else{
-                    res.status(500).json({error:"internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
                 }
             }else{
-                res.status(200).json({message: "Project record deleted succesfully", data});
+                res.status(200).json({success: "Project record deleted succesfully", data});
             }
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.updateProject=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         projectModel.setConfig(config.database)
@@ -58,37 +58,37 @@ exports.updateProject=(req,res)=>{
                     if(lib.isEmptyObject(err)){
                         res.status(400).json({error:`Project details not found for ${req.params.projectid}`});
                     }else{
-                        res.status(500).json({error:"internal server error", err});
+                        next(lib.error(500,`internal server error ${err}`));
                     }
                 }else{
-                    res.status(200).json({message: "Project record updated succesfully", data});
+                    res.status(200).json({success: "Project record updated succesfully", data});
                 }
             })
         }).catch(error=>{
-            res.status(400).json(error);
+            next(lib.error(404,"No data found"));
         })
     }catch(err){
-        res.status(500).json({error:"internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.addProject=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         projectModel.setConfig(config.database)
         projectModel.insert({name: req.body.name, description: req.body.description
         },(err,data)=>{
             if(err){
-                    res.status(500).json({error:"internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
             }else{
-                res.status(201).json({message: "Project record inserted succesfully", data});
+                res.status(201).json({success: "Project record inserted succesfully", data});
             }
         })
     }catch(err){
-        res.status(500).json({error:"internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 function isProject(pid){

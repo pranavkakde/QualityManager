@@ -7,6 +7,7 @@ exports.validate = (method) => {
           body('username', 'UserName doesn\'t exists').exists(),
           body('password', 'Password doesn\'t exists').exists(),
           body('groupid', 'group id field is missing').exists(),
+          body('groupid', 'group id field should be an integer').isInt()
          ]   
       }
       case 'updateUser':{
@@ -15,6 +16,7 @@ exports.validate = (method) => {
             body('username', 'UserName doesn\'t exists').exists(),
             body('password', 'Password doesn\'t exists').exists(),
             body('groupid', 'Group id field is required').exists(),
+            body('groupid', 'group id field should be an integer').isInt()
             ]   
       }
       case 'getUser':{

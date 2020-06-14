@@ -7,7 +7,9 @@ exports.validate = (method) => {
           body('name', 'Test Suite doesn\'t exists').exists(),
           body('description', 'Description doesn\'t exists').exists(),
           body('statusid', 'Status Id field is missing').exists(),
-          body('releaseid', 'Releaese Id field is missing').exists()
+          body('statusid', 'Status Id field should be an integer').isInt(),
+          body('releaseid', 'Releaese Id field is missing').exists(),
+          body('releaseid', 'Releaese Id field should be an integer').isInt()
          ]   
       }
       case 'updateSuite':{
@@ -16,17 +18,21 @@ exports.validate = (method) => {
             body('name', 'Test Suite doesn\'t exists').exists(),
             body('description', 'Description doesn\'t exists').exists(),
             body('statusid', 'Status Id field is missing').exists(),
-            body('releaseid', 'Releaese Id field is missing').exists()
+            body('statusid', 'Status Id field should be an integer').isInt(),
+            body('releaseid', 'Releaese Id field is missing').exists(),
+            body('releaseid', 'Releaese Id field should be an integer').isInt()
             ]   
       }
       case 'getSuite':{
         return [
             param('testsuiteid',  'testsuiteid parameter is missing').exists(), 
+            param('testsuiteid',  'testsuiteid parameter should be an integer').isInt()
             ]   
       }
       case 'deleteSuite':{
         return [
             param('testsuiteid',  'testsuiteid parameter is missing').exists(), 
+            param('testsuiteid',  'testsuiteid parameter should be an integer').isInt()             
             ]   
       }
       case 'filterSuites':{

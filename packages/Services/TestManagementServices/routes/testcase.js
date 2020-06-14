@@ -7,24 +7,24 @@ exports.getTestCase= (req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         testModel.setConfig(config.database)
         isTestCase(req.params.testcaseid).then(data=>{
             res.status(200).json(data);
         }).catch(error=>{
-            res.status(400).json(error);
+            next(lib.error(404,"No data found"));
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.deleteTestCase=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         testModel.setConfig(config.database)
@@ -33,21 +33,21 @@ exports.deleteTestCase=(req,res)=>{
                 if(lib.isEmptyObject(err)){
                     res.status(400).json({error: `Test Case Details not found for ${req.params.testcaseid}`});
                 }else{
-                    res.status(500).json({error:"internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
                 }
             }else{
-                res.status(200).json({message: "Test Case Details deleted succesfully", data});
+                res.status(200).json({success: "Test Case Details deleted succesfully", data});
             }
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.updateTestCase=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         testModel.setConfig(config.database)
@@ -60,24 +60,24 @@ exports.updateTestCase=(req,res)=>{
                     if(lib.isEmptyObject(err)){
                         res.status(400).json({error:`Test Case Details not found for ${req.params.testcaseid}`});
                     }else{
-                        res.status(500).json({error:"internal server error", err});
+                        next(lib.error(500,`internal server error ${err}`));
                     }
                 }else{
-                    res.status(200).json({message: "Test Case record updated succesfully", data});
+                    res.status(200).json({success: "Test Case record updated succesfully", data});
                 }
             })
         }).catch(error=>{
-            res.status(400).json(error);
+            next(lib.error(404,"No data found"));
         })
     }catch(err){
-        res.status(500).json({error:"internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.addTestCase=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         testModel.setConfig(config.database)
@@ -86,13 +86,13 @@ exports.addTestCase=(req,res)=>{
             author: req.body.author
         },(err,data)=>{
             if(err){
-                    res.status(500).json({error:"internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
             }else{
-                res.status(201).json({message: "Test Case record inserted succesfully", data});
+                res.status(201).json({success: "Test Case record inserted succesfully", data});
             }
         })
     }catch(err){
-        res.status(500).json({error:"internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 function isTestCase(testid){

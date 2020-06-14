@@ -7,47 +7,47 @@ exports.getSuite= (req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));  
             return;
         }
         suiteModel.setConfig(config.database)
         isSuite(req.params.testsuiteid).then(data=>{
             res.status(200).json(data[0]);
         }).catch(error=>{
-            res.status(400).json(error);
+            next(lib.error(404,`Test Suite Id ${req.params.testsuiteid} not found in database.`));
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`Internal Server Error ${err}`));
     }
 }
 exports.deleteSuite=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));  
             return;
         }
         suiteModel.setConfig(config.database)
         suiteModel.delete({testsuiteid: req.params.testsuiteid},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
-                    res.status(400).json({error: `testsuiteid details not found for ${req.params.testsuiteid}`});
+                    next(lib.error(404,`Test Suite Id ${req.params.testsuiteid} not found in database.`));
                 }else{
-                    res.status(500).json({error:"internal server error", err});
+                    next(lib.error(500,`Internal Server Error ${err}`));
                 }
             }else{
-                res.status(200).json({message: "TestSuite record deleted succesfully", data});
+                res.status(200).json({success: "TestSuite record deleted succesfully", data});
             }
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`Internal Server Error ${err}`));
     }
 }
 exports.updateSuite=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));  
             return;
         }
         suiteModel.setConfig(config.database)
@@ -57,26 +57,26 @@ exports.updateSuite=(req,res)=>{
             },(err,data)=>{
                 if(err){
                     if(lib.isEmptyObject(err)){
-                        res.status(400).json({error:`TestSuite details not found for ${req.params.testsuiteid}`});
+                        next(lib.error(404,`TestSuite details not found for Test Suite Id ${req.params.testsuiteid}`));
                     }else{
-                        res.status(500).json({error:"internal server error", err});
+                        next(lib.error(500,`Internal Server Error ${err}`));
                     }
                 }else{
-                    res.status(200).json({message: "TestSuite record updated succesfully", data});
+                    res.status(200).json({success: "TestSuite record updated succesfully", data});
                 }
             })
         }).catch(error=>{
-            res.status(400).json(error);
+            next(lib.error(404,`TestSuite details not found for Test Suite Id ${req.params.testsuiteid}`));
         })
     }catch(err){
-        res.status(500).json({error:"internal server error", err});
+        next(lib.error(500,`Internal Server Error ${err}`));
     }
 }
 exports.addSuite=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));  
             return;
         }
         suiteModel.setConfig(config.database)
@@ -84,13 +84,13 @@ exports.addSuite=(req,res)=>{
             statusid: req.body.statusid, releaseid: req.body.releaseid
         },(err,data)=>{
             if(err){
-                    res.status(500).json({error:"internal server error", err});
+                next(lib.error(500,`Internal Server Error ${err}`));
             }else{
-                res.status(201).json({message: "TestSuite record inserted succesfully", data});
+                res.status(201).json({success: "TestSuite record inserted succesfully", data});
             }
         })
     }catch(err){
-        res.status(500).json({error:"internal server error", err});
+        next(lib.error(500,`Internal Server Error ${err}`));
     }
 }
 function isSuite(testsuiteid){
@@ -114,7 +114,7 @@ function isSuite(testsuiteid){
     })
 }
 exports.getTestCases=(req,res)=>{
-    res.status(200).json({"message":"This service is still in progress. This will be completed once CRUD on Test Case Service is complete."})
+    res.status(501).json({"error":"This service is still in progress. This will be completed once CRUD on Test Case Service is complete."})
 }
 exports.filterSuite=(req,res)=>{
     suiteModel.setConfig(config.database)
@@ -138,9 +138,9 @@ exports.filterSuite=(req,res)=>{
         suiteModel.find({testsuiteid: sArray}
         ,function(err,data){
             if(err){
-                res.status(400).json({"error": "internal server error",err})
+                next(lib.error(500,`Internal Server Error ${err}`));
             }else{
-                res.status(200).json(data)
+                res.status(200).json(data);
             }
     });
 }
