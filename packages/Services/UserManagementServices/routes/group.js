@@ -8,22 +8,22 @@ exports.getGroup=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         groupModel.find({GroupId: req.params.groupid},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
-                    res.status(400).json({error: `Group details not found for ${req.params.groupid}`});
+                    next(lib.error(404,`Group details not found for ${req.params.groupid}`));
                 }else{
-                    res.status(500).json({error: "internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
                 }
             }else{
                 res.status(200).json(data);
             }
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
  
@@ -31,22 +31,22 @@ exports.deleteGroup=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         groupModel.delete({GroupId: req.params.groupid},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
-                    res.status(400).json({error: `Group details not found for ${req.params.groupid}`});
+                    next(lib.error(404,`Group details not found for ${req.params.groupid}`));
                 }else{
-                    res.status(500).json({error: "internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
                 }
             }else{
-                res.status(200).json({message: "Group record deleted succesfully"});
+                res.status(204).json({success: "Group record deleted succesfully"});
             }
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 
@@ -54,22 +54,22 @@ exports.updateGroup=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         groupModel.update({GroupId: req.params.groupid},{GroupName: req.body.groupname, IsAdmin: req.body.isadmin},(err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
-                    res.status(400).json({error: `Group details not found for ${req.params.groupid}`});
+                    next(lib.error(404,`Group details not found for ${req.params.groupid}`));
                 }else{
-                    res.status(500).json({error: "internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
                 }
             }else{
-                res.status(200).json({message: "Group record updated succesfully"});
+                res.status(200).json({success: "Group record updated succesfully"});
             }
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 
@@ -77,7 +77,7 @@ exports.addGroup=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         groupModel.insert({GroupName: req.body.groupname, IsAdmin: req.body.isadmin},(err,data)=>{
@@ -85,21 +85,21 @@ exports.addGroup=(req,res)=>{
                 if(lib.isEmptyObject(err)){
                     res.status(400).json({error: "error in inserting group data"});
                 }else{
-                    res.status(500).json({error: "internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
                 }
             }else{
-                res.status(201).json({message: "Group record inserted succesfully"});
+                res.status(201).json({success: "Group record inserted succesfully"});
             }
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 
 exports.getAllGroups=(req,res)=>{
     groupModel.find({},(err,data)=>{
         if(err){
-            res.status(400).json(err);
+            next(lib.error(500,`internal server error ${err}`));
         }else{
             res.status(200).json(data);
         }
@@ -110,7 +110,7 @@ exports.isAdmin=(groupid)=>{
     return new Promise(async(resolve, reject)=>{
         groupModel.find({GroupId:groupid},(err,data)=>{
             if(err){
-                res.status(400).json({"error": err})
+                next(lib.error(500,`internal server error ${err}`));
             }else{
                 if(data[0].IsAdmin===true){
                     resolve(true)

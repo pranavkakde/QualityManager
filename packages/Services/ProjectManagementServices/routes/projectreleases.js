@@ -8,24 +8,24 @@ exports.getCase= (req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         caseModel.setConfig(config.database)
         isProject(req.params.releaseid, req.params.projectid).then(data=>{
             res.status(200).json(data);
         }).catch(error=>{
-            res.status(400).json(error);
+            next(lib.error(404,"No data found"));
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.deleteCase=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         caseModel.setConfig(config.database)
@@ -34,21 +34,21 @@ exports.deleteCase=(req,res)=>{
                 if(lib.isEmptyObject(err)){
                     res.status(400).json({error: `Project and associated Release details not found for ${req.params.releaseid}`});
                 }else{
-                    res.status(500).json({error:"internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
                 }
             }else{
-                res.status(200).json({message: "Project and associated Release record deleted succesfully", data});
+                res.status(200).json({success: "Project and associated Release record deleted succesfully", data});
             }
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.updateCase=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         caseModel.setConfig(config.database)
@@ -59,37 +59,37 @@ exports.updateCase=(req,res)=>{
                     if(lib.isEmptyObject(err)){
                         res.status(400).json({error:`Project and associated Release Id details are not found for ${req.params.releaseid}`});
                     }else{
-                        res.status(500).json({error:"internal server error", err});
+                        next(lib.error(500,`internal server error ${err}`));
                     }
                 }else{
-                    res.status(200).json({message: "Project and associated Release Id record updated succesfully", data});
+                    res.status(200).json({success: "Project and associated Release Id record updated succesfully", data});
                 }
             })
         }).catch(error=>{
-            res.status(400).json(error);
+            next(lib.error(404,"No data found"));
         })
     }catch(err){
-        res.status(500).json({error:"internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.addCase=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         caseModel.setConfig(config.database)
         caseModel.insert({projectid: req.params.projectid, releaseid: req.params.releaseid
         },(err,data)=>{
             if(err){
-                    res.status(500).json({error:"internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
             }else{
-                res.status(201).json({message: "Project Release record inserted succesfully", data});
+                res.status(201).json({success: "Project Release record inserted succesfully", data});
             }
         })
     }catch(err){
-        res.status(500).json({error:"internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 function isProject(releaseid, projectid){
@@ -174,7 +174,7 @@ exports.getReleases = async function(req,res){
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         caseModel.setConfig(config.database)
@@ -197,7 +197,7 @@ exports.getReleases = async function(req,res){
             res.status(200).json(resp.body);
         }
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.getDefects=(req,res)=>{

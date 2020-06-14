@@ -3,6 +3,7 @@ var userModel = require('../Model/user')
 var config = require('../config/config')
 var request = require('superagent')
 //var request = require('../lib/superWrapper')
+var lib = require('../lib/common')
 
 exports.checkRequiredRole=(req,res,next)=>{
     if(req){
@@ -12,9 +13,9 @@ exports.checkRequiredRole=(req,res,next)=>{
                 userModel.find({UserName: req.body.username},(err,data)=>{
                     if(err){
                         if(lib.isEmptyObject(err)){
-                            res.status(400).json({error: `user details not found for ${req.body.username}`});
+                            next(lib.error(404,`user details not found for ${req.body.username}`));
                         }else{
-                            res.status(500).json({error: "internal server error", err});
+                            next(lib.error(500,`internal server error ${err}`));
                         }
                     }else{
                         getRole(data[0].GroupId,next)
@@ -25,9 +26,9 @@ exports.checkRequiredRole=(req,res,next)=>{
                 userModel.find({UserName: req.params.username},(err,data)=>{
                     if(err){
                         if(lib.isEmptyObject(err)){
-                            res.status(400).json({error: `user details not found for ${req.params.username}`});
+                            next(lib.error(404,`user details not found for ${req.body.username}`));
                         }else{
-                            res.status(500).json({error: "internal server error", err});
+                            next(lib.error(500,`internal server error ${err}`));
                         }
                     }else{
                         getRole(data[0].GroupId,next)
@@ -46,7 +47,7 @@ function getRole(groupid,next){
     groupRoute.isAdmin(groupid).then(data=>{
         next()
     }).catch(err=>{
-        res.status(400).json({"error": err})
+        next(lib.error(500,`internal server error ${err}`));
     });
 }
 /*exports.checkLogin=(req, res, next)=>{
@@ -62,7 +63,7 @@ function getRole(groupid,next){
         }
     }
 }*/
-exports.checkAuthToken= async(req,res,next)=>{
+/*exports.checkAuthToken= async(req,res,next)=>{
     if(req){
         if(req.path.indexOf('login')<0){
             const url = `${config.services.auth_services}validatetoken`
@@ -89,3 +90,4 @@ exports.checkAuthToken= async(req,res,next)=>{
         res.status(500).json({"error": "Missing Request", err});
     }
 }
+*/

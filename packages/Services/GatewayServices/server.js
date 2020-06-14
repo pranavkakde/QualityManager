@@ -58,11 +58,25 @@ app.get("/services/getservice/:name",servicemgmt.getService);
 
 
 //############### Routing Service Calls ################################
-app.get("/api/:servicename/:path*",proxy.getProxy);
-app.put("/api/:servicename/:path*",proxy.putProxy);
-app.post("/api/:servicename/:path*",proxy.postProxy);
-app.delete("/api/:servicename/:path*",proxy.deleteProxy);
+app.get(/\/api\/(.+?)\/(.*)/,proxy.getProxy);
+app.put(/\/api\/(.+?)\/(.*)/,proxy.putProxy);
+app.post(/\/api\/(.+?)\/(.*)/,proxy.postProxy);
+app.delete(/\/api\/(.+?)\/(.*)/,proxy.deleteProxy);
 ////#########---End Routing Service calls------##########
+
+app.use((req, res, next)=>{  
+    const error ={ error: {
+     "message": "No endpoint found for this request",
+      "status": 501
+      }
+    }  
+    next(error);
+  })
+  
+  app.use((err, req, res, next)=>{  
+    res.status(err.error.status)  
+    res.json({"error": err.error.message});
+  })
 
 //#region Service Health Check
 //start server on port  

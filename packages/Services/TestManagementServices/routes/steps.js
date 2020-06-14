@@ -7,24 +7,24 @@ exports.getTestStep= (req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         stepModel.setConfig(config.database)
         isTestStep(req.params.testcaseid,req.params.stepid).then(data=>{
             res.status(200).json(data);
         }).catch(error=>{
-            res.status(400).json(error);
+            next(lib.error(404,"No data found"));
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.deleteTestStep=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         stepModel.setConfig(config.database)
@@ -33,21 +33,21 @@ exports.deleteTestStep=(req,res)=>{
                 if(lib.isEmptyObject(err)){
                     res.status(400).json({error: `Test Step Details not found for ${req.params.testcaseid}`});
                 }else{
-                    res.status(500).json({error:"internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
                 }
             }else{
-                res.status(200).json({message: "Test Step Details deleted succesfully"});
+                res.status(200).json({success: "Test Step Details deleted succesfully"});
             }
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.updateTestStep=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         stepModel.setConfig(config.database)
@@ -59,24 +59,24 @@ exports.updateTestStep=(req,res)=>{
                     if(lib.isEmptyObject(err)){
                         res.status(400).json({error:`Test Step Details not found for ${req.params.testcaseid}`});
                     }else{
-                        res.status(500).json({error:"internal server error", err});
+                        next(lib.error(500,`internal server error ${err}`));
                     }
                 }else{
-                    res.status(200).json({message: "Test Step record updated succesfully", data});
+                    res.status(200).json({success: "Test Step record updated succesfully", data});
                 }
             })
         }).catch(error=>{
-            res.status(400).json(error);
+            next(lib.error(404,"No data found"));
         })
     }catch(err){
-        res.status(500).json({error:"internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 exports.addTestStep=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         stepModel.setConfig(config.database)
@@ -84,13 +84,13 @@ exports.addTestStep=(req,res)=>{
             verification: req.body.verification, testcaseid: req.params.testcaseid, statusid: req.body.statusid
         },(err,data)=>{
             if(err){
-                    res.status(500).json({error:"internal server error", err});
+                    next(lib.error(500,`internal server error ${err}`));
             }else{
-                res.status(201).json({message: "Test Step record inserted succesfully", data});
+                res.status(201).json({success: "Test Step record inserted succesfully", data});
             }
         })
     }catch(err){
-        res.status(500).json({error:"internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }
 function isTestStep(testid, stepid){
@@ -117,7 +117,7 @@ exports.getAllSteps=(req,res)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ error: errors.array() });
+            next(lib.error(422,errors.array()));
             return;
         }
         stepModel.setConfig(config.database)
@@ -137,6 +137,6 @@ exports.getAllSteps=(req,res)=>{
             }
         })
     }catch(err){
-        res.status(500).json({error: "internal server error", err});
+        next(lib.error(500,`internal server error ${err}`));
     }
 }

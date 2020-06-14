@@ -69,7 +69,19 @@ app.post("/validatetoken",clientvalidation.validate('validatetoken'), client.val
 app.get("/isalive",(req,res)=>{
   res.status(200).json({"status":"ok"});
 })
-
+app.use((req, res, next)=>{  
+    const error ={ error: {
+     "message": "No endpoint found for this request",
+      "status": 501
+      }
+    }  
+    next(error);
+  })
+  
+  app.use((err, req, res, next)=>{  
+    res.status(err.error.status)  
+    res.json({"error": err.error.message});
+  })
 app.listen(port,'0.0.0.0',()=>{console.log(`Starting server on port ${port}`)})
 
 module.exports = app
