@@ -51,6 +51,7 @@ app.delete("/release/:releaseid",releasevalidator.validate('deleteRelease'),rele
 app.put("/release/:releaseid",releasevalidator.validate('updateRelease'),release.updateRelease)
 app.post("/release",releasevalidator.validate('addRelease'),release.addRelease)
 app.post("/releases",releasevalidator.validate('filterReleases'),release.filterReleases)
+app.post("/releases/testsuites",releasevalidator.validate('filterReleases'),caseSuite.filterReleasesTestSuites)
 //########### Release and Test Suite associative routes ######################
 app.get("/release/:releaseid/testsuite/:testsuiteid", casevalidator.validate('getCase'),caseSuite.getCase)
 app.post("/release/:releaseid/testsuite/:testsuiteid", casevalidator.validate('addCase'),caseSuite.addCase)

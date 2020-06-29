@@ -266,10 +266,95 @@
           }
         }
       }
-    }
-  },
-  "components": {
+    },
+    "/releases": {
+      "parameters": [      ],
+      "post": {
+        "summary": "Filter all Releases for the list of releases sent",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/release_all"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { 
+                  "type": "object",
+                  "properties": {
+                    "releaseids": {
+                      "type": "array",
+                      "items":{
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/releases/testsuites": {
+        "parameters": [      ],
+        "post": {
+          "summary": "Filter all Releases and get their testsuites",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/testsuite_all"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": { 
+                    "type": "object",
+                    "properties": {
+                      "releaseids": {
+                        "type": "array",
+                        "items":{
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },    
+  "components": {    
     "schemas": {
+      "release_ids": {
+        "title": "release_ids",
+        "type": "object",
+        "properties": {
+          "releaseid": {
+            "type": "number"
+          }
+        }
+      },
       "release_all": {
         "title": "release_all",
         "type": "object",

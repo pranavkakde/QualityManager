@@ -2,6 +2,7 @@ openapi: 3.0.0
 info:
   title: project management
   version: '1.0'
+  description: Test Project Management APIs
 servers:
   - url: 'http://localhost:7782'
 paths:
@@ -119,6 +120,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/project_releases'
+  '/project/{projectid}/testsuites':
+    parameters:
+      - schema: 
+          type: number
+        name: projectid
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:            
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/testsuite_all'
 components:
   schemas:
     project_add:
@@ -166,3 +186,16 @@ components:
         releaseid:
           type: number
       description: Project and Releases association from ProjectReleases table
+    testsuite_all:
+      type: object
+      properties:
+        testsuiteid:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        statusid:
+          type: number
+        releaseid:
+          type: number

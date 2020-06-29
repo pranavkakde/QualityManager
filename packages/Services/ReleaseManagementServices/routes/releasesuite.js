@@ -171,7 +171,7 @@ function isCase(releasesuiteid){
 exports.getTestCases=(req,res)=>{
     res.status(200).json({"message":"This service is still in progress. This will be completed once CRUD on Test Case Service is complete."})
 }
-exports.getTestSuites = async function(req,res){
+exports.getTestSuites = async function(req,res,next){
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -182,7 +182,7 @@ exports.getTestSuites = async function(req,res){
         const data = await getTestSuites(req.params.releaseid)
         var arr = []
         if(JSON.stringify(data).indexOf("error")>0){
-            res.status(400).json({"error":"Could not find Test Suites for Release Id "+ req.params.releaseid});
+            next(lib.error(404,`Could not find Test Suites for Release Id ${req.params.releaseid}`));
         }else{
             for (const key in data) {
                 const element = data[key].testsuiteid;
@@ -203,4 +203,57 @@ exports.getTestSuites = async function(req,res){
 }
 exports.getDefects=(req,res)=>{
     res.status(200).json({"message":"This service is still in progress. This will be completed once CRUD on Test Case Service is complete."})
+}
+exports.filterReleasesTestSuites=(req,res, next)=>{
+    try{
+        /*const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            next(lib.error(422,errors.array()));
+            return;
+        }*/
+        caseModel.setConfig(config.database);        
+            caseModel.join(
+                {
+                    _join: [{
+                        _localkey: 'testsuiteid',
+                        _foreignkey: 'testsuiteid',
+                        _foreignTable: 'dbo.[testsuites]',
+                        _type: 'inner',
+                        _name: '$join1'
+                    }],
+                    _field: 
+                        [
+                            {
+                                _name: '_local.releaseid'                                
+                            },
+                            {
+                                _name: '_foreign.all',
+                                _join: '$join1'
+                            }
+                        ],
+                    _filter: [      
+                            {
+                                _field:[{_name:'_local.releaseid'}],
+                                _in: [req.body.releaseids]
+                            }
+                        ]
+                }
+                , (err,data)=>{
+                    if(err){
+                        if(lib.isEmptyObject(err)){
+                            next(lib.error(404,"Release Id and associated Test Suite is not found in database"));
+                        }else{
+                            next(lib.error(500,`internal server error${err}`));
+                        }
+                    }else{
+                        if(lib.isEmptyObject(data)){
+                            next(lib.error(500,"Release Id and associated Test Suite is not found in database"));
+                        }else{
+                            res.status(200).json(data);  
+                        }
+                    }
+            });     
+    }catch(err){
+        next(lib.error(500,`internal server error ${err}`));
+    }
 }
