@@ -3,7 +3,7 @@ var config = require('../config/config')
 var lib = require('../lib/common')
 var {validationResult } = require('express-validator')
 
-exports.getRelease= (req,res)=>{
+exports.getRelease= (req,res, next)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -20,7 +20,7 @@ exports.getRelease= (req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.deleteRelease=(req,res)=>{
+exports.deleteRelease=(req,res,next)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -43,7 +43,7 @@ exports.deleteRelease=(req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.updateRelease=(req,res)=>{
+exports.updateRelease=(req,res,next)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -71,7 +71,7 @@ exports.updateRelease=(req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.addRelease=(req,res)=>{
+exports.addRelease=(req,res,next)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -112,30 +112,15 @@ function isRelease(testrelid){
         });
     })
 }
-exports.filterReleases=(req,res)=>{
+exports.filterReleases=(req,res, next)=>{
     relModel.setConfig(config.database)
-    var sArray = req.body.releases
-    /*suiteModel.aggregate(
-        {
-            _field: 
-                [
-                    {
-                        _name: '_local.all'
-                    }
-                ],
-            _filter:[       
-                {
-                    _field:[{_name:'testsuiteid'}],
-                    _in: sArray    
-                }
-            ]
-            }*/
-        relModel.find({releaseid: sArray}
-        ,function(err,data){
-            if(err){
-                res.status(400).json({"error": "internal server error",err})
-            }else{
-                res.status(200).json(data)
-            }
+    var sArray = req.body.releaseids        
+    relModel.find({releaseid: sArray}
+    ,function(err,data){
+        if(err){
+            next(lib.error(500,`internal server error ${err}`));
+        }else{
+            res.status(200).json(data);
+        }
     });
 }
