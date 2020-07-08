@@ -5,6 +5,24 @@ services:
       context: .
       dockerfile: Dockerfile
     image: "pranavkakde/qualitymanager_mainbuild"
+  auth-services:
+      build:
+        context: ./packages/Services/AuthServices
+        dockerfile: Dockerfile
+      image: "pranavkakde/qualitymanager_auth-services"
+      ports:
+        - "8181:8181"
+      depends_on:
+        - mainbuild      
+  gateway-services:
+      build:
+        context: ./packages/Services/GatewayServices
+        dockerfile: Dockerfile
+      image: "pranavkakde/qualitymanager_gateway-services"
+      ports:
+        - "10104:10104"
+      depends_on:
+        - mainbuild      
   client-services:
     build:
       context: ./packages/Services/ClientManagementServices

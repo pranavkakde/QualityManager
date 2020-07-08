@@ -16,20 +16,20 @@
   "author": "pranav kakde",
   "license": "MIT",
   "devDependencies": {
-    "body-parser": "^1.18.3",
-    "dotenv": "^8.2.0",
-    "express": "^4.16.4",
-    "gulp": "^4.0.0",
-    "gulp-zip": "^4.2.0",
-    "morgan": "^1.9.1",
-    "nodemon": "^1.19.4",
-    "serve-static": "^1.13.2"
+    "nodemon": "^1.19.4"    
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "cachejsorm": "^1.1.2",
+    "cachejsorm": "^1.1.4",
     "cors": "^2.8.5",
-    "rotating-file-stream": "^1.4.0",
-    "socket.io": "^2.2.0"
+    "rotating-file-stream": "^1.4.2",
+    "socket.io": "^2.2.0",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "gulp": "^4.0.0",
+    "gulp-zip": "^4.2.0",
+    "morgan": "^1.9.1",
+    "serve-static": "^1.13.2"
   }
 }
