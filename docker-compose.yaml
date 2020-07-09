@@ -6,32 +6,32 @@ services:
       dockerfile: Dockerfile
     image: "pranavkakde/qualitymanager_mainbuild"
   auth-services:
-      build:
-        context: ./packages/Services/AuthServices
-        dockerfile: Dockerfile
-      image: "pranavkakde/qualitymanager_auth-services"
-      ports:
-        - "8181:8181"
-      depends_on:
-        - mainbuild      
+    build:
+      context: ./packages/Services/AuthServices
+      dockerfile: Dockerfile        
+    ports:
+      - "8181:8181"
+    depends_on:
+      - mainbuild
+    image: "pranavkakde/qualitymanager_auth-services"        
   gateway-services:
-      build:
-        context: ./packages/Services/GatewayServices
-        dockerfile: Dockerfile
-      image: "pranavkakde/qualitymanager_gateway-services"
-      ports:
-        - "10104:10104"
-      depends_on:
-        - mainbuild      
+    build:
+      context: ./packages/Services/GatewayServices
+      dockerfile: Dockerfile        
+    ports:
+      - "10104:10104"
+    depends_on:
+      - mainbuild      
+    image: "pranavkakde/qualitymanager_gateway-services"
   client-services:
     build:
       context: ./packages/Services/ClientManagementServices
-      dockerfile: Dockerfile
-    image: "pranavkakde/qualitymanager_client-services"
+      dockerfile: Dockerfile      
     ports:
       - "7778:7778"
     depends_on:
       - mainbuild      
+    image: "pranavkakde/qualitymanager_client-services"
   defect-services:
     build:
       context: ./packages/Services/DefectManagementServices
