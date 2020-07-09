@@ -20,19 +20,21 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - task: DockerCompose@0
+    - task: Bash@3
       inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryEndpoint: 'docker_hub_qm'
-        dockerComposeFile: '**/docker-compose.yaml'
-        projectName: 'pranavkakde'
-        action: 'Build services'
-        includeSourceTags: true        
-    - task: DockerCompose@0
+        targetType: 'inline'
+        script: |      
+          chmod 777 release.sh
+          ./build.sh
+      env:
+        buildversion: $(Build.BuildId)
+    - task: Bash@3
       inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryEndpoint: 'docker_hub_qm'
-        dockerComposeFile: '**/docker-compose.yaml'
-        projectName: 'pranavkakde'
-        action: 'Push services'
-        includeSourceTags: true        
+        targetType: 'inline'
+        script: |
+          # Write your commands here
+          chmod 777 release.sh
+          docker login -u $(docker_user) -p $(docker_password)
+          ./release.sh
+      env:
+        buildversion: $(Build.BuildId)
