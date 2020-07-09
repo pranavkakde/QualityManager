@@ -34,6 +34,7 @@ stages:
         script: |
           # Write your commands here
           chmod 777 release.sh
+          docker login -u $(docker_user) -p $(docker_password)
           ./release.sh
       env:
         buildversion: $(Build.BuildId)
