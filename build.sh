@@ -11,6 +11,6 @@ do
     docker tag $i:latest $i:$buildversion
 done
 #push VERSION to git
-git add VERSION
-git commit -m "updated latest version"
-git push 
+#git add VERSION
+#git commit -m "updated latest version"
+#git push 
