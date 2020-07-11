@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-services
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: user-services
+          image: pranavkakde/qualitymanager_user-services      
+          envFrom:
+          - configMapRef:
+              name: db-config
+          ports:
+            - containerPort: 7777
+        - name: client-services
+          image: pranavkakde/qualitymanager_client-services
+          envFrom:
+          - configMapRef:
+              name: db-config
+          ports:
+            - containerPort: 7778
+        - name: project-services
+          image: pranavkakde/qualitymanager_project-services
+          envFrom:
+          - configMapRef:
+              name: db-config
+          ports:
+            - containerPort: 7782            
