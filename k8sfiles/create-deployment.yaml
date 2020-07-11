@@ -35,4 +35,11 @@ spec:
           - configMapRef:
               name: db-config
           ports:
-            - containerPort: 7782            
+            - containerPort: 7782
+        - name: gateway-services
+          image: pranavkakde/qualitymanager_gateway-services
+          envFrom:
+          - configMapRef:
+              name: db-config
+          ports:
+            - containerPort: 10104            
