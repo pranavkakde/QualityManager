@@ -8,4 +8,4 @@ kubectl create configmap db-config --dry-run=client -o yaml --from-literal=DBINS
             --from-literal=DBPASSWORD=$Env:DBPASSWORD | kubectl apply -f -
 kubectl apply -f .\create-deployment.yaml
 kubectl apply -f .\create-service.yaml
-kubectl rollout status
+kubectl rollout status deployment/backend-services
