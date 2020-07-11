@@ -38,3 +38,10 @@ stages:
           ./release.sh
       env:
         buildversion: $(Build.BuildId)
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: './k8sfiles'
+        includeRootFolder: true
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+        replaceExistingArchive: true
