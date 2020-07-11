@@ -16,3 +16,6 @@ spec:
     - name: project-services-port
       port: 7782
       targetPort: 7782      
+    - name: gateway-services-port
+      port: 10104
+      targetPort: 10104
