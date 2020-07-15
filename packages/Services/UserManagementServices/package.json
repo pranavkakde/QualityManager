@@ -4,11 +4,12 @@
   "description": "apis for open source test management tool",
   "main": "server.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "TBD"
+    "url": "git+ssh://git@github.com/pranavkakde/QualityManager.git"
   },
   "keywords": [
     "apis",

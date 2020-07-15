@@ -60,7 +60,7 @@ app.put("/testcasesuite/:testcasesuiteid", casevalidator.validate('updateCase'),
 app.get("/testsuite/:testsuiteid/testcases",testsuite.getTestCases)
 
 app.get("/isalive",(req,res)=>{
-  res.send("ok").status(200);
+  res.status(200).json({"status":"ok"});
 })
 
 app.use((req, res, next)=>{  

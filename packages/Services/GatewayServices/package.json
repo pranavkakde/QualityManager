@@ -4,11 +4,12 @@
   "description": "qualityManager project",
   "main": "server.js",
   "scripts": {
-    "test": "test"    
+    "test": "test",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "none"
+    "url": "git+ssh://git@github.com/pranavkakde/QualityManager.git"
   },
   "keywords": [
     "Quality Manager"

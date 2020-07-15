@@ -23,10 +23,11 @@ module.exports = {
     externals: {
         // global app config object
         config: JSON.stringify({
-            user_services_url: 'http://192.168.99.101:30344',
-            auth_services_url: 'http://localhost:8181',
-            ts_services_url: 'http://localhost:7780'
-            //auth_services_url: 'http://192.168.99.101:31552'
+            geteway_services_url: 'http://localhost:10104/api',
+            user_services_url: 'http://localhost:10104/api/user',
+            auth_services_url: 'http://localhost:10104/api/auth',
+            ts_services_url: 'http://localhost:10104/api/testsuite',
+            project_services_url: 'http://localhost:7782'
         })
     }
 }

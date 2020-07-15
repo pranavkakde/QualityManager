@@ -3,6 +3,28 @@ var config = require('../config/config')
 var lib = require('../lib/common')
 var {validationResult } = require('express-validator')
 
+exports.getAllProjects = (req, res, next) =>  {
+    try {
+        projectModel.setConfig(config.database)
+        projectModel.find( {}, (err, data) =>  {
+            if (err) {
+                if (lib.isEmptyObject(err)) {                    
+                    next(lib.error(404, `Project is not found in database`)); 
+                }else {
+                    next(lib.error(500, `internal server error $ {err}`)); 
+                }
+            }else {
+                if (lib.isEmptyObject(data)) {
+                    next(lib.error(404, `Project is not found in database`)); 
+                }else {
+                    res.status(200).json(data); 
+                }
+            }
+        }); 
+    }catch(err) {
+        next(lib.error(500, `internal server error $ {err}`)); 
+    }
+}
 exports.getProject = (req, res, next) =>  {
     try {
         const errors = validationResult(req); 

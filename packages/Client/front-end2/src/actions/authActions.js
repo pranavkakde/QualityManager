@@ -55,11 +55,11 @@ function removetoken() {
     history.push('/');
     return { type: authConstants.TOKEN_REMOVED };
 }
-function validatetoken() {
+function validatetoken(token) {
     return dispatch => {
         dispatch(request());        
         dispatch(success(token));
-        authServices.validatetoken()
+        authServices.validatetoken(token)
             .then(
                 token => dispatch(success(token)),
                 error => dispatch(failure(error.toString()))

@@ -1,12 +1,3 @@
-packages/Services/GatewayServices/log
-packages/Services/GatewayServices/node_modules
-Services/GatewayServices/node_modules/
-keyfile
 node_modules
-packages\Services\ClientManagementServices\node_modules
-packages\Services\ClientManagementServices\log
-packages\Services\DefectManagementServices\node_modules
-/keyfile
-/packages/Services/ClientManagementServices/dbsetup.bat
-/copyOnServer.ps1
-/lib
+lib
+copyOnServer.ps1

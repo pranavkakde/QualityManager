@@ -52,7 +52,7 @@ app.post("/user/login", uservalidator.validate('login'),user.login)
 app.post("/user/logout", uservalidator.validate('logout'),user.logout)*/
 
 app.get("/isalive",(req,res)=>{
-  res.send("ok").status(200);
+  res.status(200).json({"status":"ok"});
 })
 app.use((req, res, next)=>{  
   const error ={ error: {

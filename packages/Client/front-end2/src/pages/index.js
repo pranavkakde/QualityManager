@@ -1,7 +1,7 @@
-import { HomePage } from "./homePage";
+/*import { HomePage } from "./homePage";
 import { LoginPage } from "./loginPage";
-import { LandingPage } from './landingPage';
+import { LandingPage } from './landingPage';*/
 
-export default HomePage;
-export default LoginPage;
-export default LandingPage;
+export * from "./homePage";
+export * from "./loginPage";
+export * from "./landingPage";

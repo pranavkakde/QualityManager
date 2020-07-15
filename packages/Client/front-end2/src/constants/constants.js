@@ -39,3 +39,8 @@ export const tsConstants = {
     GETBYID_TS_SUCCESS: 'TS_GETBYID_SUCCESS',
     GETBYID_TS_FAILURE: 'TS_GETBYID_FAILURE'
 }
+
+export const projectConstants = {
+    GETALL_PROJ_SUCCESS: 'GETALL_PROJ_SUCCESS',
+    GETALL_PROJ_FAILURE: 'GETALL_PROJ_FAILURE'
+}
