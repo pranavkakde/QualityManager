@@ -16,7 +16,7 @@ class HomePage extends React.Component {
     }
 
     render() {
-        const { user, users } = this.props;
+        //const { user, users } = this.props;
         return (
             <div>
                 <Grid container position="fixed">
@@ -29,7 +29,7 @@ class HomePage extends React.Component {
                     <Grid item xs="auto">
                         <Paper>
                             <p>
-                                { this.props.item!=undefined?`${this.props.item.name} clicked`:''}
+                                { this.props.item!==undefined?`${this.props.item.name} clicked`:''}
                             </p>
                         </Paper>
                     </Grid>

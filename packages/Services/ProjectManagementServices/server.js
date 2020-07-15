@@ -5,7 +5,7 @@ var bodyParser = require("body-parser");
 var cors = require("cors");
 var morgan = require("morgan");
 var rfs = require("rotating-file-stream");
-var port = process.env.PORT || "7782";
+var port = process.env.PORT || 7782;
 var app = express();
 var project = require("./routes/project");
 var projectvalidator = require("./routes/validation/project");
@@ -46,6 +46,10 @@ app.use(morgan("combined", { stream: accessLogStream }));
 app.use(auth.checkRequiredRole)*/
 
 //########### Project management routes ###############
+app.get(
+  "/projects",  
+  project.getAllProjects
+);
 app.get(
   "/project/:projectid",
   projectvalidator.validate("getProject"),
@@ -117,7 +121,7 @@ app.use((req, res, next) => {
   next(error);
 });
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   res.status(err.error.status);
   res.json({ error: err.error.message });
 });

@@ -9,6 +9,22 @@
     "url" : "http://localhost:7782"
   } ],
   "paths" : {
+    "/projects" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/project_all"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/project" : {
       "post" : {
         "requestBody" : {

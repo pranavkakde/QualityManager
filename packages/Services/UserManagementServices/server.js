@@ -63,7 +63,7 @@ app.post("/group",groupvalidator.validate('addGroup'),group.addGroup)
 app.get("/groups", group.getAllGroups)
 
 app.get("/isalive",(req,res)=>{
-  res.send("ok").status(200);
+  res.status(200).json({"status":"ok"});
 })
 
 app.use((req, res, next)=>{  

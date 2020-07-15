@@ -14,15 +14,15 @@ WORKDIR /usr/src/app
 
 # Install app dependencies
 COPY package.json ./
-COPY ./packages/Services/AuthServices/package.json ./Services/AuthServices/package.json
-COPY ./packages/Services/ClientManagementServices/package.json ./Services/ClientManagementServices/package.json
-COPY ./packages/Services/DefectManagementServices/package.json ./Services/DefectManagementServices/package.json
-COPY ./packages/Services/GatewayServices/package.json ./Services/GatewayServices/package.json
-COPY ./packages/Services/ProjectManagementServices/package.json ./Services/ProjectManagementServices/package.json
-COPY ./packages/Services/ReleaseManagementServices/package.json ./Services/ReleaseManagementServices/package.json
-COPY ./packages/Services/TestManagementServices/package.json ./Services/TestManagementServices/package.json
-COPY ./packages/Services/TestSuiteManagementServices/package.json ./Services/TestSuiteManagementServices/package.json
-COPY ./packages/Services/UserManagementServices/package.json ./Services/UserManagementServices/package.json
+COPY ./packages/Services/AuthServices/package.json ./packages/Services/AuthServices/package.json
+COPY ./packages/Services/ClientManagementServices/package.json ./packages/Services/ClientManagementServices/package.json
+COPY ./packages/Services/DefectManagementServices/package.json ./packages/Services/DefectManagementServices/package.json
+COPY ./packages/Services/GatewayServices/package.json ./packages/Services/GatewayServices/package.json
+COPY ./packages/Services/ProjectManagementServices/package.json ./packages/Services/ProjectManagementServices/package.json
+COPY ./packages/Services/ReleaseManagementServices/package.json ./packages/Services/ReleaseManagementServices/package.json
+COPY ./packages/Services/TestManagementServices/package.json ./packages/Services/TestManagementServices/package.json
+COPY ./packages/Services/TestSuiteManagementServices/package.json ./packages/Services/TestSuiteManagementServices/package.json
+COPY ./packages/Services/UserManagementServices/package.json ./packages/Services/UserManagementServices/package.json
 COPY lerna.json .
 
 RUN lerna bootstrap --hoist

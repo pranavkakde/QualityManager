@@ -13,7 +13,7 @@ function getAllTSById() {
         headers: { 'Content-Type': 'application/json' }        
     };
 
-    return fetch(`${config.ts_services_url}/testsuite/6`, fetchOptions(requestOptions))
+    return fetch(`${config.ts_services_url}/6`, fetchOptions(requestOptions))
         .then(handleResponse)
         .then(testsuite => {
             return testsuite;
@@ -27,7 +27,7 @@ function getAllTSByRelease(projectid) {
         body: JSON.stringify({ username, password })
     };
 
-    return fetch(`${config.user_services_url}/user/login`, requestOptions)
+    return fetch(`${config.user_services_url}/login`, requestOptions)
         .then(handleResponse)
         .then(user => {
             // store user details and jwt token in local storage to keep user logged in between page refreshes

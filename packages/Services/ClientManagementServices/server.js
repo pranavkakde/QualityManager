@@ -78,11 +78,11 @@ app.use((req, res, next)=>{
     next(error);
   })
   
-  app.use((err, req, res, next)=>{  
+  app.use((err, req, res)=>{  
     res.status(err.error.status)  
     res.json({"error": err.error.message});
   })
-app.listen(port,'0.0.0.0',()=>{console.log(`Starting server on port ${port}`)})
+  app.listen(port,()=>{console.log(`Starting server on port ${port}`)})
 
 module.exports = app
-app.listen(3000);
+//app.listen(3000);

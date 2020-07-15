@@ -9,7 +9,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "diff": "lerna diff",
-    "new-version": "lerna version --conventional-commit --yes"
+    "new-version": "lerna version --conventional-commit --yes",
+    "start": "lerna run --parallel start"
   },
   "repository": {
     "type": "git",
