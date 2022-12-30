@@ -35,7 +35,7 @@
   "devDependencies": {
     "assert": "^2.0.0",
     "dotenv": "^8.2.0",
-    "mocha": "^6.1.4",
+    "mocha": "^10.2.0",
     "supertest": "^4.0.2"
   },
   "gitHead": "66aceefa5501924e72b4c692d48d2cd1f09e892b"
