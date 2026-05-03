@@ -3,7 +3,7 @@ var config = require('../config/config')
 var lib = require('../lib/common')
 var {validationResult } = require('express-validator')
 
-exports.getDefect= (req,res)=>{
+exports.getDefect= (req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -20,7 +20,7 @@ exports.getDefect= (req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.deleteDefect=(req,res)=>{
+exports.deleteDefect=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -43,7 +43,7 @@ exports.deleteDefect=(req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.updateDefect=(req,res)=>{
+exports.updateDefect=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -73,7 +73,7 @@ exports.updateDefect=(req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.addDefect=(req,res)=>{
+exports.addDefect=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {

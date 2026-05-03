@@ -7,7 +7,7 @@ var app = express();
 var port = process.env.PORT || '10104'  
 var serviceModel = require('./Model/Service')
 var morgan = require('morgan')
-var rfs = require("rotating-file-stream");
+var rfs = require("rotating-file-stream").createStream;
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
@@ -15,6 +15,11 @@ var servicemgmt = require('./router/servicemgmt');
 var proxy = require('./router/proxy');
 var auth = require('./auth/auth');
 var disc = require('./router/servicedisc');
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./doc/openapi.json');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 app.use(express.static('public'));  
 app.use(bodyParser.json({limit:'5mb'}));    
 app.use(bodyParser.urlencoded({extended:true, limit:'5mb'}));  
@@ -73,10 +78,31 @@ app.use((req, res, next)=>{
     next(error);
   })
   
-  app.use((err, req, res, next)=>{  
-    res.status(err.error.status)  
-    res.json({"error": err.error.message});
-  })
+  app.use((err, req, res, next) => {
+  // Enhanced Telemetry / Logging
+  console.error('\n================ ERROR ================');
+  console.error('Time:', new Date().toISOString());
+  console.error('Path:', req.method, req.originalUrl);
+  console.error('Body:', JSON.stringify(req.body, null, 2));
+  console.error('Params:', JSON.stringify(req.params, null, 2));
+  console.error('Query:', JSON.stringify(req.query, null, 2));
+  console.error('---');
+  
+  if (err.error && err.error.status) {
+    // This is a custom lib.error
+    console.error('Custom Error Message:', err.error.message);
+    console.error('Custom Error Status:', err.error.status);
+    if (err.error.innerError) console.error('Inner Error:', err.error.innerError);
+    console.error('=======================================\n');
+    res.status(err.error.status).json({"error": err.error.message});
+  } else {
+    // This is an unhandled, raw Node.js/DB crash
+    console.error('RAW UNHANDLED ERROR:');
+    console.error(err.stack || err);
+    console.error('=======================================\n');
+    res.status(500).json({"error": "Internal Server Error", "details": err.message});
+  }
+});
 
 //#region Service Health Check
 //start server on port  

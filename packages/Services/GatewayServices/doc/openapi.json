@@ -1,0 +1,198 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Gateway Services",
+    "version": "1.0.0",
+    "description": "API Gateway and Service Discovery"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:10104"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Service": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "serviceEndpoint": {
+            "type": "string"
+          },
+          "resouceName": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/services/service": {
+      "get": {
+        "summary": "Get all services",
+        "operationId": "getAllServices",
+        "responses": {
+          "200": {
+            "description": "List of services"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new service",
+        "operationId": "saveService",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Service"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Service added"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a service",
+        "operationId": "updateService",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Service"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Service updated"
+          }
+        }
+      }
+    },
+    "/services/service/{name}": {
+      "delete": {
+        "summary": "Delete a service by name",
+        "operationId": "deleteService",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Service deleted"
+          }
+        }
+      }
+    },
+    "/services/getservice/{name}": {
+      "get": {
+        "summary": "Get a specific service by name",
+        "operationId": "getService",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Service details"
+          }
+        }
+      }
+    },
+    "/api/{service}/{path}": {
+      "get": {
+        "summary": "Proxy GET requests",
+        "parameters": [
+          {
+            "name": "service",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "Proxied response" } }
+      },
+      "post": {
+        "summary": "Proxy POST requests",
+        "parameters": [
+          {
+            "name": "service",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "Proxied response" } }
+      },
+      "put": {
+        "summary": "Proxy PUT requests",
+        "parameters": [
+          {
+            "name": "service",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "Proxied response" } }
+      },
+      "delete": {
+        "summary": "Proxy DELETE requests",
+        "parameters": [
+          {
+            "name": "service",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "Proxied response" } }
+      }
+    }
+  }
+}

@@ -4,7 +4,7 @@ var path = require("path");
 var bodyParser = require('body-parser');   
 var cors = require('cors')  
 var morgan = require('morgan')
-var rfs = require("rotating-file-stream");
+var rfs = require("rotating-file-stream").createStream;
 var port = process.env.PORT || '7777'  
 var app = express();
 var user = require('./routes/user')
@@ -75,10 +75,31 @@ app.use((req, res, next)=>{
   next(error);
 })
 
-app.use((err, req, res, next)=>{  
-  res.status(err.error.status)  
-  res.json({"error": err.error.message});
-})
+app.use((err, req, res, next) => {
+  // Enhanced Telemetry / Logging
+  console.error('\n================ ERROR ================');
+  console.error('Time:', new Date().toISOString());
+  console.error('Path:', req.method, req.originalUrl);
+  console.error('Body:', JSON.stringify(req.body, null, 2));
+  console.error('Params:', JSON.stringify(req.params, null, 2));
+  console.error('Query:', JSON.stringify(req.query, null, 2));
+  console.error('---');
+  
+  if (err.error && err.error.status) {
+    // This is a custom lib.error
+    console.error('Custom Error Message:', err.error.message);
+    console.error('Custom Error Status:', err.error.status);
+    if (err.error.innerError) console.error('Inner Error:', err.error.innerError);
+    console.error('=======================================\n');
+    res.status(err.error.status).json({"error": err.error.message});
+  } else {
+    // This is an unhandled, raw Node.js/DB crash
+    console.error('RAW UNHANDLED ERROR:');
+    console.error(err.stack || err);
+    console.error('=======================================\n');
+    res.status(500).json({"error": "Internal Server Error", "details": err.message});
+  }
+});
 
 app.listen(port,()=>{console.log(`Starting server on port ${port}`)})
 

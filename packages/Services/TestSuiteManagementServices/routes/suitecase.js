@@ -20,7 +20,7 @@ exports.getCase= (req,res,next)=>{
         next(lib.error(500,`Internal Server Error ${err}`));
     }
 }
-exports.deleteCase=(req,res)=>{
+exports.deleteCase=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -43,7 +43,7 @@ exports.deleteCase=(req,res)=>{
         next(lib.error(500,`Internal Server Error ${err}`));
     }
 }
-exports.updateCase=(req,res)=>{
+exports.updateCase=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -72,7 +72,7 @@ exports.updateCase=(req,res)=>{
         next(lib.error(500,`Internal Server Error ${err}`));
     }
 }
-exports.addCase=(req,res)=>{
+exports.addCase=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {

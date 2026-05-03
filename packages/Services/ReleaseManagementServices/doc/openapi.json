@@ -367,6 +367,9 @@
           },
           "description": {
             "type": "string"
+          },
+          "iscurrentrelease": {
+            "type": "boolean"
           }
         }
       },
@@ -379,6 +382,9 @@
           },
           "description": {
             "type": "string"
+          },
+          "iscurrentrelease": {
+            "type": "boolean"
           }
         }
       },

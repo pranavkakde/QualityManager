@@ -3,7 +3,7 @@ var config = require('../config/config')
 var lib = require('../lib/common')
 var {validationResult } = require('express-validator')
 
-exports.getTestCase= (req,res)=>{
+exports.getTestCase= (req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -20,7 +20,7 @@ exports.getTestCase= (req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.deleteTestCase=(req,res)=>{
+exports.deleteTestCase=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -43,7 +43,7 @@ exports.deleteTestCase=(req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.updateTestCase=(req,res)=>{
+exports.updateTestCase=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -73,7 +73,7 @@ exports.updateTestCase=(req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.addTestCase=(req,res)=>{
+exports.addTestCase=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -116,7 +116,7 @@ function isTestCase(testid){
         });
     })
 }
-exports.filterReleases=(req,res)=>{
+exports.filterReleases=(req, res, next) =>{
     relModel.setConfig(config.database)
     var sArray = req.body.releases
     /*suiteModel.aggregate(

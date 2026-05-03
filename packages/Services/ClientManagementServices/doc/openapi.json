@@ -1,0 +1,148 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Client Management Services",
+    "version": "1.0.0",
+    "description": "API for Client Management"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:7778"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "secretkey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "secretkey"
+      }
+    },
+    "schemas": {
+      "Client": {
+        "type": "object",
+        "properties": {
+          "clientname": {
+            "type": "string"
+          },
+          "secretkey": {
+            "type": "string"
+          }
+        },
+        "required": ["clientname", "secretkey"]
+      }
+    }
+  },
+  "security": [
+    {
+      "secretkey": []
+    }
+  ],
+  "paths": {
+    "/client/{clientname}": {
+      "get": {
+        "summary": "Get client by clientname",
+        "operationId": "getClient",
+        "parameters": [
+          {
+            "name": "clientname",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "Client not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update client by clientname",
+        "operationId": "updateClient",
+        "parameters": [
+          {
+            "name": "clientname",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Client"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete client by clientname",
+        "operationId": "deleteClient",
+        "parameters": [
+          {
+            "name": "clientname",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/client/": {
+      "post": {
+        "summary": "Add a new client",
+        "operationId": "addClient",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Client"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Client created successfully"
+          }
+        }
+      }
+    },
+    "/isalive": {
+      "get": {
+        "summary": "Health check",
+        "operationId": "isalive",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Service is alive"
+          }
+        }
+      }
+    }
+  }
+}

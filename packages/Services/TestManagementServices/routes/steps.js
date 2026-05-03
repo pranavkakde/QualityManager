@@ -3,7 +3,7 @@ var config = require('../config/config')
 var lib = require('../lib/common')
 var {validationResult } = require('express-validator')
 
-exports.getTestStep= (req,res)=>{
+exports.getTestStep= (req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -20,7 +20,7 @@ exports.getTestStep= (req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.deleteTestStep=(req,res)=>{
+exports.deleteTestStep=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -43,7 +43,7 @@ exports.deleteTestStep=(req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.updateTestStep=(req,res)=>{
+exports.updateTestStep=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -72,7 +72,7 @@ exports.updateTestStep=(req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.addTestStep=(req,res)=>{
+exports.addTestStep=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -113,7 +113,7 @@ function isTestStep(testid, stepid){
         });
     })
 }
-exports.getAllSteps=(req,res)=>{
+exports.getAllSteps=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {

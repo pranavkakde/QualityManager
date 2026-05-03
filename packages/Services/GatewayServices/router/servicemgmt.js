@@ -3,7 +3,7 @@ var config = require('../config');
 
 serviceModel.setConfig(config.database);
 
-exports.getAllServices=(req,res)=>{
+exports.getAllServices=(req, res, next) =>{
     
     serviceModel.find({},function(err,data){  
         console.log(err)
@@ -16,7 +16,7 @@ exports.getAllServices=(req,res)=>{
     });
 }
 
-exports.updateService=(req,res)=>{
+exports.updateService=(req, res, next) =>{
     serviceModel.update(
         {_id:req.body._id}, 
         { name:  req.body.name, 
@@ -33,7 +33,7 @@ exports.updateService=(req,res)=>{
     });  
 }
 
-exports.saveService=(req,res)=>{
+exports.saveService=(req, res, next) =>{
     var mod = new serviceModel(req.body);  
         mod.insert(function(err,data){  
             if(err){  
@@ -45,7 +45,7 @@ exports.saveService=(req,res)=>{
         });  
 }
 
-exports.deleteService=(req,res)=>{
+exports.deleteService=(req, res, next) =>{
     serviceModel.delete({ name: req.params.name }, function(err) {  
         if(err){  
             res.send(err);  
@@ -56,7 +56,7 @@ exports.deleteService=(req,res)=>{
     });  
 }
 
-exports.getService=(req,res)=>{
+exports.getService=(req, res, next) =>{
     serviceModel.find({name: req.params.name},function(err,data){  
         if(err){  
             res.send(err);  

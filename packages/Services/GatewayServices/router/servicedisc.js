@@ -1,7 +1,7 @@
 var serviceModel = require('../Model/Service');
 var config = require('../config');
 
-exports.serviceExists= async(req,res)=>{
+exports.serviceExists= async(req, res, next) =>{
     return new Promise((resolve, reject) => {        
         serviceModel.setConfig(config.database);
         var retval;        

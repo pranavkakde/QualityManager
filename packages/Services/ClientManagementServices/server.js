@@ -3,12 +3,13 @@ var path = require("path");
 var bodyParser = require('body-parser');   
 var cors = require('cors')  
 var morgan = require('morgan')
-var rfs = require("rotating-file-stream");
+var rfs = require("rotating-file-stream").createStream;
 var port = process.env.PORT || '7778'  
 var app = express();
 var client = require('./routes/client')
 var clientvalidation = require('./routes/validation/client')
-const expressSwagger = require('express-swagger-generator')(app);
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./doc/openapi.json');
 
 //Setup app
 app.use(express.static('public'));  
@@ -28,33 +29,7 @@ var accessLogStream = rfs('access.log', {
 // setup the logger
 app.use(morgan('combined', { stream: accessLogStream }))
 
-let options = {
-  swaggerDefinition: {
-      info: {
-          description: 'swagger specification for Client Management',
-          title: 'Swagger',
-          version: '1.0.0',
-      },
-      host: `localhost:${port}`,
-      basePath: '/',
-      produces: [
-          "application/json",
-          "application/xml"
-      ],
-      schemes: ['http', 'https'],
-      securityDefinitions: {
-          JWT: {
-              type: 'apiKey',
-              in: 'header',
-              name: 'secretkey',
-              description: "",
-          }
-      }
-  },
-  basedir: __dirname, //app absolute path
-  files: ['./routes/*.js', './doc/api-schema.js'] //Path to the API handle folder
-};
-expressSwagger(options)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //########### Client management routes ###############
 
@@ -78,10 +53,31 @@ app.use((req, res, next)=>{
     next(error);
   })
   
-  app.use((err, req, res)=>{  
-    res.status(err.error.status)  
-    res.json({"error": err.error.message});
-  })
+  app.use((err, req, res, next) => {
+  // Enhanced Telemetry / Logging
+  console.error('\n================ ERROR ================');
+  console.error('Time:', new Date().toISOString());
+  console.error('Path:', req.method, req.originalUrl);
+  console.error('Body:', JSON.stringify(req.body, null, 2));
+  console.error('Params:', JSON.stringify(req.params, null, 2));
+  console.error('Query:', JSON.stringify(req.query, null, 2));
+  console.error('---');
+  
+  if (err.error && err.error.status) {
+    // This is a custom lib.error
+    console.error('Custom Error Message:', err.error.message);
+    console.error('Custom Error Status:', err.error.status);
+    if (err.error.innerError) console.error('Inner Error:', err.error.innerError);
+    console.error('=======================================\n');
+    res.status(err.error.status).json({"error": err.error.message});
+  } else {
+    // This is an unhandled, raw Node.js/DB crash
+    console.error('RAW UNHANDLED ERROR:');
+    console.error(err.stack || err);
+    console.error('=======================================\n');
+    res.status(500).json({"error": "Internal Server Error", "details": err.message});
+  }
+});
   app.listen(port,()=>{console.log(`Starting server on port ${port}`)})
 
 module.exports = app

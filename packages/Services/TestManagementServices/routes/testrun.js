@@ -3,7 +3,7 @@ var config = require('../config/config')
 var lib = require('../lib/common')
 var {validationResult } = require('express-validator')
 
-exports.getTestRun= (req,res)=>{
+exports.getTestRun= (req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -20,7 +20,7 @@ exports.getTestRun= (req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.deleteTestRun=(req,res)=>{
+exports.deleteTestRun=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -43,7 +43,7 @@ exports.deleteTestRun=(req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.updateTestRun=(req,res)=>{
+exports.updateTestRun=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -73,7 +73,7 @@ exports.updateTestRun=(req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.addTestRun=(req,res)=>{
+exports.addTestRun=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -119,7 +119,7 @@ function isTestRun(testid, runid){
         });
     })
 }
-exports.getAllRuns=(req,res)=>{
+exports.getAllRuns=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {

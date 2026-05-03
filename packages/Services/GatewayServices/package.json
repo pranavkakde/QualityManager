@@ -17,21 +17,21 @@
   "author": "pranav kakde",
   "license": "MIT",
   "devDependencies": {
-    "nodemon": "^1.19.4"
+    "nodemon": "^3.1.14"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "body-parser": "^1.19.0",
+    "axios": "^1.16.0",
+    "body-parser": "^2.2.2",
     "cachejsorm": "^1.1.4",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "gulp": "^4.0.0",
-    "gulp-zip": "^4.2.0",
-    "morgan": "^1.9.1",
-    "rotating-file-stream": "^1.4.2",
-    "serve-static": "^1.13.2",
-    "socket.io": "^2.4.0"
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "gulp": "^5.0.1",
+    "gulp-zip": "^6.1.0",
+    "morgan": "^1.10.1",
+    "rotating-file-stream": "^3.2.9",
+    "serve-static": "^2.2.1",
+    "socket.io": "^4.8.3"
   },
   "gitHead": "66aceefa5501924e72b4c692d48d2cd1f09e892b"
 }

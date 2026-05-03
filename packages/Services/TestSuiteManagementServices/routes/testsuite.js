@@ -3,7 +3,7 @@ var config = require('../config/config')
 var lib = require('../lib/common')
 var {validationResult } = require('express-validator')
 
-exports.getSuite= (req,res)=>{
+exports.getSuite= (req,res,next)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -20,7 +20,7 @@ exports.getSuite= (req,res)=>{
         next(lib.error(500,`Internal Server Error ${err}`));
     }
 }
-exports.deleteSuite=(req,res)=>{
+exports.deleteSuite=(req,res,next)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -43,7 +43,7 @@ exports.deleteSuite=(req,res)=>{
         next(lib.error(500,`Internal Server Error ${err}`));
     }
 }
-exports.updateSuite=(req,res)=>{
+exports.updateSuite=(req,res,next)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -72,7 +72,7 @@ exports.updateSuite=(req,res)=>{
         next(lib.error(500,`Internal Server Error ${err}`));
     }
 }
-exports.addSuite=(req,res)=>{
+exports.addSuite=(req,res,next)=>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -113,10 +113,10 @@ function isSuite(testsuiteid){
         });
     })
 }
-exports.getTestCases=(req,res)=>{
+exports.getTestCases=(req,res,next)=>{
     res.status(501).json({"error":"This service is still in progress. This will be completed once CRUD on Test Case Service is complete."})
 }
-exports.filterSuite=(req,res)=>{
+exports.filterSuite=(req,res,next)=>{
     suiteModel.setConfig(config.database)
     var sArray = req.body.testsuites
     console.log(sArray)

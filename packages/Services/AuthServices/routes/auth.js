@@ -1,7 +1,7 @@
 var userModel = require('../models/user')
 var config = require('../config/config')
 var lib = require('../lib/common')
-var bcrypt = require('bcrypt')
+var bcrypt = require('bcryptjs')
 var {validationResult } = require('express-validator')
 var jwt = require('jsonwebtoken')
 
@@ -36,7 +36,7 @@ function getAsciiPwd(password){
 function getBase64Pwd(password){
     return Buffer.from(password).toString('base64')
 }
-exports.gettoken=(req,res)=>{
+exports.gettoken=(req, res, next) =>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         next(lib.error(422,errors.array()));
@@ -58,11 +58,12 @@ exports.gettoken=(req,res)=>{
             next(lib.error(400,"password does not match"));
         }
     }).catch(error=>{
+        console.error(">>> REAL DB ERROR CAUGHT IN PROMISE: ", error);
         next(lib.error(404,`Not found`));
     })    
   }
 
-exports.validatetoken=(req,res)=>{
+exports.validatetoken=(req, res, next) =>{
     var token = req.body.token
     var isverified = jwt.verify(token,Buffer.from(config.authkey.key).toString('base64'))
     if (isverified){

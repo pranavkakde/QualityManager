@@ -4,7 +4,7 @@ var lib = require('../lib/common')
 var {validationResult } = require('express-validator')
 var request = require('superagent')
 
-exports.getCase= (req,res)=>{
+exports.getCase= (req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -21,7 +21,7 @@ exports.getCase= (req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.deleteCase=(req,res)=>{
+exports.deleteCase=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -44,7 +44,7 @@ exports.deleteCase=(req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.updateCase=(req,res)=>{
+exports.updateCase=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -72,7 +72,7 @@ exports.updateCase=(req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.addCase=(req,res)=>{
+exports.addCase=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -168,7 +168,7 @@ function isCase(releasesuiteid){
         });
     })
 }
-exports.getTestCases=(req,res)=>{
+exports.getTestCases=(req, res, next) =>{
     res.status(200).json({"message":"This service is still in progress. This will be completed once CRUD on Test Case Service is complete."})
 }
 exports.getTestSuites = async function(req,res){
@@ -201,6 +201,6 @@ exports.getTestSuites = async function(req,res){
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.getDefects=(req,res)=>{
+exports.getDefects=(req, res, next) =>{
     res.status(200).json({"message":"This service is still in progress. This will be completed once CRUD on Test Case Service is complete."})
 }

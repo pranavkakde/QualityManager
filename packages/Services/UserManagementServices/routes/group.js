@@ -4,7 +4,7 @@ var {validationResult } = require('express-validator')
 var lib = require('../lib/common')
 groupModel.setConfig(config.database)
 
-exports.getGroup=(req,res)=>{
+exports.getGroup=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -27,7 +27,7 @@ exports.getGroup=(req,res)=>{
     }
 }
  
-exports.deleteGroup=(req,res)=>{
+exports.deleteGroup=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -50,7 +50,7 @@ exports.deleteGroup=(req,res)=>{
     }
 }
 
-exports.updateGroup=(req,res)=>{
+exports.updateGroup=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -73,7 +73,7 @@ exports.updateGroup=(req,res)=>{
     }
 }
 
-exports.addGroup=(req,res)=>{
+exports.addGroup=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -96,7 +96,7 @@ exports.addGroup=(req,res)=>{
     }
 }
 
-exports.getAllGroups=(req,res)=>{
+exports.getAllGroups=(req, res, next) =>{
     groupModel.find({},(err,data)=>{
         if(err){
             next(lib.error(500,`internal server error ${err}`));

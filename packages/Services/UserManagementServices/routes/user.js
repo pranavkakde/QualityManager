@@ -1,7 +1,7 @@
 var userModel = require('../Model/user')
 var config = require('../config/config')
 var lib = require('../lib/common')
-var bcrypt = require('bcrypt')
+var bcrypt = require('bcryptjs')
 var {validationResult } = require('express-validator')
 
 function getAsciiPwd(password){
@@ -34,7 +34,7 @@ function isUser(username, secretkey){
         });
     })
 }
-exports.getUser= (req,res)=>{
+exports.getUser= (req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -57,7 +57,7 @@ exports.getUser= (req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.deleteUser=(req,res)=>{
+exports.deleteUser=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -80,7 +80,7 @@ exports.deleteUser=(req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.updateUser=(req,res)=>{
+exports.updateUser=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -113,7 +113,7 @@ exports.updateUser=(req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.addUser=(req,res)=>{
+exports.addUser=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -138,7 +138,7 @@ exports.addUser=(req,res)=>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.getAllUsers=(req,res)=>{    
+exports.getAllUsers=(req, res, next) =>{    
     userModel.setConfig(config.database)
     userModel.find({},function(err,data){
         if(err){
@@ -155,7 +155,7 @@ exports.getAllUsers=(req,res)=>{
 function checkSecretKey(reqseckey,dbseckey){
     return bcrypt.compareSync(reqseckey, dbseckey)
 }
-/*exports.login=(req,res)=>{
+/*exports.login=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -175,7 +175,7 @@ function checkSecretKey(reqseckey,dbseckey){
         next(lib.error(500,`internal server error ${err}`));
     }
 }
-exports.logout=(req,res)=>{
+exports.logout=(req, res, next) =>{
     if (req.session) {
         destroySession(req.session).then(data=>{
             res.status(200).json({"success":"logout successful"})

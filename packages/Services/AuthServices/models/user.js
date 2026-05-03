@@ -1,14 +1,14 @@
-var table = require('cachejsorm').TableSchema
-var tableMapping = require('cachejsorm').TableMapper
+var table = require('../../shared/orm.js').TableSchema
+var tableMapping = require('../../shared/orm.js').TableMapper
 
-var tableName ='dbo.[UserProfile]';
+var tableName = 'dbo.[UserProfile]';
 var schema = new table(
     {
-        UserId: {type: Number}, 
-        UserName: {type: String},
-        Password: {type: String}, 
-        GroupId : {type:Number}
+        UserId: { type: Number },
+        UserName: { type: String },
+        Password: { type: String },
+        GroupId: { type: Number }
     }
 );
 var userModel = new tableMapping(tableName, schema);
-module.exports=userModel;
+module.exports = userModel;

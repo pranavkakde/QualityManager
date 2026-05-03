@@ -1,5 +1,5 @@
-var table = require('cachejsorm').TableSchema
-var tableMapping = require('cachejsorm').TableMapper
+var table = require('../../shared/orm.js').TableSchema
+var tableMapping = require('../../shared/orm.js').TableMapper
 
 var tableName ='dbo.[defects]';
 var schema = new table(

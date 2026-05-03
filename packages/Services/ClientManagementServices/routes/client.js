@@ -1,7 +1,7 @@
 var clientModel = require('../Model/client')
 var config = require('../config/config')
 var lib = require('../lib/common')
-var bcrypt = require('bcrypt')
+var bcrypt = require('bcryptjs')
 var jwt = require('jsonwebtoken')
 
 var {validationResult } = require('express-validator')
@@ -51,7 +51,7 @@ var isClient=(async(clientname, secretkey)=>{
  * @returns {Error.model}  500 - Unexpected error
  * @security JWT
  */
-exports.getClient=(req,res)=>{
+exports.getClient=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -81,7 +81,7 @@ exports.getClient=(req,res)=>{
  * @returns {Error.model}  500 - Unexpected error
  * @security JWT
  */
-exports.deleteClient=(req,res)=>{
+exports.deleteClient=(req, res, next) =>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         next(lib.error(422,errors.array()));
@@ -119,7 +119,7 @@ exports.deleteClient=(req,res)=>{
  * @returns {Error.model}  500 - Unexpected error
  * @security JWT
  */
-exports.updateClient=(req,res)=>{
+exports.updateClient=(req, res, next) =>{
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -163,7 +163,7 @@ exports.updateClient=(req,res)=>{
  * @returns {Error.model}  500 - Unexpected error
  * @security JWT
  */
-exports.addClient=(req,res)=>{
+exports.addClient=(req, res, next) =>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         next(lib.error(422,errors.array()));
@@ -184,7 +184,7 @@ exports.addClient=(req,res)=>{
     })
 }
 
-exports.getAllClients=(req,res)=>{
+exports.getAllClients=(req, res, next) =>{
     clientModel.setConfig(config.database)
     clientModel.find({},function(err,data){
         if(err){
@@ -211,7 +211,7 @@ exports.getAllClients=(req,res)=>{
  * @returns {Error.model}  500 - Unexpected error
  * @security JWT
  */
-/*exports.gettoken=(req,res)=>{
+/*exports.gettoken=(req, res, next) =>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         next(lib.error(422,errors.array()));
@@ -249,7 +249,7 @@ exports.getAllClients=(req,res)=>{
  * @returns {Error.model}  500 - Unexpected error
  * @security JWT
  */
-/*exports.validatetoken=(req,res)=>{
+/*exports.validatetoken=(req, res, next) =>{
     var token = req.body.token
     var isverified = jwt.verify(token,Buffer.from('clientkey').toString('base64'))
     if (isverified){

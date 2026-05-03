@@ -1,7 +1,7 @@
 var apihandler=require('./router');
 var disc = require('./servicedisc');
 
-exports.getProxy=(req,res)=>{
+exports.getProxy=(req, res, next) =>{
     console.log(`${JSON.stringify(req.params)}`)
     disc.serviceExists(req, res).then(data=>{
         const uri = data[0].serviceEndpoint + "/"+ req.params[0] +"/"+ req.params[1];
@@ -20,7 +20,7 @@ exports.getProxy=(req,res)=>{
     })         
 }
 
-exports.deleteProxy=(req,res)=>{
+exports.deleteProxy=(req, res, next) =>{
     disc.serviceExists(req, res).then(data=>{
         const uri = data[0].serviceEndpoint + "/"+ req.params[0] +"/"+ req.params[1];
         apihandler.apiDeleteHandler(uri)
@@ -35,7 +35,7 @@ exports.deleteProxy=(req,res)=>{
     })         
 }
 
-exports.putProxy=(req,res)=>{    
+exports.putProxy=(req, res, next) =>{    
     disc.serviceExists(req, res).then(data=>{
         const uri = data[0].serviceEndpoint + "/"+ req.params[0] +"/"+ req.params[1];    
         apihandler.apiPutHandler(uri, {...req.body})
@@ -50,7 +50,7 @@ exports.putProxy=(req,res)=>{
     })        
 }
 
-exports.postProxy=(req,res)=>{        
+exports.postProxy=(req, res, next) =>{        
     disc.serviceExists(req, res).then(data=>{
         const uri = data[0].serviceEndpoint + "/"+ req.params[0] +"/"+ req.params[1];        
         apihandler.apiPostHandler(uri, {...req.body})

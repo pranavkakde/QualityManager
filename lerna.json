@@ -1,6 +1,4 @@
 {
-  "packages": [
-    "packages/Services/*"
-  ],
+  "npmClient": "npm",
   "version": "1.0.1"
 }

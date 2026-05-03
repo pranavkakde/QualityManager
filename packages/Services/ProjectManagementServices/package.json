@@ -17,26 +17,25 @@
   "author": "Pranav Kakde",
   "license": "MIT",
   "dependencies": {
-    "bcrypt": "^5.0.0",
-    "body-parser": "^1.19.0",
+    "body-parser": "^2.2.2",
     "cachejsorm": "^1.1.4",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "express-session": "^1.16.2",
-    "express-validator": "^6.1.1",
-    "jsonwebtoken": "^8.5.1",
-    "morgan": "^1.9.1",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "express-validator": "^7.3.2",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.10.1",
     "path": "^0.12.7",
-    "rotating-file-stream": "^1.4.2",
-    "superagent": "^5.1.0",
-    "swagger-ui-express": "^4.0.7",
-    "underscore": "^1.10.2"
+    "rotating-file-stream": "^3.2.9",
+    "superagent": "^10.3.0",
+    "swagger-ui-express": "^5.0.1",
+    "underscore": "^1.13.8"
   },
   "devDependencies": {
-    "assert": "^2.0.0",
-    "dotenv": "^8.2.0",
-    "mocha": "^6.1.4",
-    "supertest": "^4.0.2"
+    "assert": "^2.1.0",
+    "dotenv": "^17.4.2",
+    "mocha": "^11.7.5",
+    "supertest": "^7.2.2"
   },
   "gitHead": "66aceefa5501924e72b4c692d48d2cd1f09e892b"
 }
