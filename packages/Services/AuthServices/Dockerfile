@@ -1,4 +1,3 @@
-FROM pranavkakde/qualitymanager_mainbuild:latest
-COPY . .
-EXPOSE 8181:8181
-CMD [ "npm", "--prefix", "./", "start" ]
+FROM qualitymanager-mainbuild:latest
+COPY . packages/Services/AuthServices/
+CMD [ "npm", "--prefix", "packages/Services/AuthServices", "start" ]

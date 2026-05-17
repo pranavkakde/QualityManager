@@ -1,4 +1,5 @@
 require("dotenv").config();
+require('../shared/otel');
 var express = require("express");
 var path = require("path");
 var bodyParser = require("body-parser");
@@ -7,6 +8,7 @@ var morgan = require("morgan");
 var rfs = require("rotating-file-stream").createStream;
 var port = process.env.PORT || 7782;
 var app = express();
+const sharedAuth = require('../shared/auth');
 var project = require("./routes/project");
 var projectvalidator = require("./routes/validation/project");
 var caseSuite = require("./routes/projectreleases");
@@ -24,7 +26,8 @@ app.use(bodyParser.json({ limit: "5mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "5mb" }));
 app.use(bodyParser.text());
 app.use(bodyParser.json({ type: "application/json" }));
-app.use(cors());
+app.use(cors())
+app.use(sharedAuth.checkAuth);
 
 //create a session
 /*app.use(session({

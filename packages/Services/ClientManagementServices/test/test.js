@@ -1,5 +1,7 @@
+require('dotenv').config({ path: '../../../../.env' });
 var test = require('supertest')
 var server = require('../server')
+var assert = require('assert')
 
 var clientdata={
     clientname: 'client1',
@@ -8,60 +10,82 @@ var clientdata={
 var clientdata2={
     secretkey: 'newkey'
 }
-var clientdata2={
-    GroupName: 'usergroup'
-}
 
-describe('Verify if Client CRUD is successful', async () => {
+describe('Verify if Client CRUD is successful', function () {
     
-    it('post client data', async(done) => {
-        await test(server)
+    it('post client data', (done) => {
+        test(server)
             .post('/client')
             .set('Accept','application/json')
             .send(clientdata)
             .expect(201)
-            .expect((res)=>{res.body.message = 'Client record inserted successfully'},done())
+            .end((err, res) => {
+                if (err) return done(err);
+                assert.strictEqual(res.body.success, 'Client record inserted succesfully');
+                done();
+            });
     })
     
-    it('put group by client name', async(done) => {
+    it('put group by client name', (done) => {
         test(server)
             .put('/client/client1')
             .set('Accept','application/json')
             .set('secretkey','seckey')
             .send(clientdata2)
             .expect(200)
-            .expect((res)=>{res.body.message = 'Client record updated successfully'},done())
+            .end((err, res) => {
+                if (err) return done(err);
+                assert.strictEqual(res.body.success, 'client record updated succesfully');
+                done();
+            });
     })
-    it('get client by client name', async(done) => {
-        await test(server)
+    it('get client by client name', (done) => {
+        test(server)
           .get('/client/client1')
           .set('Accept','application/json')
           .set('secretkey','newkey')
           .expect(200)
-          .expect((res)=>{
-            res.body.clientname = 'client1';
-          }, done())
+          .end((err, res) => {
+              if (err) return done(err);
+              assert.strictEqual(res.body[0].ClientName, 'client1');
+              done();
+          });
     })
-    it('get all client', async(done) => {
-        await test(server)
+    // These routes are currently commented out in server.js
+    /*
+    it('get all client', (done) => {
+        test(server)
           .get('/client')
           .set('Accept', 'application/json')
-          .expect(200,done())
+          .expect(200)
+          .end((err, res) => {
+              if (err) return done(err);
+              done();
+          });
     })
-    it('get token', async (done) => {
-        await test(server)
+    it('get token', (done) => {
+        test(server)
           .get('/gettoken')
           .set('Accept', 'application/json')
           .set('secretkey','newkey')
-          .expect(200,done())
+          .expect(200)
+          .end((err, res) => {
+              if (err) return done(err);
+              done();
+          });
     })
-    it('delete client by client name', async(done) => {
-        await test(server)
+    */
+    it('delete client by client name', (done) => {
+        test(server)
             .delete('/client/client1')
             .set('Accept','application/json')
             .set('secretkey','newkey')
             .expect(200)
-            .expect((res)=>{res.body.message = 'Client record deleted successfully'},done())
+            .end((err, res) => {
+                if (err) return done(err);
+                assert.strictEqual(res.body.success, 'client record deleted succesfully');
+                done();
+            });
     })
     
 })

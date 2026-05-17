@@ -8,7 +8,10 @@ var schema = new table(
         name: {type: String},
         description: {type: String}, 
         statusid : {type:Number},
-        releaseid : {type:Number}
+        releaseid : {
+            type: Number,
+            references: { model: 'ReleaseMaster', key: 'releaseid' }
+        }
     }
 );
 var suiteModel = new tableMapping(tableName, schema);

@@ -1,23 +1,25 @@
 {
-  "openapi" : "3.0.0",
-  "info" : {
-    "title" : "project management",
-    "description" : "Test Project Management APIs",
-    "version" : "1.0.0-oas3"
+  "openapi": "3.0.0",
+  "info": {
+    "title": "project management",
+    "description": "Test Project Management APIs",
+    "version": "1.0.0-oas3"
   },
-  "servers" : [ {
-    "url" : "http://localhost:7782"
-  } ],
-  "paths" : {
-    "/projects" : {
-      "get" : {
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/project_all"
+  "servers": [
+    {
+      "url": "http://localhost:7782"
+    }
+  ],
+  "paths": {
+    "/projects": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/project_all"
                 }
               }
             }
@@ -25,118 +27,126 @@
         }
       }
     },
-    "/project" : {
-      "post" : {
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/project_add"
+    "/project": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/project_add"
               }
             }
           }
         },
-        "responses" : {
-          "201" : {
-            "description" : "Created"
+        "responses": {
+          "201": {
+            "description": "Created"
           }
         }
       }
     },
-    "/project/{projectid}" : {
-      "get" : {
-        "tags" : [ ],
-        "summary" : "Your GET endpoint",
-        "parameters" : [ {
-          "name" : "projectid",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "number"
+    "/project/{projectid}": {
+      "get": {
+        "tags": [],
+        "summary": "Your GET endpoint",
+        "parameters": [
+          {
+            "name": "projectid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            }
           }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/project_all"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/project_all"
                 }
               }
             }
           }
         }
       },
-      "put" : {
-        "parameters" : [ {
-          "name" : "projectid",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "number"
+      "put": {
+        "parameters": [
+          {
+            "name": "projectid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            }
           }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/project_add"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/project_add"
               }
             }
           }
         },
-        "responses" : {
-          "200" : {
-            "description" : "OK"
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       },
-      "delete" : {
-        "parameters" : [ {
-          "name" : "projectid",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "number"
+      "delete": {
+        "parameters": [
+          {
+            "name": "projectid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            }
           }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    "/project/{projectid}/releases" : {
-      "get" : {
-        "tags" : [ ],
-        "summary" : "Your GET endpoint",
-        "parameters" : [ {
-          "name" : "projectid",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "number"
+    "/project/{projectid}/releases": {
+      "get": {
+        "tags": [],
+        "summary": "Your GET endpoint",
+        "parameters": [
+          {
+            "name": "projectid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            }
           }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/release_all"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/release_all"
                   }
                 }
               }
@@ -145,150 +155,163 @@
         }
       }
     },
-    "/project/{projectid}/release/{releaseid}" : {
-      "get" : {
-        "tags" : [ ],
-        "summary" : "Your GET endpoint",
-        "parameters" : [ {
-          "name" : "projectid",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "number"
+    "/project/{projectid}/release/{releaseid}": {
+      "get": {
+        "tags": [],
+        "summary": "Your GET endpoint",
+        "parameters": [
+          {
+            "name": "projectid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "releaseid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            }
           }
-        }, {
-          "name" : "releaseid",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "number"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/release_all"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/release_all"
                 }
               }
             }
           }
         }
       },
-      "post" : {
-        "description" : "add an association of project and release id - add an entry in project releases table",
-        "parameters" : [ {
-          "name" : "projectid",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "number"
+      "post": {
+        "description": "add an association of project and release id - add an entry in project releases table",
+        "parameters": [
+          {
+            "name": "projectid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "releaseid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            }
           }
-        }, {
-          "name" : "releaseid",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "number"
-          }
-        } ],
-        "responses" : {
-          "201" : {
-            "description" : "Created"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
           }
         }
       },
-      "delete" : {
-        "description" : "delete an association of project and release id - delete an entry in project releases table",
-        "parameters" : [ {
-          "name" : "projectid",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "number"
+      "delete": {
+        "description": "delete an association of project and release id - delete an entry in project releases table",
+        "parameters": [
+          {
+            "name": "projectid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "releaseid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            }
           }
-        }, {
-          "name" : "releaseid",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "number"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    "/projectreleases/{projectreleaseid}" : {
-      "put" : {
-        "tags" : [ ],
-        "summary" : "Your GET endpoint",
-        "parameters" : [ {
-          "name" : "projectreleaseid",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "number"
+    "/projectreleases/{projectreleaseid}": {
+      "put": {
+        "tags": [],
+        "summary": "Your GET endpoint",
+        "parameters": [
+          {
+            "name": "projectreleaseid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            }
           }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/project_releases"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/project_releases"
               }
             }
           }
         },
-        "responses" : {
-          "200" : {
-            "description" : "OK"
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    "/project/{projectid}/testsuites" : {
-      "get" : {
-        "tags" : [ ],
-        "summary" : "Your GET endpoint",
-        "parameters" : [ {
-          "name" : "projectid",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "number"
+    "/project/{projectid}/testsuites": {
+      "get": {
+        "tags": [],
+        "summary": "Your GET endpoint",
+        "parameters": [
+          {
+            "name": "projectid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "number"
+            }
           }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/testsuite_all"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/testsuite_all"
                   }
                 }
               }
@@ -298,95 +321,107 @@
       }
     }
   },
-  "components" : {
-    "schemas" : {
-      "project_add" : {
-        "title" : "project_add",
-        "type" : "object",
-        "properties" : {
-          "name" : {
-            "type" : "string"
+  "components": {
+    "schemas": {
+      "project_add": {
+        "title": "project_add",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
           },
-          "description" : {
-            "type" : "string"
+          "description": {
+            "type": "string"
           }
         }
       },
-      "project_all" : {
-        "title" : "project_all",
-        "type" : "object",
-        "properties" : {
-          "projectid" : {
-            "type" : "number"
+      "project_all": {
+        "title": "project_all",
+        "type": "object",
+        "properties": {
+          "projectid": {
+            "type": "number"
           },
-          "name" : {
-            "type" : "string"
+          "name": {
+            "type": "string"
           },
-          "description" : {
-            "type" : "string"
+          "description": {
+            "type": "string"
           }
         }
       },
-      "release_all" : {
-        "title" : "release_all",
-        "type" : "object",
-        "properties" : {
-          "releaseid" : {
-            "type" : "number"
+      "release_all": {
+        "title": "release_all",
+        "type": "object",
+        "properties": {
+          "releaseid": {
+            "type": "number"
           },
-          "name" : {
-            "type" : "string"
+          "name": {
+            "type": "string"
           },
-          "description" : {
-            "type" : "string"
+          "description": {
+            "type": "string"
           }
         }
       },
-      "release_add" : {
-        "title" : "release_add",
-        "type" : "object",
-        "properties" : {
-          "name" : {
-            "type" : "string"
+      "release_add": {
+        "title": "release_add",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
           },
-          "description" : {
-            "type" : "string"
+          "description": {
+            "type": "string"
           }
         }
       },
-      "project_releases" : {
-        "title" : "project_releases",
-        "type" : "object",
-        "properties" : {
-          "projectid" : {
-            "type" : "number"
+      "project_releases": {
+        "title": "project_releases",
+        "type": "object",
+        "properties": {
+          "projectid": {
+            "type": "number"
           },
-          "releaseid" : {
-            "type" : "number"
+          "releaseid": {
+            "type": "number"
           }
         },
-        "description" : "Project and Releases association from ProjectReleases table"
+        "description": "Project and Releases association from ProjectReleases table"
       },
-      "testsuite_all" : {
-        "type" : "object",
-        "properties" : {
-          "testsuiteid" : {
-            "type" : "number"
+      "testsuite_all": {
+        "type": "object",
+        "properties": {
+          "testsuiteid": {
+            "type": "number"
           },
-          "name" : {
-            "type" : "string"
+          "name": {
+            "type": "string"
           },
-          "description" : {
-            "type" : "string"
+          "description": {
+            "type": "string"
           },
-          "statusid" : {
-            "type" : "number"
+          "statusid": {
+            "type": "number"
           },
-          "releaseid" : {
-            "type" : "number"
+          "releaseid": {
+            "type": "number"
           }
         }
       }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }

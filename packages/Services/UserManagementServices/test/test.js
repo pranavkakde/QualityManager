@@ -90,14 +90,19 @@ describe('Verify if User CRUD is successful', () => {
             .set('Accept','application/json')
             .send(userdata)
             .expect(200)
-            .end((res)=>{res.body.message.should('User record inserted successfully');done();})
+            .end((err, res) => {
+                if (err) return done(err);
+                assert.strictEqual(res.body.success, 'User record inserted successfully');
+                done();
+            })
     })
     it('get all users by user id',  (done) => {
          test(server)
           .get('/users')
           .set('Accept', 'application/json')
           .expect(200)
-          .end((res)=>{ 
+          .end((err, res) => { 
+              if (err) return done(err);
               userid = res.body[0].UserId;
               console.log(`user id inserted ${userid}`); 
               done();
@@ -109,22 +114,32 @@ describe('Verify if User CRUD is successful', () => {
             .set('Accept','application/json')
             .send(userdata3)
             .expect(200)
-            .end((res)=>{res.body.message.should('User record updated successfully'); done()})
+            .end((err, res) => {
+                if (err) return done(err);
+                assert.strictEqual(res.body.success, 'User record updated successfully');
+                done();
+            })
     })
     it('get user by user id',  (done) => {
          test(server)
           .get(`/user/${userid}`)
           .set('Accept','application/json')
           .expect(200)
-          .end((res)=>{
-            console.log(res.body); done();
-            })
+          .end((err, res) => {
+            if (err) return done(err);
+            console.log(res.body);
+            done();
+          })
     })    
     it('delete user by user id', (done) => {
          test(server)
             .delete(`/user/${userid}`)
             .set('Accept','application/json')
             .expect(200)
-            .end((res)=>{res.body.message.should('User record deleted successfully');done()})
+            .end((err, res) => {
+                if (err) return done(err);
+                assert.strictEqual(res.body.success, 'User record deleted successfully');
+                done();
+            })
     })
 })

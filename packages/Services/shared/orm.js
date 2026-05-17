@@ -42,17 +42,25 @@ class TableMapper {
             let seqSchema = {};
             let isFirst = true;
             for(let key in this.schema.schemaObj) {
-                let type = this.schema.schemaObj[key].type;
+                let schemaProp = this.schema.schemaObj[key];
+                let type = schemaProp.type;
                 let seqType = DataTypes.STRING;
                 if (type === Number) seqType = DataTypes.INTEGER;
                 else if (type === Boolean) seqType = DataTypes.BOOLEAN;
                 else if (type === Date) seqType = DataTypes.DATE;
                 
+                let isAutoInc = schemaProp.autoIncrement !== undefined ? 
+                                schemaProp.autoIncrement : 
+                                (isFirst && (type === Number));
+
                 seqSchema[key] = {
                     type: seqType,
                     primaryKey: isFirst,
-                    autoIncrement: isFirst && (type === Number) 
+                    autoIncrement: isAutoInc 
                 };
+                if (schemaProp.references) {
+                    seqSchema[key].references = schemaProp.references;
+                }
                 isFirst = false;
             }
 

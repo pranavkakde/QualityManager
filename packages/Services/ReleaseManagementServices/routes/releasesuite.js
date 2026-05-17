@@ -116,22 +116,7 @@ function isRel(releaseid, testsuiteid){
 async function getTestSuites(releaseid){
     return new Promise((resolve, reject)=>{
         caseModel.setConfig(config)
-        caseModel.aggregate(
-            {
-                _field: 
-                    [
-                        {
-                            _name: '_local.testsuiteid',
-                        }
-                    ],
-                _filter: [      
-                        {
-                            _field:[{_name:'_local.releaseid'}],
-                            _eq: releaseid
-                        }
-                    ]
-            }
-            , (err,data)=>{
+        caseModel.find({ releaseid: releaseid }, (err,data)=>{
             if(err){
                 if(lib.isEmptyObject(err)){
                     reject({error:"Release Id and associated Test Suite is not found in database"})
@@ -139,7 +124,7 @@ async function getTestSuites(releaseid){
                     reject({error:"internal server error", err})
                 }
             }else{
-                if(lib.isEmptyObject(data)){
+                if(!data || data.length === 0){
                     reject({error:"Release Id and associated Test Suite is not found in database"})
                 }else{
                     resolve(data)    
@@ -194,7 +179,8 @@ exports.getTestSuites = async function(req,res,next){
                 .post(url)
                 .send(body)
                 .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json');
+                .set('Accept', 'application/json')
+                .set('Authorization', req.headers.authorization);
             res.status(200).json(resp.body);
         }
     }catch(err){

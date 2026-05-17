@@ -8,7 +8,10 @@ var schema = new table(
         stepname: {type: String},
         action: {type: String},
         verification: {type: String},
-        testcaseid: {type: Number},
+        testcaseid: {
+            type: Number,
+            references: { model: 'testcases', key: 'testcaseid' }
+        },
         statusid: {type: Number}
     }
 );

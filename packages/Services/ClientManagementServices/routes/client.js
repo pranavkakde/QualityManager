@@ -27,7 +27,7 @@ var isClient=(async(clientname, secretkey)=>{
                 if(lib.isEmptyObject(data)){
                     reject({error:"client name and secret key combination not found in database"})
                 }else{
-                    if(checkSecretKey(secretkey,data[0].Secretkey)){
+                    if(checkSecretKey(secretkey,data[0].SecretKey)){
                         resolve(data)    
                     }else{
                         reject({error:"client name and secret key combination not found in database"})
@@ -219,7 +219,7 @@ exports.getAllClients=(req, res, next) =>{
     }
     var password = req.header('secretkey')
     isClient(req.body.clientname,password).then(data =>{                
-        var seckeydb = data[0].Secretkey
+        var seckeydb = data[0].SecretKey
         if(bcrypt.compareSync(password, seckeydb)){
             var user = {
                 clientid: data[0].ClientId,

@@ -1,0 +1,15 @@
+drop table dbo.Clients
+drop table dbo.defects
+drop table dbo.testcases
+drop table dbo.testcasesuite
+drop table dbo.testrun
+drop table dbo.teststeps
+drop table dbo.testsuites
+drop table dbo.Services
+drop table dbo.ProjectMaster
+drop table dbo.projectreleases
+drop table dbo.ReleaseMaster
+drop table dbo.releasesuites
+drop table dbo.UserProfile
+drop table dbo.UserGroup
+drop table dbo.UserProjects

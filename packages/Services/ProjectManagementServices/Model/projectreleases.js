@@ -5,8 +5,14 @@ var tableName ='dbo.[projectreleases]';
 var schema = new table(
     {
         projectreleaseid: {type: Number}, 
-        releaseid : {type:Number},
-        projectid : {type:Number}
+        releaseid : {
+            type: Number,
+            references: { model: 'ReleaseMaster', key: 'releaseid' }
+        },
+        projectid : {
+            type: Number,
+            references: { model: 'ProjectMaster', key: 'projectid' }
+        }
     }
 );
 var projectReleaseModel = new tableMapping(tableName, schema);

@@ -10,7 +10,10 @@ var schema = new table(
         versionid: {type: String},
         prerequisite: {type: String},
         statusid: {type: Number},
-        author: {type: Number}
+        author: {
+            type: Number,
+            references: { model: 'UserProfile', key: 'UserId' }
+        }
     }
 );
 var testModel = new tableMapping(tableName, schema);

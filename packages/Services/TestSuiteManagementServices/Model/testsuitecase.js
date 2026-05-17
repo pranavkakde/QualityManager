@@ -5,8 +5,14 @@ var tableName ='dbo.[testcasesuite]';
 var schema = new table(
     {
         id: {type: Number}, 
-        testcaseid : {type:Number},
-        testsuiteid : {type:Number}
+        testcaseid : {
+            type: Number,
+            references: { model: 'testcases', key: 'testcaseid' }
+        },
+        testsuiteid : {
+            type: Number,
+            references: { model: 'testsuites', key: 'testsuiteid' }
+        }
     }
 );
 var suitecaseModel = new tableMapping(tableName, schema);

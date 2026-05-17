@@ -16,6 +16,11 @@
         "type": "apiKey",
         "in": "header",
         "name": "secretkey"
+      },
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     },
     "schemas": {
@@ -29,13 +34,16 @@
             "type": "string"
           }
         },
-        "required": ["clientname", "secretkey"]
+        "required": [
+          "clientname",
+          "secretkey"
+        ]
       }
     }
   },
   "security": [
     {
-      "secretkey": []
+      "bearerAuth": []
     }
   ],
   "paths": {

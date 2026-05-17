@@ -7,7 +7,13 @@ var schema = new table(
         UserId: { type: Number },
         UserName: { type: String },
         Password: { type: String },
-        GroupId: { type: Number }
+        GroupId: { 
+            type: Number,
+            references: {
+                model: 'UserGroup', // Matches the tableName of UserGroup model
+                key: 'GroupId'      // Matches the column in the UserGroup table
+            }
+        }
     }
 );
 var userModel = new tableMapping(tableName, schema);

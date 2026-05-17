@@ -268,7 +268,7 @@
       }
     },
     "/releases": {
-      "parameters": [      ],
+      "parameters": [],
       "post": {
         "summary": "Filter all Releases for the list of releases sent",
         "responses": {
@@ -289,53 +289,13 @@
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": { 
-                  "type": "object",
-                  "properties": {
-                    "releaseids": {
-                      "type": "array",
-                      "items":{
-                        "type": "number"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/releases/testsuites": {
-        "parameters": [      ],
-        "post": {
-          "summary": "Filter all Releases and get their testsuites",
-          "responses": {
-            "200": {
-              "description": "OK",
-              "content": {
-                "application/json": {
-                  "schema": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "releaseids": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/testsuite_all"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": { 
-                    "type": "object",
-                    "properties": {
-                      "releaseids": {
-                        "type": "array",
-                        "items":{
-                          "type": "number"
-                        }
-                      }
+                      "type": "number"
                     }
                   }
                 }
@@ -343,8 +303,48 @@
             }
           }
         }
-      },    
-  "components": {    
+      }
+    },
+    "/releases/testsuites": {
+      "parameters": [],
+      "post": {
+        "summary": "Filter all Releases and get their testsuites",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/testsuite_all"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "releaseids": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
     "schemas": {
       "release_ids": {
         "title": "release_ids",
@@ -477,6 +477,18 @@
           }
         }
       }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }

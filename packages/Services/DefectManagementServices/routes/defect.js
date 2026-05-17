@@ -54,7 +54,7 @@ exports.updateDefect=(req, res, next) =>{
         isDefect(req.params.defectid).then(data =>{
             defectModel.update({defectid: req.params.defectid},{subject: req.body.subject, description: req.body.description, 
                 assignedto: req.body.assignedto, createdby: req.body.createdby, createddate: req.body.createddate, 
-                defectstatusid: req.body.defectstatusid, closedby: req.body.closedby
+                defectstatusid: req.body.defectstatusid, closedby: req.body.closedby, releaseid: req.body.releaseid
             },(err,data)=>{
                 if(err){
                     if(lib.isEmptyObject(err)){
@@ -83,7 +83,7 @@ exports.addDefect=(req, res, next) =>{
         defectModel.setConfig(config.database)
         defectModel.insert({subject: req.body.subject, description: req.body.description, 
             assignedto: req.body.assignedto, createdby: req.body.createdby, createddate: req.body.createddate, 
-            defectstatusid: req.body.defectstatusid, closedby: req.body.closedby
+            defectstatusid: req.body.defectstatusid, closedby: req.body.closedby, releaseid: req.body.releaseid
         },(err,data)=>{
             if(err){
                     next(lib.error(500,`internal server error ${err}`));

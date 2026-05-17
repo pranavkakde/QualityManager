@@ -7,7 +7,10 @@ var schema = new table(
         UserId: {type: Number}, 
         UserName: {type: String},
         Password: {type: String}, 
-        GroupId : {type:Number}
+        GroupId : {
+            type: Number,
+            references: { model: 'UserGroup', key: 'GroupId' }
+        }
     }
 );
 var userModel = new tableMapping(tableName, schema);

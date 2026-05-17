@@ -30,7 +30,16 @@
     "morgan": "^1.10.1",
     "path": "^0.12.7",
     "rotating-file-stream": "^3.2.9",
-    "bcryptjs": "^3.0.3"
+    "bcryptjs": "^3.0.3",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/sdk-node": "^0.53.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.51.0",
+    "@opentelemetry/exporter-logs-otlp-http": "^0.53.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.53.0",
+    "@opentelemetry/resources": "^1.26.0",
+    "@opentelemetry/semantic-conventions": "^1.27.0",
+    "@opentelemetry/sdk-logs": "^0.53.0",
+    "@opentelemetry/api-logs": "^0.53.0"
   },
   "devDependencies": {
     "eslint": "^10.3.0",

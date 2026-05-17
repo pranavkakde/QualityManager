@@ -1,81 +1,95 @@
-## Services for QualityManager - Open source test management tool
-This project contains backend services for QualityManager. 
-These services are written in NodeJS, JavaScript and Express. 
-Following is a list of backend services. API documentation is deployed using swagger-ui-express which can be access using `/api-docs` path. Each folder consists of a dedicated app running Express server. The build pipeline in Azure Devops builds docker images of these services using Docker compose and pushes them to Docker hub. Once these images built and deployed to Docker Hub, Azure Devops release deploys these images on Kubernates cluster running on VSTS agent. 
-### List of Services
-1. User Management 
-2. Test Case Management
-3. Test Suite Management
-4. Project
-5. Release
-6. Administration
-7. Defect Management
+# QualityManager — Backend Microservices Reference Manual
 
-#### User Management
-User management services provide CRUD operation for User management within application
-1. GET /users
-2. POST /users
-3. PUT /users/{userid}
-4. DELETE /users/{userid}
-5. GET /users/{groupid}
-6. POST /users/{groupid}
-7. GET  /gettoken (returns a JSON web token which is required for all services)
+This directory contains the backend microservices architecture for the **QualityManager** platform. The services are written in **Node.js** utilizing **Express** as the routing framework and **Sequelize** for Microsoft SQL Server (MSSQL) database mapping.
 
-#### Test Case management
-1. GET /testcases
-2. GET /testcases/{testcaseid}
-3. POST /testcases
-4. PUT /testcases/{testcaseid}
-5. DELETE /testcases/{testcaseid}
-6. GET  /testcases/{testcaseid}/steps
-7. GET  /testcases/{testcaseid}/steps/{teststepid}
-8. POST  /testcases/{testcaseid}/steps
-9. PUT  /testcases/{testcaseid}/steps/{teststepid}
-10. DELETE  /testcases/{testcaseid}/steps/{teststepid}
-11. GET /testcases/testruns/{testrunid}
-12. POST /testcases/testruns/
-13. PUT  /testcases/testruns/{testrunid}
-14. DELETE  /testcases/testruns/{testrunid}
-15. GET /testcases/testruns
-16. GET /testcases/{testcaseid}/defects
-17. GET /testcases/{testcaseid}/steps/{teststepid}/defects
-18. GET /testcases/{testcaseid}/steps/{teststepid}/defects/{defectid}
+---
 
-#### Test Suite Management
-1. GET /testsuites
-2. GET  /testsuites/{testsuiteid}
-3. POST  /testsuites
-4. PUT  /testsuites/{testsuiteid}
-5. DELETE  /testsuites/{testsuiteid}
-6. GET  /testsuites/testcases
-7. POST /testsuites/testcases/{testcaseid}
+## 1. Microservice Topology
 
-#### Project Services
-1. GET /projects
-2. POST /projects
-3. PUT  /projects/{projectid}
-4. DELETE   /projects/{projectid}
-5. GET  /projects/{projectid}
+Each microservice runs in its own isolated Node process with standard port mapping:
 
-#### Release Services
-1. GET /releases
-2. POST /releases
-3. PUT  /releases/{releaseid}
-4. DELETE   /releases/{releaseid}
-5. GET  /releases/{releaseid}
-6. GET  /releases/{releaseid}/testsuites
-7. GET  /releases/{releaseid}/testsuites/{testsuiteid}
+| Port | Service Package | Purpose |
+| :--- | :--- | :--- |
+| `7777` | **UserManagementServices** | User creation, validation, session token issuance |
+| `7779` | **DefectManagementServices** | Bug logging, severity level associations, case linkages |
+| `7780` | **TestSuiteManagementServices** | Test suites groups creation and releases mappings |
+| `7781` | **ReleaseManagementServices** | Release timelines, version scopes, test run targets |
+| `7782` | **ProjectManagementServices** | Core project workspaces |
+| `7784` | **TestCaseManagementServices** | Action steps, execution status logs, runs history |
 
-#### Administration
-1. TBD
+---
 
-#### Defect Management
-1. GET  /defects
-2. POST /defects    (will include testcaseid / teststepid)
-3. PUT  /defects/{defectid}
-4. DELETE   /defects/{defectid}
-5. GET  /defects/{defectid}
+## 2. Database Mapping Layer (Sequelize ORM)
 
-#### Authorization services
-1. POST /gettoken
-2. POST /validationtoken
+Database queries are mediated through a centralized ORM wrapper located at:
+* **[packages/Services/shared/orm.js](file:///c:/Users/Pranav/Documents/Code/git/QualityManager/packages/Services/shared/orm.js)**
+
+This wrapper dynamically maps relational tables into custom Sequelize entities using the `TableMapper` class. 
+
+### Development Guidelines
+* **No Raw `.aggregate()` / `.join()` Methods:** The `TableMapper` entity classes support standard `.find()`, `.insert()`, `.update()`, and `.delete()` wrappers. Explicit aggregation/joining queries are unsupported and will reject promises.
+* **Foreign Key and ID Constraints:** Tables use standard MSSQL `IDENTITY` columns. Keep in mind that project IDs use `.projectid`, release IDs use `.releaseid`, and user mappings utilize `.UserId` to align with the database seed schema in `mock_data.sql`.
+
+---
+
+## 3. Microservice Route Catalog
+
+The following is the structured catalog of API endpoints exposed by the services:
+
+### 🔑 User & Authentication Services (Port `7777`)
+Manages identities, security tokens, and user permissions:
+
+* `GET /api/user/users` - Fetches all users.
+* `POST /api/user/user` - Creates a new user.
+* `PUT /api/user/user/:userid` - Updates a user's details.
+* `DELETE /api/user/user/:userid` - Deletes a user.
+* `POST /api/user/login` - Authenticates credentials and returns a secure JWT token.
+* `GET /api/user/user/:userid/projects` - Fetches project IDs mapped to the user.
+* `POST /api/user/project` - Maps a user to a specific project.
+* `DELETE /api/user/user/:userid/project/:projectid` - Removes project mapping from a user.
+
+### 📁 Project Services (Port `7782`)
+Manages primary workspace scopes:
+
+* `GET /api/project/projects` - Fetches all active projects.
+* `POST /api/project/project` - Creates a new project.
+* `GET /api/project/project/:projectid` - Fetches project details.
+* `GET /api/project/project/:projectid/releases` - Fetches releases associated with a project.
+
+### 📅 Release Services (Port `7781`)
+Manages versions and release stages:
+
+* `GET /api/release/releases` - Fetches all releases.
+* `POST /api/release/release` - Creates a new release.
+* `GET /api/release/release/:releaseid` - Fetches details of a specific release.
+* `GET /api/release/release/:releaseid/testsuites` - Fetches test suites assigned to the release.
+
+### 🧪 Test Case Services (Port `7784`)
+Handles test definitions, steps, and run logging:
+
+* `GET /api/testcase/testcases` - Fetches all test cases.
+* `POST /api/testcase/testcase` - Creates a new test case.
+* `GET /api/testcase/testcases/:testcaseid` - Fetches details of a test case.
+* `GET /api/testcase/testcases/:testcaseid/steps` - Fetches definition steps of a case.
+* `POST /api/testcase/testcases/:testcaseid/step` - Adds a step to a test case.
+* `GET /api/testcase/release/:releaseid/testcases` - Fetches test cases assigned to a release.
+* `GET /api/testcase/release/:releaseid/testsuites` - Fetches test suites assigned to a release.
+* `GET /api/testcase/release/:releaseid/defects` - Fetches defects reported under a release.
+* `GET /api/testcase/testcaseruns/:testcaseid/testruns` - Fetches execution history logs of a case.
+
+### 🧪 Test Suite Services (Port `7780`)
+Groups test cases into execution blocks:
+
+* `GET /api/testsuite/testsuites` - Fetches all test suites.
+* `POST /api/testsuite/testsuite` - Creates a new test suite.
+* `GET /api/testsuite/testsuite/:testsuiteid` - Fetches details of a suite.
+* `GET /api/testsuite/testsuite/:testsuiteid/testcases` - Fetches cases mapped to a suite.
+* `POST /api/testsuite/testcase` - Mappings a test case to a suite.
+
+### 🐛 Defect Services (Port `7779`)
+Tracks issues, failures, and resolution state:
+
+* `GET /api/defect/defects` - Fetches all reported defects.
+* `POST /api/defect/defect` - Logs a new defect (linking to test case/step).
+* `GET /api/defect/defect/:defectid` - Fetches defect details.
+* `PUT /api/defect/defect/:defectid` - Updates a defect status.

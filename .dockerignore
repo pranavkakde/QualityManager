@@ -1,3 +1,7 @@
 node_modules
-lib
-copyOnServer.ps1
+packages/**/node_modules
+.git
+.vscode
+npm-debug.log
+Dockerfile
+.dockerignore

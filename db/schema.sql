@@ -1,85 +1,85 @@
 -- SQL Server Schema generated from QualityManager cachejsorm model files
 
-CREATE TABLE [dbo].[UserProfile] (
-    [UserId] INT PRIMARY KEY,
-    [UserName] NVARCHAR(MAX),
-    [Password] NVARCHAR(MAX),
-    [GroupId] INT
-);
-
 CREATE TABLE [dbo].[UserGroup] (
-    [GroupId] INT PRIMARY KEY,
+    [GroupId] INT IDENTITY(1,1) PRIMARY KEY,
     [GroupName] NVARCHAR(MAX),
     [IsAdmin] BIT
 );
 
-CREATE TABLE [dbo].[testcasesuite] (
-    [id] INT PRIMARY KEY,
-    [testcaseid] INT,
-    [testsuiteid] INT
-);
-
-CREATE TABLE [dbo].[testsuites] (
-    [testsuiteid] INT PRIMARY KEY,
-    [name] NVARCHAR(MAX),
-    [description] NVARCHAR(MAX),
-    [statusid] INT,
-    [releaseid] INT
-);
-
-CREATE TABLE [dbo].[testrun] (
-    [testrunid] INT PRIMARY KEY,
-    [name] NVARCHAR(MAX),
-    [runtypeid] INT,
-    [startdate] NVARCHAR(MAX),
-    [enddate] NVARCHAR(MAX),
-    [userid] INT,
-    [testrunstatusid] INT,
-    [testcaseid] INT
-);
-
-CREATE TABLE [dbo].[testcases] (
-    [testcaseid] INT PRIMARY KEY,
-    [name] NVARCHAR(MAX),
-    [description] NVARCHAR(MAX),
-    [versionid] NVARCHAR(MAX),
-    [prerequisite] NVARCHAR(MAX),
-    [statusid] INT,
-    [author] INT
-);
-
-CREATE TABLE [dbo].[teststeps] (
-    [stepid] INT PRIMARY KEY,
-    [stepname] NVARCHAR(MAX),
-    [action] NVARCHAR(MAX),
-    [verification] NVARCHAR(MAX),
-    [testcaseid] INT,
-    [statusid] INT
-);
-
-CREATE TABLE [dbo].[releasesuites] (
-    [id] INT PRIMARY KEY,
-    [releaseid] INT,
-    [testsuiteid] INT
+CREATE TABLE [dbo].[UserProfile] (
+    [UserId] INT IDENTITY(1,1) PRIMARY KEY,
+    [UserName] NVARCHAR(MAX),
+    [Password] NVARCHAR(MAX),
+    [GroupId] INT FOREIGN KEY REFERENCES [dbo].[UserGroup]([GroupId])
 );
 
 CREATE TABLE [dbo].[ReleaseMaster] (
-    [releaseid] INT PRIMARY KEY,
+    [releaseid] INT IDENTITY(1,1) PRIMARY KEY,
     [name] NVARCHAR(MAX),
     [description] NVARCHAR(MAX),
     [iscurrentrelease] BIT
 );
 
-CREATE TABLE [dbo].[projectreleases] (
-    [projectreleaseid] INT PRIMARY KEY,
-    [releaseid] INT,
-    [projectid] INT
-);
-
 CREATE TABLE [dbo].[ProjectMaster] (
-    [projectid] INT PRIMARY KEY,
+    [projectid] INT IDENTITY(1,1) PRIMARY KEY,
     [name] NVARCHAR(MAX),
     [description] NVARCHAR(MAX)
+);
+
+CREATE TABLE [dbo].[testsuites] (
+    [testsuiteid] INT IDENTITY(1,1) PRIMARY KEY,
+    [name] NVARCHAR(MAX),
+    [description] NVARCHAR(MAX),
+    [statusid] INT,
+    [releaseid] INT FOREIGN KEY REFERENCES [dbo].[ReleaseMaster]([releaseid])
+);
+
+CREATE TABLE [dbo].[testcases] (
+    [testcaseid] INT IDENTITY(1,1) PRIMARY KEY,
+    [name] NVARCHAR(MAX),
+    [description] NVARCHAR(MAX),
+    [versionid] NVARCHAR(MAX),
+    [prerequisite] NVARCHAR(MAX),
+    [statusid] INT,
+    [author] INT FOREIGN KEY REFERENCES [dbo].[UserProfile]([UserId])
+);
+
+CREATE TABLE [dbo].[testcasesuite] (
+    [id] INT IDENTITY(1,1) PRIMARY KEY,
+    [testcaseid] INT FOREIGN KEY REFERENCES [dbo].[testcases]([testcaseid]),
+    [testsuiteid] INT FOREIGN KEY REFERENCES [dbo].[testsuites]([testsuiteid])
+);
+
+CREATE TABLE [dbo].[testrun] (
+    [testrunid] INT IDENTITY(1,1) PRIMARY KEY,
+    [name] NVARCHAR(MAX),
+    [runtypeid] INT,
+    [startdate] NVARCHAR(MAX),
+    [enddate] NVARCHAR(MAX),
+    [userid] INT FOREIGN KEY REFERENCES [dbo].[UserProfile]([UserId]),
+    [testrunstatusid] INT,
+    [testcaseid] INT FOREIGN KEY REFERENCES [dbo].[testcases]([testcaseid])
+);
+
+CREATE TABLE [dbo].[teststeps] (
+    [stepid] INT IDENTITY(1,1) PRIMARY KEY,
+    [stepname] NVARCHAR(MAX),
+    [action] NVARCHAR(MAX),
+    [verification] NVARCHAR(MAX),
+    [testcaseid] INT FOREIGN KEY REFERENCES [dbo].[testcases]([testcaseid]),
+    [statusid] INT
+);
+
+CREATE TABLE [dbo].[releasesuites] (
+    [id] INT IDENTITY(1,1) PRIMARY KEY,
+    [releaseid] INT FOREIGN KEY REFERENCES [dbo].[ReleaseMaster]([releaseid]),
+    [testsuiteid] INT FOREIGN KEY REFERENCES [dbo].[testsuites]([testsuiteid])
+);
+
+CREATE TABLE [dbo].[projectreleases] (
+    [projectreleaseid] INT IDENTITY(1,1) PRIMARY KEY,
+    [releaseid] INT FOREIGN KEY REFERENCES [dbo].[ReleaseMaster]([releaseid]),
+    [projectid] INT FOREIGN KEY REFERENCES [dbo].[ProjectMaster]([projectid])
 );
 
 CREATE TABLE [dbo].[Services] (
@@ -90,20 +90,27 @@ CREATE TABLE [dbo].[Services] (
 );
 
 CREATE TABLE [dbo].[defects] (
-    [defectid] INT PRIMARY KEY,
+    [defectid] INT IDENTITY(1,1) PRIMARY KEY,
     [subject] NVARCHAR(MAX),
     [description] NVARCHAR(MAX),
-    [assignedto] INT,
-    [createdby] INT,
+    [assignedto] INT FOREIGN KEY REFERENCES [dbo].[UserProfile]([UserId]),
+    [createdby] INT FOREIGN KEY REFERENCES [dbo].[UserProfile]([UserId]),
     [createddate] NVARCHAR(MAX),
     [defectstatusid] INT,
-    [closedby] INT
+    [closedby] INT FOREIGN KEY REFERENCES [dbo].[UserProfile]([UserId]),
+    [releaseid] INT FOREIGN KEY REFERENCES [dbo].[ReleaseMaster]([releaseid])
 );
 
 CREATE TABLE [dbo].[Clients] (
-    [ClientId] INT PRIMARY KEY,
+    [ClientId] INT IDENTITY(1,1) PRIMARY KEY,
     [ClientName] NVARCHAR(MAX),
     [SecretKey] NVARCHAR(MAX),
     [token] NVARCHAR(MAX),
     [password] NVARCHAR(MAX)
+);
+
+CREATE TABLE [dbo].[UserProject] (
+    [id] INT IDENTITY(1,1) PRIMARY KEY,
+    [userid] INT FOREIGN KEY REFERENCES [dbo].[UserProfile]([UserId]),
+    [projectid] INT FOREIGN KEY REFERENCES [dbo].[ProjectMaster]([projectid])
 );

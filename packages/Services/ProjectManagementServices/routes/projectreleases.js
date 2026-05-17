@@ -158,26 +158,16 @@ function isProjectRelease(releaseid, projectid) {
   });
 }
 async function getRels(projectid) {  
+  console.error('[DEBUG] getRels called with projectid:', projectid, 'type:', typeof projectid);
   return new Promise((resolve, reject) => {
     caseModel.setConfig(config.database);    
-    caseModel.aggregate(
-      {
-        _field: [
-          {
-            _name: "_local.releaseid",
-          },
-        ],
-        _filter: [
-          {
-            _field: [{ _name: "_local.projectid" }],
-            _eq: projectid,
-          },
-        ],
-      },
+    caseModel.find(
+      { projectid: Number(projectid) },
       (err, data) => {        
-        if (_.isEmpty(data) && _.isEmpty(err)) {
+        console.error('[DEBUG] caseModel.find returned err:', err, 'data:', data);
+        if ((!data || data.length === 0) && _.isEmpty(err)) {
           reject({error:"Project Id and associated Release Id is not found in database"});
-        } else if (!_.isNull(err)) {
+        } else if (err && !_.isEmpty(err)) {
           reject({ error: `${JSON.stringify(err)}` });
         } else {
           resolve(data);
@@ -239,6 +229,7 @@ exports.getReleases = async function (req, res, next) {
           .post(url)
           .set("Content-Type", "application/json")
           .set("Accept", "application/json")
+          .set("Authorization", req.headers.authorization)
           .send(body)
           .then((resp) => {
             res.status(200).json(resp.body);
@@ -292,7 +283,8 @@ exports.getTestSuites = (req, res, next) => {
         .post(url)
         .send(body)
         .set("Content-Type", "application/json")
-        .set("Accept", "application/json")      
+        .set("Accept", "application/json")
+        .set("Authorization", req.headers.authorization)
       })
       .then((resp)=>{
         res.status(200).json(resp.body);
