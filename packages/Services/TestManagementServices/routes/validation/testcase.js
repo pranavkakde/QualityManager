@@ -34,5 +34,10 @@ exports.validate = (method) => {
           body('releases', 'release ids are missing').exists()
         ]
       }
+      case 'filterTestCases':{
+        return [
+          body('testcases', 'testcase ids are missing').exists()
+        ]
+      }
     }
   }

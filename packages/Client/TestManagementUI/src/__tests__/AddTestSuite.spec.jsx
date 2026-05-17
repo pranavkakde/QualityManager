@@ -44,7 +44,9 @@ describe('AddTestSuite Component Spec', () => {
 
   it('submits name, description, statusid, and selected release ID successfully', async () => {
     const user = userEvent.setup();
-    axios.post = vi.fn().mockResolvedValueOnce({ data: { success: true } });
+    axios.post = vi.fn()
+      .mockResolvedValueOnce({ data: { success: true, data: { testsuiteid: 101 } } })
+      .mockResolvedValueOnce({ data: { success: true } });
 
     render(<AddTestSuite selectedRelease={12} />);
 
@@ -56,12 +58,14 @@ describe('AddTestSuite Component Spec', () => {
     await user.type(descInput, 'Verifies payment pathways');
     await user.click(submitButton);
 
-    expect(axios.post).toHaveBeenCalledWith('/api/testsuite/testsuite', {
+    expect(axios.post).toHaveBeenNthCalledWith(1, '/api/testsuite/testsuite', {
       name: 'Checkout Integration Flow',
       description: 'Verifies payment pathways',
       releaseid: 12,
       statusid: 1
     });
+
+    expect(axios.post).toHaveBeenNthCalledWith(2, '/api/release/release/12/testsuite/101');
 
     await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith('/suites');

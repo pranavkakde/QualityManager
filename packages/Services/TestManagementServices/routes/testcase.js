@@ -143,3 +143,23 @@ exports.filterReleases=(req, res, next) =>{
             }
     });
 }
+
+exports.filterTestCases = (req, res, next) => {
+    try {
+        testModel.setConfig(config.database);
+        var sArray = req.body.testcases;
+        if (!Array.isArray(sArray) || sArray.length === 0) {
+            res.status(200).json([]);
+            return;
+        }
+        testModel.find({ testcaseid: sArray }, function(err, data){
+            if (err) {
+                res.status(400).json({ "error": "internal server error", err });
+            } else {
+                res.status(200).json(Array.isArray(data) ? data : []);
+            }
+        });
+    } catch(err) {
+        next(lib.error(500, `internal server error ${err}`));
+    }
+}

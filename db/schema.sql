@@ -26,11 +26,21 @@ CREATE TABLE [dbo].[ProjectMaster] (
     [description] NVARCHAR(MAX)
 );
 
+CREATE TABLE [dbo].[TestSuiteStatus] (
+    [statusid] INT PRIMARY KEY,
+    [statusname] NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE [dbo].[TestCaseStatus] (
+    [statusid] INT PRIMARY KEY,
+    [statusname] NVARCHAR(50) NOT NULL
+);
+
 CREATE TABLE [dbo].[testsuites] (
     [testsuiteid] INT IDENTITY(1,1) PRIMARY KEY,
     [name] NVARCHAR(MAX),
     [description] NVARCHAR(MAX),
-    [statusid] INT,
+    [statusid] INT FOREIGN KEY REFERENCES [dbo].[TestSuiteStatus]([statusid]),
     [releaseid] INT FOREIGN KEY REFERENCES [dbo].[ReleaseMaster]([releaseid])
 );
 
@@ -40,7 +50,7 @@ CREATE TABLE [dbo].[testcases] (
     [description] NVARCHAR(MAX),
     [versionid] NVARCHAR(MAX),
     [prerequisite] NVARCHAR(MAX),
-    [statusid] INT,
+    [statusid] INT FOREIGN KEY REFERENCES [dbo].[TestCaseStatus]([statusid]),
     [author] INT FOREIGN KEY REFERENCES [dbo].[UserProfile]([UserId])
 );
 

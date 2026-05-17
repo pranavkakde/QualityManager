@@ -1,7 +1,7 @@
-var relModel = require('../Model/release')
-var config = require('../config/config')
 var lib = require('../lib/common')
 var { validationResult } = require('express-validator')
+var config = require('../config/config')
+var relModel = require('../Model/release')
 
 exports.getRelease = (req, res, next) => {
     try {
@@ -10,7 +10,6 @@ exports.getRelease = (req, res, next) => {
             next(lib.error(422, errors.array()));
             return;
         }
-        relModel.setConfig(config.database)
         isRelease(req.params.releaseid).then(data => {
             res.status(200).json(data);
         }).catch(error => {
@@ -50,8 +49,8 @@ exports.updateRelease = (req, res, next) => {
             next(lib.error(422, errors.array()));
             return;
         }
-        relModel.setConfig(config.database)
         isRelease(req.params.releaseid).then(data => {
+            relModel.setConfig(config.database)
             relModel.update({ releaseid: req.params.releaseid }, {
                 name: req.body.name, description: req.body.description, iscurrentrelease: req.body.iscurrentrelease
             }, (err, data) => {
@@ -96,7 +95,6 @@ exports.addRelease = (req, res, next) => {
 function isRelease(testrelid) {
     return new Promise((resolve, reject) => {
         relModel.setConfig(config.database)
-
         relModel.find({ releaseid: testrelid }, (err, data) => {
             if (err) {
                 if (lib.isEmptyObject(err)) {
@@ -115,8 +113,8 @@ function isRelease(testrelid) {
     })
 }
 exports.filterReleases = (req, res, next) => {
-    relModel.setConfig(config.database)
     var sArray = req.body.releaseids
+    relModel.setConfig(config.database)
     relModel.find({ releaseid: sArray }
         , function (err, data) {
             if (err) {

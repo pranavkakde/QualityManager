@@ -9,6 +9,8 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import TestSuiteList from './pages/TestSuiteList';
 import AddTestSuite from './pages/AddTestSuite';
+import TestCaseList from './pages/TestCaseList';
+import AddTestCase from './pages/AddTestCase';
 import DefectList from './pages/DefectList';
 import TestRunList from './pages/TestRunList';
 import UserManagement from './pages/UserManagement';
@@ -105,23 +107,25 @@ function App() {
     <Router>
       <div className="min-h-screen bg-slate-50">
         <Sidebar isAdmin={isAdmin} />
-        
+
         <div className="pl-64 min-h-screen flex flex-col">
-          <Header 
-            projects={projects} 
-            selectedProject={selectedProject} 
+          <Header
+            projects={projects}
+            selectedProject={selectedProject}
             setSelectedProject={setSelectedProject}
-            releases={releases} 
-            selectedRelease={selectedRelease} 
+            releases={releases}
+            selectedRelease={selectedRelease}
             setSelectedRelease={setSelectedRelease}
             onLogout={handleLogout}
           />
-          
+
           <div className="flex-1 bg-slate-50">
             <Routes>
               <Route path="/" element={<Dashboard selectedRelease={selectedRelease} />} />
               <Route path="/suites" element={<TestSuiteList selectedRelease={selectedRelease} />} />
               <Route path="/suites/add" element={<AddTestSuite selectedRelease={selectedRelease} />} />
+              <Route path="/suites/:testsuiteid/cases" element={<TestCaseList />} />
+              <Route path="/suites/:testsuiteid/cases/add" element={<AddTestCase />} />
               <Route path="/defects" element={<DefectList selectedRelease={selectedRelease} />} />
               <Route path="/runs" element={<TestRunList selectedRelease={selectedRelease} />} />
               {isAdmin && (

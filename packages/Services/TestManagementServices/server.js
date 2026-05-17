@@ -47,6 +47,7 @@ app.get("/:testcaseid", testvalidator.validate('getTestCase') ,testcase.getTestC
 app.delete("/:testcaseid",testvalidator.validate('deleteTestCase'),testcase.deleteTestCase)
 app.put("/:testcaseid",testvalidator.validate('updateTestCase'),testcase.updateTestCase)
 app.post("/",testvalidator.validate('addTestCase'),testcase.addTestCase)
+app.post("/filter", testvalidator.validate('filterTestCases'), testcase.filterTestCases)
 
 //########### Test Steps routes ######################
 app.get("/testcasesteps/:testcaseid/steps/:stepid", stepvalidator.validate('getTestStep') ,teststep.getTestStep)

@@ -17,19 +17,19 @@ class TableMapper {
 
     setConfig(config) {
         if (!this.sequelize) {
-            let dialect = config.driverType === 'mssql' ? 'mssql' : 
-                          config.driverType === 'mysql' ? 'mysql' : 
-                          config.driverType === 'postgres' ? 'postgres' : 'mssql';
-            
+            let dialect = config.driverType === 'mssql' ? 'mssql' :
+                config.driverType === 'mysql' ? 'mysql' :
+                    config.driverType === 'postgres' ? 'postgres' : 'mssql';
+
             let host = config.server || 'localhost';
             let dialectOptions = {};
-            
+
             if (dialect === 'mssql' && host.includes('\\')) {
-                 const parts = host.split('\\');
-                 host = parts[0];
-                 dialectOptions.options = { instanceName: parts[1], encrypt: false, trustServerCertificate: true };
+                const parts = host.split('\\');
+                host = parts[0];
+                dialectOptions.options = { instanceName: parts[1], encrypt: false, trustServerCertificate: true };
             } else if (dialect === 'mssql') {
-                 dialectOptions.options = { encrypt: false, trustServerCertificate: true };
+                dialectOptions.options = { encrypt: false, trustServerCertificate: true };
             }
 
             this.sequelize = new Sequelize(config.database, config.username, config.password, {
@@ -41,22 +41,22 @@ class TableMapper {
 
             let seqSchema = {};
             let isFirst = true;
-            for(let key in this.schema.schemaObj) {
+            for (let key in this.schema.schemaObj) {
                 let schemaProp = this.schema.schemaObj[key];
                 let type = schemaProp.type;
                 let seqType = DataTypes.STRING;
                 if (type === Number) seqType = DataTypes.INTEGER;
                 else if (type === Boolean) seqType = DataTypes.BOOLEAN;
                 else if (type === Date) seqType = DataTypes.DATE;
-                
-                let isAutoInc = schemaProp.autoIncrement !== undefined ? 
-                                schemaProp.autoIncrement : 
-                                (isFirst && (type === Number));
+
+                let isAutoInc = schemaProp.autoIncrement !== undefined ?
+                    schemaProp.autoIncrement :
+                    (isFirst && (type === Number));
 
                 seqSchema[key] = {
                     type: seqType,
                     primaryKey: isFirst,
-                    autoIncrement: isAutoInc 
+                    autoIncrement: isAutoInc
                 };
                 if (schemaProp.references) {
                     seqSchema[key].references = schemaProp.references;
@@ -73,24 +73,36 @@ class TableMapper {
     }
 
     find(criteria, callback) {
+        if (!this.model) {
+            return callback(new Error("Model not initialized"), null);
+        }
         this.model.findAll({ where: criteria, raw: true })
             .then(data => callback(null, data))
             .catch(err => callback(err, null));
     }
 
     insert(data, callback) {
+        if (!this.model) {
+            return callback(new Error("Model not initialized"), null);
+        }
         this.model.create(data)
             .then(record => callback(null, record.toJSON ? record.toJSON() : record))
             .catch(err => callback(err, null));
     }
 
     update(criteria, data, callback) {
+        if (!this.model) {
+            return callback(new Error("Model not initialized"), null);
+        }
         this.model.update(data, { where: criteria })
             .then(result => callback(null, result))
             .catch(err => callback(err, null));
     }
 
     delete(criteria, callback) {
+        if (!this.model) {
+            return callback(new Error("Model not initialized"), null);
+        }
         this.model.destroy({ where: criteria })
             .then(result => callback(null, result))
             .catch(err => callback(err, null));

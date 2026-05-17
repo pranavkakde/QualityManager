@@ -23,12 +23,16 @@ const AddTestSuite = ({ selectedRelease }) => {
 
     setLoading(true);
     try {
-      await axios.post(`${API_BASE}/testsuite/testsuite`, {
+      const res = await axios.post(`${API_BASE}/testsuite/testsuite`, {
         name,
         description,
         releaseid: Number(selectedRelease),
         statusid: 1
       });
+      const newTestSuiteId = res.data?.data?.testsuiteid || res.data?.data?.id || res.data?.testsuiteid || res.data?.id;
+      if (newTestSuiteId) {
+        await axios.post(`${API_BASE}/release/release/${selectedRelease}/testsuite/${newTestSuiteId}`);
+      }
       setLoading(false);
       navigate('/suites');
     } catch (err) {

@@ -81,9 +81,9 @@ Handles test definitions, steps, and run logging:
 Groups test cases into execution blocks:
 
 * `GET /api/testsuite/testsuites` - Fetches all test suites.
-* `POST /api/testsuite/testsuite` - Creates a new test suite.
-* `GET /api/testsuite/testsuite/:testsuiteid` - Fetches details of a suite.
-* `GET /api/testsuite/testsuite/:testsuiteid/testcases` - Fetches cases mapped to a suite.
+* `POST /api/testsuite` - Creates a new test suite.
+* `GET /api/testsuite/:testsuiteid` - Fetches details of a suite.
+* `GET /api/testsuite/:testsuiteid/testcases` - Fetches cases mapped to a suite.
 * `POST /api/testsuite/testcase` - Mappings a test case to a suite.
 
 ### 🐛 Defect Services (Port `7779`)

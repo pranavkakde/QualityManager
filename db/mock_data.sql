@@ -30,6 +30,21 @@ INSERT INTO [dbo].[ReleaseMaster] ([releaseid], [name], [description], [iscurren
 (2, 'v1.1', 'Bug fixes and performance improvements', 1);
 SET IDENTITY_INSERT [dbo].[ReleaseMaster] OFF;
 
+-- TestSuiteStatus
+INSERT INTO [dbo].[TestSuiteStatus] ([statusid], [statusname]) VALUES
+(1, 'Created'),
+(2, 'In Progress'),
+(3, 'Completed');
+
+-- TestCaseStatus
+INSERT INTO [dbo].[TestCaseStatus] ([statusid], [statusname]) VALUES
+(1, 'New'),
+(2, 'In Progress'),
+(3, 'Passed'),
+(4, 'Failed'),
+(5, 'Blocked'),
+(6, 'On Hold');
+
 -- projectreleases
 SET IDENTITY_INSERT [dbo].[projectreleases] ON;
 INSERT INTO [dbo].[projectreleases] ([projectreleaseid], [releaseid], [projectid]) VALUES 

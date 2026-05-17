@@ -29,14 +29,6 @@ app.use(bodyParser.json({ type: "application/json" }));
 app.use(cors())
 app.use(sharedAuth.checkAuth);
 
-//create a session
-/*app.use(session({
-  secret: 'new session',
-  resave: true,
-  saveUninitialized: false,
-  cookie: { maxAge: 60000 }}
-));*/
-
 // create a rotating access log
 var accessLogStream = rfs("access.log", {
   interval: "1d", // rotate daily
@@ -50,7 +42,7 @@ app.use(auth.checkRequiredRole)*/
 
 //########### Project management routes ###############
 app.get(
-  "/projects",  
+  "/projects",
   project.getAllProjects
 );
 app.get(
@@ -133,20 +125,20 @@ app.use((err, req, res, next) => {
   console.error('Params:', JSON.stringify(req.params, null, 2));
   console.error('Query:', JSON.stringify(req.query, null, 2));
   console.error('---');
-  
+
   if (err.error && err.error.status) {
     // This is a custom lib.error
     console.error('Custom Error Message:', err.error.message);
     console.error('Custom Error Status:', err.error.status);
     if (err.error.innerError) console.error('Inner Error:', err.error.innerError);
     console.error('=======================================\n');
-    res.status(err.error.status).json({"error": err.error.message});
+    res.status(err.error.status).json({ "error": err.error.message });
   } else {
     // This is an unhandled, raw Node.js/DB crash
     console.error('RAW UNHANDLED ERROR:');
     console.error(err.stack || err);
     console.error('=======================================\n');
-    res.status(500).json({"error": "Internal Server Error", "details": err.message});
+    res.status(500).json({ "error": "Internal Server Error", "details": err.message });
   }
 });;
 app.listen(port, () => {
