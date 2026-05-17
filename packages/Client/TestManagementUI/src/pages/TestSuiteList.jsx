@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { TestTube } from 'lucide-react';
 
@@ -6,6 +7,7 @@ const API_BASE = '/api';
 
 const TestSuiteList = ({ selectedRelease }) => {
   const [suites, setSuites] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!selectedRelease) return;
@@ -25,7 +27,12 @@ const TestSuiteList = ({ selectedRelease }) => {
     <div className="p-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold text-slate-800">Test Suites</h1>
-        <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors">Add Suite</button>
+        <button
+          onClick={() => navigate('/suites/add')}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors shadow-sm"
+        >
+          Add Suite
+        </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {suites.map(suite => (

@@ -8,6 +8,7 @@ import Header from './components/Header';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import TestSuiteList from './pages/TestSuiteList';
+import AddTestSuite from './pages/AddTestSuite';
 import DefectList from './pages/DefectList';
 import TestRunList from './pages/TestRunList';
 import UserManagement from './pages/UserManagement';
@@ -116,10 +117,11 @@ function App() {
             onLogout={handleLogout}
           />
           
-          <main className="flex-1 bg-slate-50">
+          <div className="flex-1 bg-slate-50">
             <Routes>
               <Route path="/" element={<Dashboard selectedRelease={selectedRelease} />} />
               <Route path="/suites" element={<TestSuiteList selectedRelease={selectedRelease} />} />
+              <Route path="/suites/add" element={<AddTestSuite selectedRelease={selectedRelease} />} />
               <Route path="/defects" element={<DefectList selectedRelease={selectedRelease} />} />
               <Route path="/runs" element={<TestRunList selectedRelease={selectedRelease} />} />
               {isAdmin && (
@@ -130,7 +132,7 @@ function App() {
               )}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
-          </main>
+          </div>
         </div>
       </div>
     </Router>
