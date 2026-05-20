@@ -113,14 +113,23 @@ function isRelease(testrelid) {
     })
 }
 exports.filterReleases = (req, res, next) => {
-    var sArray = req.body.releaseids
-    relModel.setConfig(config.database)
-    relModel.find({ releaseid: sArray }
-        , function (err, data) {
-            if (err) {
-                next(lib.error(500, `internal server error ${err}`));
-            } else {
-                res.status(200).json(data);
-            }
-        });
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            next(lib.error(422, errors.array()));
+            return;
+        }
+        var sArray = req.body.releaseids
+        relModel.setConfig(config.database)
+        relModel.find({ releaseid: sArray }
+            , function (err, data) {
+                if (err) {
+                    next(lib.error(500, `internal server error ${err}`));
+                } else {
+                    res.status(200).json(data);
+                }
+            });
+    } catch (err) {
+        next(lib.error(500, `internal server error ${err}`));
+    }
 }

@@ -94,6 +94,10 @@ This document provides a precise reference snapshot of the SQL Server database s
 
 ## 4. Defect & System Tables
 
+### `defectstatus`
+* `defectstatusid` - `INT PRIMARY KEY`
+* `defectstatus` - `NVARCHAR(50) NOT NULL`
+
 ### `defects`
 * `defectid` - `INT IDENTITY(1,1) PRIMARY KEY`
 * `subject` - `NVARCHAR(MAX)`
@@ -101,9 +105,15 @@ This document provides a precise reference snapshot of the SQL Server database s
 * `assignedto` - `INT FOREIGN KEY REFERENCES UserProfile(UserId)`
 * `createdby` - `INT FOREIGN KEY REFERENCES UserProfile(UserId)`
 * `createddate` - `NVARCHAR(MAX)`
-* `defectstatusid` - `INT`
+* `defectstatusid` - `INT FOREIGN KEY REFERENCES defectstatus(defectstatusid)`
 * `closedby` - `INT FOREIGN KEY REFERENCES UserProfile(UserId)`
 * `releaseid` - `INT FOREIGN KEY REFERENCES ReleaseMaster(releaseid)`
+
+### `defecttestcase`
+* `id` - `INT IDENTITY(1,1) PRIMARY KEY`
+* `defectid` - `INT FOREIGN KEY REFERENCES defects(defectid) ON DELETE CASCADE`
+* `testsuiteid` - `INT FOREIGN KEY REFERENCES testsuites(testsuiteid)`
+* `testcaseid` - `INT FOREIGN KEY REFERENCES testcases(testcaseid)`
 
 ### `Clients`
 * `ClientId` - `INT IDENTITY(1,1) PRIMARY KEY`

@@ -50,6 +50,12 @@ app.get("/defect/:defectid", defectvalidator.validate('getDefect'), defect.getDe
 app.delete("/defect/:defectid", defectvalidator.validate('deleteDefect'), defect.deleteDefect)
 app.put("/defect/:defectid", defectvalidator.validate('updateDefect'), defect.updateDefect)
 app.post("/defect", defectvalidator.validate('addDefect'), defect.addDefect)
+app.get("/defect/:defectid/testcases", defectvalidator.validate('getDefect'), defect.getDefectTestCases)
+app.get("/defects", defect.getDefects)
+app.get("/statuses", defect.getStatuses)
+app.get("/defect-testcases/all", defect.getAllDefectTestCases)
+
+
 
 app.get("/isalive", (req, res) => {
   res.status(200).json({ "status": "ok" });

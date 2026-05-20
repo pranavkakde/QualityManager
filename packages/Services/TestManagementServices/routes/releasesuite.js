@@ -156,7 +156,7 @@ function isCase(releasesuiteid){
 exports.getTestCases=(req, res, next) =>{
     res.status(200).json({"message":"This service is still in progress. This will be completed once CRUD on Test Case Service is complete."})
 }
-exports.getTestSuites = async function(req,res){
+exports.getTestSuites = async function(req,res,next){
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -164,25 +164,32 @@ exports.getTestSuites = async function(req,res){
             return;
         }
         caseModel.setConfig(config.database)
-        const data = await getTestSuites(req.params.releaseid)
-        var arr = []
-        if(JSON.stringify(data).indexOf("error")>0){
-            res.status(400).json({"error":"Could not find Test Suites for Release Id "+ req.params.releaseid});
-        }else{
-            for (const key in data) {
-                const element = data[key].testsuiteid;
-                arr.push(element)       
-            }
-            const url = `${config.services.testsuite}testsuites`
-            const body = {"testsuites": arr}
-            const resp = await request
-                .post(url)
-                .send(body)
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-                .set('Authorization', req.headers.authorization);
-            res.status(200).json(resp.body);
+        let data;
+        try {
+            data = await getTestSuites(req.params.releaseid);
+        } catch (err) {
+            next(lib.error(404, err.error || "Could not find Test Suites for Release Id " + req.params.releaseid));
+            return;
         }
+        const dataArray = Array.isArray(data) ? data : [];
+        if (dataArray.length === 0) {
+            next(lib.error(404, "Could not find Test Suites for Release Id " + req.params.releaseid));
+            return;
+        }
+        var arr = []
+        for (const key in dataArray) {
+            const element = dataArray[key].testsuiteid;
+            arr.push(element)       
+        }
+        const url = `${config.services.testsuite}testsuites`
+        const body = {"testsuites": arr}
+        const resp = await request
+            .post(url)
+            .send(body)
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+            .set('Authorization', req.headers.authorization);
+        res.status(200).json(resp.body);
     }catch(err){
         next(lib.error(500,`internal server error ${err}`));
     }

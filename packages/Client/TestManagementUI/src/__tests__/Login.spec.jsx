@@ -23,8 +23,8 @@ describe('Login Component Spec', () => {
     expect(screen.getByText('QualityManager')).toBeInTheDocument();
     expect(screen.getByText('Sign in to continue')).toBeInTheDocument();
 
-    const usernameInput = screen.getByDisplayValue('demo');
-    const passwordInput = screen.getByDisplayValue('demo123');
+    const usernameInput = screen.getByDisplayValue('admin');
+    const passwordInput = screen.getByDisplayValue('admin123');
 
     expect(usernameInput).toBeInTheDocument();
     expect(passwordInput).toBeInTheDocument();
@@ -35,7 +35,7 @@ describe('Login Component Spec', () => {
     const mockOnLogin = vi.fn();
     const user = userEvent.setup();
 
-    axios.post = vi.fn().mockResolvedValueOnce({ data: { token: 'mock-token', username: 'demo' } });
+    axios.post = vi.fn().mockResolvedValueOnce({ data: { token: 'mock-token', username: 'admin' } });
 
     render(<Login onLogin={mockOnLogin} />);
 
@@ -43,10 +43,10 @@ describe('Login Component Spec', () => {
     await user.click(submitButton);
 
     expect(axios.post).toHaveBeenCalledWith('/api/user/login', {
-      username: 'demo',
-      password: 'demo123',
+      username: 'admin',
+      password: 'admin123',
     });
-    expect(mockOnLogin).toHaveBeenCalledWith(true, { token: 'mock-token', username: 'demo' });
+    expect(mockOnLogin).toHaveBeenCalledWith(true, { token: 'mock-token', username: 'admin' });
     expect(mockNavigate).toHaveBeenCalledWith('/');
   });
 

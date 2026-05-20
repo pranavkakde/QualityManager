@@ -4,8 +4,8 @@ import { Lock, User } from 'lucide-react';
 import axios from 'axios';
 
 const Login = ({ onLogin }) => {
-  const [username, setUsername] = useState('demo');
-  const [password, setPassword] = useState('demo123');
+  const [username, setUsername] = useState('admin');
+  const [password, setPassword] = useState('admin123');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {

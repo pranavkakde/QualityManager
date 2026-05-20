@@ -177,13 +177,13 @@ exports.getTestSuites = async function (req, res, next) {
             data = await getTestSuites(req.params.releaseid);
             console.log(`data from db in gettestsuies ${data}`);
         } catch (err) {
-            console.log(`error from db in gettestsuies ${err.error} \n ${err.parent.message}`);
+            console.log(`error from db in gettestsuies ${err.error} \n ${err.parent ? err.parent.message : ''}`);
             next(lib.error(404, err.error));
             return;
         }
         const dataArray = Array.isArray(data) ? data : [];
         if (dataArray.length === 0) {
-            next(lib.error(404, err.error));
+            next(lib.error(404, "Release Id and associated Test Suite is not found in database"));
             return;
         }
         var arr = []
@@ -211,11 +211,11 @@ exports.getDefects = (req, res, next) => {
 }
 exports.filterReleasesTestSuites = (req, res, next) => {
     try {
-        /*const errors = validationResult(req);
+        const errors = validationResult(req);
         if (!errors.isEmpty()) {
             next(lib.error(422,errors.array()));
             return;
-        }*/
+        }
         caseModel.setConfig(config.database)
         caseModel.join(
             {

@@ -1,4 +1,6 @@
 var defectModel = require('../Model/defect')
+var defectStatusModel = require('../Model/defectstatus')
+var defectTestCaseModel = require('../Model/defecttestcase')
 var config = require('../config/config')
 var lib = require('../lib/common')
 var {validationResult } = require('express-validator')
@@ -43,6 +45,84 @@ exports.deleteDefect=(req, res, next) =>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
+function saveMappings(databaseConfig, defectid, testcases) {
+    return new Promise((resolve, reject) => {
+        if (!Array.isArray(testcases) || testcases.length === 0) {
+            return resolve();
+        }
+        defectTestCaseModel.setConfig(databaseConfig);
+        let promises = testcases.map(tc => {
+            return new Promise((res, rej) => {
+                defectTestCaseModel.insert({
+                    defectid: defectid,
+                    testsuiteid: tc.testsuiteid,
+                    testcaseid: tc.testcaseid
+                }, (err, data) => {
+                    if (err) {
+                        console.error('Error inserting mapping:', err);
+                        rej(err);
+                    } else {
+                        res(data);
+                    }
+                });
+            });
+        });
+        Promise.all(promises).then(resolve).catch(reject);
+    });
+}
+
+function updateMappings(databaseConfig, defectid, testcases) {
+    return new Promise((resolve, reject) => {
+        defectTestCaseModel.setConfig(databaseConfig);
+        defectTestCaseModel.delete({ defectid: defectid }, (err, result) => {
+            if (err) {
+                console.error('Error deleting existing mappings:', err);
+                return reject(err);
+            }
+            saveMappings(databaseConfig, defectid, testcases).then(resolve).catch(reject);
+        });
+    });
+}
+
+exports.getDefectTestCases = (req, res, next) => {
+    try {
+        defectTestCaseModel.setConfig(config.database);
+        defectTestCaseModel.find({ defectid: Number(req.params.defectid) }, (err, data) => {
+            if (err) {
+                if (lib.isEmptyObject(err)) {
+                    res.status(200).json([]);
+                } else {
+                    next(lib.error(500, `internal server error ${err}`));
+                }
+            } else {
+                res.status(200).json(Array.isArray(data) ? data : []);
+            }
+        });
+    } catch (err) {
+        next(lib.error(500, `internal server error ${err}`));
+    }
+};
+
+exports.getAllDefectTestCases = (req, res, next) => {
+    try {
+        defectTestCaseModel.setConfig(config.database);
+        defectTestCaseModel.find({}, (err, data) => {
+            if (err) {
+                if (lib.isEmptyObject(err)) {
+                    res.status(200).json([]);
+                } else {
+                    next(lib.error(500, `internal server error ${err}`));
+                }
+            } else {
+                res.status(200).json(Array.isArray(data) ? data : []);
+            }
+        });
+    } catch (err) {
+        next(lib.error(500, `internal server error ${err}`));
+    }
+};
+
+
 exports.updateDefect=(req, res, next) =>{
     try{
         const errors = validationResult(req);
@@ -63,7 +143,13 @@ exports.updateDefect=(req, res, next) =>{
                         next(lib.error(500,`internal server error ${err}`));
                     }
                 }else{
-                    res.status(200).json({success: "Defect record updated succesfully"});
+                    updateMappings(config.database, req.params.defectid, req.body.testcases || [])
+                        .then(() => {
+                            res.status(200).json({success: "Defect record updated succesfully"});
+                        })
+                        .catch(updateErr => {
+                            next(lib.error(500, `internal server error updating mappings ${updateErr}`));
+                        });
                 }
             })
         }).catch(error=>{
@@ -73,6 +159,7 @@ exports.updateDefect=(req, res, next) =>{
         next(lib.error(500,`internal server error ${err}`));
     }
 }
+
 exports.addDefect=(req, res, next) =>{
     try{
         const errors = validationResult(req);
@@ -86,13 +173,60 @@ exports.addDefect=(req, res, next) =>{
             defectstatusid: req.body.defectstatusid, closedby: req.body.closedby, releaseid: req.body.releaseid
         },(err,data)=>{
             if(err){
-                    next(lib.error(500,`internal server error ${err}`));
+                next(lib.error(500,`internal server error ${err}`));
             }else{
-                res.status(201).json({success: "Defect record inserted succesfully"});
+                const newDefectId = data.defectid || data.id;
+                saveMappings(config.database, newDefectId, req.body.testcases || [])
+                    .then(() => {
+                        res.status(201).json({success: "Defect record inserted succesfully", data});
+                    })
+                    .catch(saveErr => {
+                        next(lib.error(500, `internal server error saving mappings ${saveErr}`));
+                    });
             }
         })
     }catch(err){
         next(lib.error(500,`internal server error ${err}`));
+    }
+}
+exports.getDefects = (req, res, next) => {
+    try {
+        defectModel.setConfig(config.database);
+        const filter = {};
+        if (req.query.releaseid) {
+            filter.releaseid = Number(req.query.releaseid);
+        }
+        defectModel.find(filter, (err, data) => {
+            if (err) {
+                if (lib.isEmptyObject(err)) {
+                    res.status(200).json([]);
+                } else {
+                    next(lib.error(500, `internal server error ${err}`));
+                }
+            } else {
+                res.status(200).json(Array.isArray(data) ? data : []);
+            }
+        });
+    } catch (err) {
+        next(lib.error(500, `internal server error ${err}`));
+    }
+}
+exports.getStatuses = (req, res, next) => {
+    try {
+        defectStatusModel.setConfig(config.database);
+        defectStatusModel.find({}, (err, data) => {
+            if (err) {
+                if (lib.isEmptyObject(err)) {
+                    res.status(200).json([]);
+                } else {
+                    next(lib.error(500, `internal server error ${err}`));
+                }
+            } else {
+                res.status(200).json(Array.isArray(data) ? data : []);
+            }
+        });
+    } catch (err) {
+        next(lib.error(500, `internal server error ${err}`));
     }
 }
 function isDefect(defectid){

@@ -99,6 +99,11 @@ CREATE TABLE [dbo].[Services] (
     [resouceName] NVARCHAR(MAX)
 );
 
+CREATE TABLE [dbo].[defectstatus] (
+    [defectstatusid] INT PRIMARY KEY,
+    [defectstatus] NVARCHAR(50) NOT NULL
+);
+
 CREATE TABLE [dbo].[defects] (
     [defectid] INT IDENTITY(1,1) PRIMARY KEY,
     [subject] NVARCHAR(MAX),
@@ -106,10 +111,18 @@ CREATE TABLE [dbo].[defects] (
     [assignedto] INT FOREIGN KEY REFERENCES [dbo].[UserProfile]([UserId]),
     [createdby] INT FOREIGN KEY REFERENCES [dbo].[UserProfile]([UserId]),
     [createddate] NVARCHAR(MAX),
-    [defectstatusid] INT,
+    [defectstatusid] INT FOREIGN KEY REFERENCES [dbo].[defectstatus]([defectstatusid]),
     [closedby] INT FOREIGN KEY REFERENCES [dbo].[UserProfile]([UserId]),
     [releaseid] INT FOREIGN KEY REFERENCES [dbo].[ReleaseMaster]([releaseid])
 );
+
+CREATE TABLE [dbo].[defecttestcase] (
+    [id] INT IDENTITY(1,1) PRIMARY KEY,
+    [defectid] INT FOREIGN KEY REFERENCES [dbo].[defects]([defectid]) ON DELETE CASCADE,
+    [testsuiteid] INT FOREIGN KEY REFERENCES [dbo].[testsuites]([testsuiteid]),
+    [testcaseid] INT FOREIGN KEY REFERENCES [dbo].[testcases]([testcaseid])
+);
+
 
 CREATE TABLE [dbo].[Clients] (
     [ClientId] INT IDENTITY(1,1) PRIMARY KEY,

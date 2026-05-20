@@ -99,6 +99,17 @@ INSERT INTO [dbo].[testrun] ([testrunid], [name], [runtypeid], [startdate], [end
 (2, 'Sprint 1 Regression', 1, '2026-05-01T00:00:00Z', '2026-05-02T00:00:00Z', 2, 1, 2);
 SET IDENTITY_INSERT [dbo].[testrun] OFF;
 
+-- defectstatus
+INSERT INTO [dbo].[defectstatus] ([defectstatusid], [defectstatus]) VALUES
+(1, 'New'),
+(2, 'In Progress'),
+(3, 'Fixed'),
+(4, 'Retest Pass'),
+(5, 'Retest Failed'),
+(6, 'Closed'),
+(7, 'Cancelled'),
+(8, 'Reopened');
+
 -- defects
 SET IDENTITY_INSERT [dbo].[defects] ON;
 INSERT INTO [dbo].[defects] ([defectid], [subject], [description], [assignedto], [createdby], [createddate], [defectstatusid], [closedby], [releaseid]) VALUES 
