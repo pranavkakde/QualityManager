@@ -73,6 +73,8 @@ Provide users with the ability to edit existing defects in the defect tracker. T
 ### Defect List View (`src/pages/DefectList.jsx`)
 * **Edit Button**:
   - Add an Edit button (Pencil icon from `lucide-react`) next to each defect's action buttons (View details / Delete).
+* **Linked Test Cases Mapping**:
+  - Mapped test cases and their parent suites are resolved and accessible during filter matching, details popups, and reports, but the main defects table listing keeps this column hidden to maintain a compact, clean layout and prevent rows from growing excessively large when multiple cases are linked.
 * **Edit Modal**:
   - Displays a modal/form pre-filled with the selected defect's fields.
   - Includes a **Defect Status** dropdown populated from the statuses reference list.

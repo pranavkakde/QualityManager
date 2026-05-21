@@ -1,10 +1,14 @@
 var table = require('../../shared/orm.js').TableSchema
 var tableMapping = require('../../shared/orm.js').TableMapper
 
-var tableName ='dbo.[testcases]';
+var tableName ='dbo.[testcaseversions]';
 var schema = new table(
     {
-        testcaseid: {type: Number}, 
+        id: {type: Number},
+        testcaseid: {
+            type: Number,
+            references: { model: 'testcases', key: 'testcaseid' }
+        },
         name: {type: String},
         description: {type: String},
         versionid: {type: String},
@@ -14,8 +18,9 @@ var schema = new table(
             type: Number,
             references: { model: 'UserProfile', key: 'UserId' }
         },
+        createdat: {type: Date},
         tag: {type: String}
     }
 );
-var testModel = new tableMapping(tableName, schema);
-module.exports=testModel;
+var versionModel = new tableMapping(tableName, schema);
+module.exports = versionModel;

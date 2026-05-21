@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Activity, LayoutDashboard, TestTube, Bug, Users, Terminal } from 'lucide-react';
+import { Activity, LayoutDashboard, TestTube, ClipboardList, Bug, Users, Terminal } from 'lucide-react';
 
 const Sidebar = ({ isAdmin }) => (
   <div className="w-64 bg-slate-900 text-white h-screen flex flex-col fixed shadow-2xl z-20">
@@ -14,6 +14,7 @@ const Sidebar = ({ isAdmin }) => (
       {[
         { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/' },
         { name: 'Test Suites', icon: <TestTube size={20} />, path: '/suites' },
+        { name: 'Test Cases', icon: <ClipboardList size={20} />, path: '/cases' },
         { name: 'Defects', icon: <Bug size={20} />, path: '/defects' },
         { name: 'Test Runs', icon: <Activity size={20} />, path: '/runs' },
         ...(isAdmin ? [

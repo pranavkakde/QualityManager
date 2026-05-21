@@ -43,6 +43,17 @@ INSERT INTO [dbo].[TestCaseStatus] ([statusid], [statusname]) VALUES
 (3, 'Passed'),
 (4, 'Failed'),
 (5, 'Blocked'),
+(6, 'On Hold'),
+(7, 'In Review'),
+(8, 'Reviewed');
+
+-- stepstatus
+INSERT INTO [dbo].[stepstatus] ([id], [status]) VALUES
+(1, 'New'),
+(2, 'Pass'),
+(3, 'Failed'),
+(4, 'Blocked'),
+(5, 'Complete'),
 (6, 'On Hold');
 
 -- projectreleases
@@ -68,11 +79,17 @@ SET IDENTITY_INSERT [dbo].[releasesuites] OFF;
 
 -- testcases
 SET IDENTITY_INSERT [dbo].[testcases] ON;
-INSERT INTO [dbo].[testcases] ([testcaseid], [name], [description], [versionid], [prerequisite], [statusid], [author]) VALUES 
-(1, 'Valid User Login', 'Ensure a user can log in with correct credentials', 'v1', 'User account exists', 1, 2),
-(2, 'Invalid Password Login', 'Ensure user is rejected with incorrect password', 'v1', 'None', 1, 2),
-(3, 'Add Item to Cart', 'Ensure item is added to cart successfully', 'v1', 'User logged in', 1, 2);
+INSERT INTO [dbo].[testcases] ([testcaseid], [name], [description], [versionid], [prerequisite], [statusid], [author], [tag]) VALUES 
+(1, 'Valid User Login', 'Ensure a user can log in with correct credentials', 'v1', 'User account exists', 1, 2, 'Regression,Auth'),
+(2, 'Invalid Password Login', 'Ensure user is rejected with incorrect password', 'v1', 'None', 1, 2, 'Auth,Security'),
+(3, 'Add Item to Cart', 'Ensure item is added to cart successfully', 'v1', 'User logged in', 1, 2, 'Checkout,Cart,Regression');
 SET IDENTITY_INSERT [dbo].[testcases] OFF;
+
+-- testcaseversions
+INSERT INTO [dbo].[testcaseversions] ([testcaseid], [name], [description], [versionid], [prerequisite], [statusid], [author], [tag]) VALUES
+(1, 'Valid User Login', 'Ensure a user can log in with correct credentials', 'v1', 'User account exists', 1, 2, 'Regression,Auth'),
+(2, 'Invalid Password Login', 'Ensure user is rejected with incorrect password', 'v1', 'None', 1, 2, 'Auth,Security'),
+(3, 'Add Item to Cart', 'Ensure item is added to cart successfully', 'v1', 'User logged in', 1, 2, 'Checkout,Cart,Regression');
 
 -- testcasesuite
 SET IDENTITY_INSERT [dbo].[testcasesuite] ON;
@@ -94,9 +111,9 @@ SET IDENTITY_INSERT [dbo].[teststeps] OFF;
 
 -- testrun
 SET IDENTITY_INSERT [dbo].[testrun] ON;
-INSERT INTO [dbo].[testrun] ([testrunid], [name], [runtypeid], [startdate], [enddate], [userid], [testrunstatusid], [testcaseid]) VALUES 
-(1, 'Sprint 1 Regression', 1, '2026-05-01T00:00:00Z', '2026-05-02T00:00:00Z', 2, 2, 1),
-(2, 'Sprint 1 Regression', 1, '2026-05-01T00:00:00Z', '2026-05-02T00:00:00Z', 2, 1, 2);
+INSERT INTO [dbo].[testrun] ([testrunid], [name], [runtypeid], [startdate], [enddate], [userid], [testrunstatusid], [testcaseid], [testsuiteid]) VALUES 
+(1, 'Sprint 1 Regression', 1, '2026-05-01T00:00:00Z', '2026-05-02T00:00:00Z', 2, 2, 1, 1),
+(2, 'Sprint 1 Regression', 1, '2026-05-01T00:00:00Z', '2026-05-02T00:00:00Z', 2, 1, 2, 1);
 SET IDENTITY_INSERT [dbo].[testrun] OFF;
 
 -- defectstatus

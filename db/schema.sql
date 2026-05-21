@@ -51,7 +51,8 @@ CREATE TABLE [dbo].[testcases] (
     [versionid] NVARCHAR(MAX),
     [prerequisite] NVARCHAR(MAX),
     [statusid] INT FOREIGN KEY REFERENCES [dbo].[TestCaseStatus]([statusid]),
-    [author] INT FOREIGN KEY REFERENCES [dbo].[UserProfile]([UserId])
+    [author] INT FOREIGN KEY REFERENCES [dbo].[UserProfile]([UserId]),
+    [tag] NVARCHAR(MAX)
 );
 
 CREATE TABLE [dbo].[testcasesuite] (
@@ -68,7 +69,21 @@ CREATE TABLE [dbo].[testrun] (
     [enddate] NVARCHAR(MAX),
     [userid] INT FOREIGN KEY REFERENCES [dbo].[UserProfile]([UserId]),
     [testrunstatusid] INT,
-    [testcaseid] INT FOREIGN KEY REFERENCES [dbo].[testcases]([testcaseid])
+    [testcaseid] INT FOREIGN KEY REFERENCES [dbo].[testcases]([testcaseid]),
+    [testsuiteid] INT FOREIGN KEY REFERENCES [dbo].[testsuites]([testsuiteid]) ON DELETE SET NULL,
+    [status] NVARCHAR(50) DEFAULT 'New'
+);
+
+CREATE TABLE [dbo].[testruncases] (
+    [id] INT IDENTITY(1,1) PRIMARY KEY,
+    [testrunid] INT FOREIGN KEY REFERENCES [dbo].[testrun]([testrunid]) ON DELETE CASCADE,
+    [testcaseid] INT FOREIGN KEY REFERENCES [dbo].[testcases]([testcaseid]) ON DELETE CASCADE,
+    [status] NVARCHAR(50) DEFAULT 'New'
+);
+
+CREATE TABLE [dbo].[stepstatus] (
+    [id] INT PRIMARY KEY,
+    [status] NVARCHAR(50) NOT NULL
 );
 
 CREATE TABLE [dbo].[teststeps] (
@@ -77,7 +92,28 @@ CREATE TABLE [dbo].[teststeps] (
     [action] NVARCHAR(MAX),
     [verification] NVARCHAR(MAX),
     [testcaseid] INT FOREIGN KEY REFERENCES [dbo].[testcases]([testcaseid]),
-    [statusid] INT
+    [statusid] INT FOREIGN KEY REFERENCES [dbo].[stepstatus]([id])
+);
+
+CREATE TABLE [dbo].[testrunsteps] (
+    [id] INT IDENTITY(1,1) PRIMARY KEY,
+    [testrunid] INT FOREIGN KEY REFERENCES [dbo].[testrun]([testrunid]) ON DELETE CASCADE,
+    [testcaseid] INT FOREIGN KEY REFERENCES [dbo].[testcases]([testcaseid]) ON DELETE CASCADE,
+    [stepid] INT FOREIGN KEY REFERENCES [dbo].[teststeps]([stepid]) ON DELETE CASCADE,
+    [statusid] INT FOREIGN KEY REFERENCES [dbo].[stepstatus]([id])
+);
+
+CREATE TABLE [dbo].[testcaseversions] (
+    [id] INT IDENTITY(1,1) PRIMARY KEY,
+    [testcaseid] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[testcases]([testcaseid]) ON DELETE CASCADE,
+    [name] NVARCHAR(MAX),
+    [description] NVARCHAR(MAX),
+    [versionid] NVARCHAR(MAX),
+    [prerequisite] NVARCHAR(MAX),
+    [statusid] INT FOREIGN KEY REFERENCES [dbo].[TestCaseStatus]([statusid]),
+    [author] INT FOREIGN KEY REFERENCES [dbo].[UserProfile]([UserId]),
+    [createdat] DATETIME DEFAULT GETDATE(),
+    [tag] NVARCHAR(MAX)
 );
 
 CREATE TABLE [dbo].[releasesuites] (

@@ -178,12 +178,12 @@ exports.getTestSuites = async function (req, res, next) {
             console.log(`data from db in gettestsuies ${data}`);
         } catch (err) {
             console.log(`error from db in gettestsuies ${err.error} \n ${err.parent ? err.parent.message : ''}`);
-            next(lib.error(404, err.error));
+            res.status(200).json([]);
             return;
         }
         const dataArray = Array.isArray(data) ? data : [];
         if (dataArray.length === 0) {
-            next(lib.error(404, "Release Id and associated Test Suite is not found in database"));
+            res.status(200).json([]);
             return;
         }
         var arr = []

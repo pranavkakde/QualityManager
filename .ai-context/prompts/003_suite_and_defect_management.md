@@ -22,8 +22,13 @@ Provide dedicated interfaces to map and display active Test Suites assigned to a
 ## 3. Frontend UI Specifications
 
 ### Test Suites View (`src/pages/TestSuiteList.jsx`)
-* **Visuals:** A table with list of items representing executable suites (e.g. Authentication Suite, Checkout Suite) with descriptions and an "Add Suite" and "Delete" button to the next of each suite.
-* **Interactivity:** Clicking "View Cases" triggers listings of definitions mapped within that suite context.
+* **Visuals:** A stunning, high-fidelity responsive HTML table containing columns: ID, Suite Name, Description, Status, and Actions.
+  - **Status Badge**: Displays status dynamically as Created, In Progress, or Completed using premium colored badges.
+* **Interactivity & Integrated Actions**:
+  - **Test Cases Button**: Icon-only action with a descriptive tooltip/title that navigates the user to the Test Cases screen (`/suites/:testsuiteid/cases`) for that suite.
+  - **Defects Button**: Icon-only action with a descriptive tooltip/title that navigates the user to the Defect Tracker screen (`/defects`) and passes state so the defect list is automatically pre-filtered by the selected test suite.
+  - **Edit Button**: Opens a gorgeous in-page overlay Modal to edit the suite's Name, Description, and Status. Submitting triggers a `PUT` API request to Test Suite Management Services and updates the table on success.
+  - **Delete Button**: Opens a sweet confirmation overlay. Confirming triggers a `DELETE` API request to Test Suite Management Services, removing the suite from the table without full page reloads.
 
 ### Defect Management (`src/pages/DefectList.jsx`)
 * **Visuals:** Two-column split layout:

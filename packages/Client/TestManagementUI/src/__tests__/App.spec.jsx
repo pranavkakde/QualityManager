@@ -43,6 +43,12 @@ describe('App Component Spec', () => {
       if (url.includes('/testcase/release/')) {
         return Promise.resolve({ data: [] });
       }
+      if (url.includes('/defect/defects')) {
+        return Promise.resolve({ data: [] });
+      }
+      if (url.includes('/testcase/testruns/')) {
+        return Promise.resolve({ data: [] });
+      }
       return Promise.reject(new Error(`Unhandled URL: ${url}`));
     });
 

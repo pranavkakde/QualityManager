@@ -45,6 +45,7 @@ app.use(morgan('combined', { stream: accessLogStream }))
 // Global Shared Auth
 // Public routes
 app.post(["/login", "/user/login", "/loginUser", "/user/loginUser"], user.login)
+app.post(["/refresh", "/user/refresh"], user.refresh)
 
 app.use(sharedAuth.checkAuth)
 

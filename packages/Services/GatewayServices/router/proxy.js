@@ -4,7 +4,9 @@ var disc = require('./servicedisc');
 exports.getProxy=(req, res, next) =>{
     console.log(`${JSON.stringify(req.params)}`)
     disc.serviceExists(req, res).then(data=>{
-        const uri = data[0].serviceEndpoint + "/"+ req.params[0] +"/"+ req.params[1];
+        const queryIndex = req.url.indexOf('?');
+        const queryStr = queryIndex !== -1 ? req.url.substring(queryIndex) : '';
+        const uri = data[0].serviceEndpoint + "/"+ req.params[0] +"/"+ req.params[1] + queryStr;
         console.log(uri)
         apihandler.apiGetHandler(uri)
             .then(response => {                
@@ -22,7 +24,9 @@ exports.getProxy=(req, res, next) =>{
 
 exports.deleteProxy=(req, res, next) =>{
     disc.serviceExists(req, res).then(data=>{
-        const uri = data[0].serviceEndpoint + "/"+ req.params[0] +"/"+ req.params[1];
+        const queryIndex = req.url.indexOf('?');
+        const queryStr = queryIndex !== -1 ? req.url.substring(queryIndex) : '';
+        const uri = data[0].serviceEndpoint + "/"+ req.params[0] +"/"+ req.params[1] + queryStr;
         apihandler.apiDeleteHandler(uri)
             .then(response => {
                 res.json(response)
@@ -37,7 +41,9 @@ exports.deleteProxy=(req, res, next) =>{
 
 exports.putProxy=(req, res, next) =>{    
     disc.serviceExists(req, res).then(data=>{
-        const uri = data[0].serviceEndpoint + "/"+ req.params[0] +"/"+ req.params[1];    
+        const queryIndex = req.url.indexOf('?');
+        const queryStr = queryIndex !== -1 ? req.url.substring(queryIndex) : '';
+        const uri = data[0].serviceEndpoint + "/"+ req.params[0] +"/"+ req.params[1] + queryStr;    
         apihandler.apiPutHandler(uri, {...req.body})
             .then(response => {
                 res.json(response)
@@ -52,7 +58,9 @@ exports.putProxy=(req, res, next) =>{
 
 exports.postProxy=(req, res, next) =>{        
     disc.serviceExists(req, res).then(data=>{
-        const uri = data[0].serviceEndpoint + "/"+ req.params[0] +"/"+ req.params[1];        
+        const queryIndex = req.url.indexOf('?');
+        const queryStr = queryIndex !== -1 ? req.url.substring(queryIndex) : '';
+        const uri = data[0].serviceEndpoint + "/"+ req.params[0] +"/"+ req.params[1] + queryStr;        
         apihandler.apiPostHandler(uri, {...req.body})
             .then(response => {                
                 res.json(response)

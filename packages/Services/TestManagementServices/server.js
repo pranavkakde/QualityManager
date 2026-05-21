@@ -48,6 +48,7 @@ app.delete("/:testcaseid",testvalidator.validate('deleteTestCase'),testcase.dele
 app.put("/:testcaseid",testvalidator.validate('updateTestCase'),testcase.updateTestCase)
 app.post("/",testvalidator.validate('addTestCase'),testcase.addTestCase)
 app.post("/filter", testvalidator.validate('filterTestCases'), testcase.filterTestCases)
+app.get("/:testcaseid/versions", testvalidator.validate('getTestCase'), testcase.getTestCaseVersions)
 
 //########### Test Steps routes ######################
 app.get("/testcasesteps/:testcaseid/steps/:stepid", stepvalidator.validate('getTestStep') ,teststep.getTestStep)
@@ -61,6 +62,17 @@ app.delete("/testcaseruns/:testcaseid/testruns/:testrunid",runvalidator.validate
 app.put("/testcaseruns/:testcaseid/testruns/:testrunid",runvalidator.validate('updateTestRun'),testrun.updateTestRun)
 app.post("/testcaseruns/:testcaseid/testruns",runvalidator.validate('addTestRun'),testrun.addTestRun)
 app.get("/testcaseruns/:testcaseid/testruns",runvalidator.validate('getAllRuns'),testrun.getAllRuns)
+
+// New Suite-scoped Test Runs Routes
+app.get("/testruns/suite/:testsuiteid", testrun.getSuiteRuns)
+app.get("/testruns/all", testrun.getGlobalRuns)
+app.post("/testruns", testrun.createSuiteRun)
+app.get("/testruns/:testrunid/cases", testrun.getRunCases)
+app.get("/testruns/:testrunid/cases/:testcaseid/steps", testrun.getRunCaseSteps)
+app.put("/testruns/:testrunid/cases/:testcaseid/steps", testrun.updateRunCaseSteps)
+app.put("/testruns/:testrunid/cases/:testcaseid/status", testrun.updateRunCaseStatusDirect)
+app.put("/testruns/:testrunid", testrun.updateSuiteRunDetails)
+app.delete("/testruns/:testrunid", testrun.deleteSuiteRun)
 
 //########### Release and Test Suite associative routes ######################
 app.get("/release/:releaseid/testsuite/:testsuiteid", casevalidator.validate('getCase'),caseSuite.getCase)

@@ -153,9 +153,60 @@ function isCase(releasesuiteid){
         });
     })
 }
-exports.getTestCases=(req, res, next) =>{
-    res.status(200).json({"message":"This service is still in progress. This will be completed once CRUD on Test Case Service is complete."})
-}
+exports.getTestCases = async function(req, res, next) {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            next(lib.error(422, errors.array()));
+            return;
+        }
+        caseModel.setConfig(config.database);
+        
+        let suitesData;
+        try {
+            suitesData = await getTestSuites(req.params.releaseid);
+        } catch (err) {
+            res.status(200).json([]);
+            return;
+        }
+        const dataArray = Array.isArray(suitesData) ? suitesData : [];
+        if (dataArray.length === 0) {
+            res.status(200).json([]);
+            return;
+        }
+        const suiteIds = dataArray.map(item => item.testsuiteid);
+        
+        const casesMapping = await caseModel.sequelize.query(
+            'SELECT DISTINCT testcaseid, testsuiteid FROM dbo.testcasesuite WHERE testsuiteid IN (:suiteIds)',
+            {
+                replacements: { suiteIds },
+                type: caseModel.sequelize.QueryTypes.SELECT
+            }
+        );
+        
+        if (casesMapping.length === 0) {
+            res.status(200).json([]);
+            return;
+        }
+        
+        const caseIds = casesMapping.map(item => item.testcaseid);
+        
+        const testcases = await caseModel.sequelize.query(
+            `SELECT DISTINCT tc.*, tcs.testsuiteid 
+             FROM dbo.testcases tc
+             JOIN dbo.testcasesuite tcs ON tc.testcaseid = tcs.testcaseid
+             WHERE tc.testcaseid IN (:caseIds)`,
+            {
+                replacements: { caseIds },
+                type: caseModel.sequelize.QueryTypes.SELECT
+            }
+        );
+        
+        res.status(200).json(testcases);
+    } catch (err) {
+        next(lib.error(500, `internal server error ${err}`));
+    }
+};
 exports.getTestSuites = async function(req,res,next){
     try{
         const errors = validationResult(req);
@@ -168,12 +219,12 @@ exports.getTestSuites = async function(req,res,next){
         try {
             data = await getTestSuites(req.params.releaseid);
         } catch (err) {
-            next(lib.error(404, err.error || "Could not find Test Suites for Release Id " + req.params.releaseid));
+            res.status(200).json([]);
             return;
         }
         const dataArray = Array.isArray(data) ? data : [];
         if (dataArray.length === 0) {
-            next(lib.error(404, "Could not find Test Suites for Release Id " + req.params.releaseid));
+            res.status(200).json([]);
             return;
         }
         var arr = []

@@ -13,6 +13,7 @@ const AddTestCase = () => {
   const [prerequisite, setPrerequisite] = useState('');
   const [versionid, setVersionid] = useState('v1');
   const [statusid, setStatusid] = useState(1);
+  const [tag, setTag] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -33,7 +34,8 @@ const AddTestCase = () => {
         versionid,
         prerequisite,
         statusid: parseInt(statusid, 10),
-        author: 2
+        author: 2,
+        tag
       };
 
       const caseRes = await axios.post(`${API_BASE}/testcase`, testCasePayload);
@@ -106,6 +108,18 @@ const AddTestCase = () => {
               onChange={(e) => setPrerequisite(e.target.value)}
               placeholder="e.g. Valid user session is active. Shopping cart has at least 1 item."
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all text-slate-800 placeholder-slate-400 h-20"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="testcase-tag" className="block text-sm font-bold text-slate-700 mb-2">Tag</label>
+            <input
+              id="testcase-tag"
+              type="text"
+              value={tag}
+              onChange={(e) => setTag(e.target.value)}
+              placeholder="e.g. Smoke, Regression, Billing"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all text-slate-800 placeholder-slate-400"
             />
           </div>
 

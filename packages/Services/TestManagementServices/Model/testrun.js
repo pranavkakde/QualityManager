@@ -17,7 +17,12 @@ var schema = new table(
         testcaseid: {
             type: Number,
             references: { model: 'testcases', key: 'testcaseid' }
-        }
+        },
+        testsuiteid: {
+            type: Number,
+            references: { model: 'testsuites', key: 'testsuiteid' }
+        },
+        status: {type: String}
     }
 );
 var runModel = new tableMapping(tableName, schema);

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { 
   AlertTriangle, 
@@ -23,6 +24,7 @@ import {
 const API_BASE = '/api';
 
 const DefectList = ({ selectedRelease }) => {
+  const location = useLocation();
   const [defects, setDefects] = useState([]);
   const [users, setUsers] = useState([]);
   const [userMap, setUserMap] = useState({});
@@ -62,7 +64,7 @@ const DefectList = ({ selectedRelease }) => {
   const [linkedTestCases, setLinkedTestCases] = useState([]);
 
   // Advanced search and filters states
-  const [filterTestSuite, setFilterTestSuite] = useState('');
+  const [filterTestSuite, setFilterTestSuite] = useState(location.state?.testsuiteid ? String(location.state.testsuiteid) : '');
   const [filterTestCase, setFilterTestCase] = useState('');
   const [filterAssignedTo, setFilterAssignedTo] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
@@ -167,7 +169,7 @@ const DefectList = ({ selectedRelease }) => {
           if (!linkedSuites.some(s => s.id === Number(m.testsuiteid))) {
             linkedSuites.push({ id: Number(m.testsuiteid), name: suiteName });
           }
-          linkedCases.push({ id: Number(m.testcaseid), name: caseName, suiteId: Number(m.testsuiteid) });
+          linkedCases.push({ id: Number(m.testcaseid), name: caseName, suiteId: Number(m.testsuiteid), suiteName });
         });
 
         return {
@@ -276,6 +278,13 @@ const DefectList = ({ selectedRelease }) => {
       setFilterTestCasesList([]);
     }
   };
+
+  useEffect(() => {
+    if (location.state?.testsuiteid) {
+      const suiteId = String(location.state.testsuiteid);
+      handleFilterSuiteChange(suiteId);
+    }
+  }, [location.state]);
 
   // Dynamic filter reset
   const handleClearFilters = () => {
@@ -406,7 +415,7 @@ const DefectList = ({ selectedRelease }) => {
     }
 
     const selectedSuite = testSuites.find(s => Number(s.testsuiteid || s.id) === Number(activeTestSuiteId));
-    const selectedCase = testCases.find(tc => Number(tc.testcaseid) === Number(activeTestCaseId));
+    const selectedCase = testCases.find(tc => Number(tc.testcaseid || tc.id) === Number(activeTestCaseId));
 
     if (!selectedSuite || !selectedCase) return;
 
@@ -770,11 +779,14 @@ const DefectList = ({ selectedRelease }) => {
                 className="w-full px-3 py-2 bg-slate-50/60 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-xs disabled:opacity-50 border-slate-200"
               >
                 <option value="">All Test Cases</option>
-                {filterTestCasesList.map(tc => (
-                  <option key={tc.testcaseid} value={tc.testcaseid}>
-                    {tc.name}
-                  </option>
-                ))}
+                {filterTestCasesList.map(tc => {
+                  const tcId = tc.testcaseid || tc.id;
+                  return (
+                    <option key={tcId} value={tcId}>
+                      {tc.name}
+                    </option>
+                  );
+                })}
               </select>
             </div>
 
@@ -886,7 +898,7 @@ const DefectList = ({ selectedRelease }) => {
                     <td className="py-4 px-6 font-semibold text-indigo-600">
                       #{defect.defectid || defect.id}
                     </td>
-                    <td className="py-4 px-6 max-w-md truncate font-medium text-slate-800">
+                    <td className="py-4 px-6 max-w-xs truncate font-medium text-slate-800">
                       {defect.subject}
                     </td>
                     <td className="py-4 px-6">
@@ -1099,11 +1111,14 @@ const DefectList = ({ selectedRelease }) => {
                         className="w-full px-2.5 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs disabled:opacity-60"
                       >
                         <option value="">-- Select Case --</option>
-                        {testCases.map((tc) => (
-                          <option key={tc.testcaseid} value={tc.testcaseid}>
-                            {tc.name}
-                          </option>
-                        ))}
+                        {testCases.map((tc) => {
+                          const tcId = tc.testcaseid || tc.id;
+                          return (
+                            <option key={tcId} value={tcId}>
+                              {tc.name}
+                            </option>
+                          );
+                        })}
                       </select>
                     </div>
                   </div>
@@ -1332,11 +1347,14 @@ const DefectList = ({ selectedRelease }) => {
                         className="w-full px-2.5 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs disabled:opacity-60"
                       >
                         <option value="">-- Select Case --</option>
-                        {testCases.map((tc) => (
-                          <option key={tc.testcaseid} value={tc.testcaseid}>
-                            {tc.name}
-                          </option>
-                        ))}
+                        {testCases.map((tc) => {
+                          const tcId = tc.testcaseid || tc.id;
+                          return (
+                            <option key={tcId} value={tcId}>
+                              {tc.name}
+                            </option>
+                          );
+                        })}
                       </select>
                     </div>
                   </div>

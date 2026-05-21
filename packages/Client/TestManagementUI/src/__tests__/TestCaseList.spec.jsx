@@ -41,54 +41,64 @@ describe('TestCaseList Component Spec', () => {
   });
 
   it('renders list of test cases in a table successfully with status badges and author name mapped', async () => {
-    axios.get = vi.fn()
-      .mockResolvedValueOnce({ data: { testsuiteid: 42, name: 'Billing Suite', description: 'Checks stripe integrations' } })
-      .mockResolvedValueOnce({
-        data: [
-          {
-            testcaseid: 1,
-            name: 'Process Payment Success',
-            description: 'Ensure charges map cleanly',
-            prerequisite: 'Valid card available',
-            versionid: 'v1',
-            statusid: 3,
-            author: 2
-          },
-          {
-            testcaseid: 2,
-            name: 'Process Payment Decline',
-            description: 'Ensure correct codes propagated',
-            prerequisite: 'Declined card available',
-            versionid: 'v2',
-            statusid: 4,
-            author: 2
-          }
-        ]
-      })
-      .mockResolvedValueOnce({
-        data: [
-          { UserId: 2, UserName: 'pranav' }
-        ]
-      });
+    axios.get = vi.fn().mockImplementation((url) => {
+      if (url.includes('/testcases')) {
+        return Promise.resolve({
+          data: [
+            {
+              testcaseid: 1,
+              name: 'Process Payment Success',
+              description: 'Ensure charges map cleanly',
+              prerequisite: 'Valid card available',
+              versionid: 'v1',
+              statusid: 3,
+              author: 2
+            },
+            {
+              testcaseid: 2,
+              name: 'Process Payment Decline',
+              description: 'Ensure correct codes propagated',
+              prerequisite: 'Declined card available',
+              versionid: 'v2',
+              statusid: 4,
+              author: 2
+            }
+          ]
+        });
+      }
+      if (url.includes('/testsuite/42')) {
+        return Promise.resolve({
+          data: { testsuiteid: 42, name: 'Billing Suite', description: 'Checks stripe integrations' }
+        });
+      }
+      if (url.includes('/user/users')) {
+        return Promise.resolve({
+          data: [
+            { UserId: 2, UserName: 'pranav' }
+          ]
+        });
+      }
+      return Promise.reject(new Error('Unknown URL: ' + url));
+    });
 
     render(<TestCaseList />);
 
     await waitFor(() => {
       // Check table headers
-      expect(screen.getByText('Name')).toBeInTheDocument();
-      expect(screen.getByText('Description')).toBeInTheDocument();
-      expect(screen.getByText('Prerequisites')).toBeInTheDocument();
-      expect(screen.getByText('Version')).toBeInTheDocument();
-      expect(screen.getByText('Status')).toBeInTheDocument();
-      expect(screen.getByText('Author')).toBeInTheDocument();
+      expect(screen.getByRole('columnheader', { name: 'Name' })).toBeInTheDocument();
+      expect(screen.getByRole('columnheader', { name: 'Description' })).toBeInTheDocument();
+      expect(screen.getByRole('columnheader', { name: 'Prerequisites' })).toBeInTheDocument();
+      expect(screen.getByRole('columnheader', { name: 'Version' })).toBeInTheDocument();
+      expect(screen.getByRole('columnheader', { name: 'Status' })).toBeInTheDocument();
+      expect(screen.getByRole('columnheader', { name: 'Author' })).toBeInTheDocument();
 
       // Check test case details
       expect(screen.getByText('Process Payment Success')).toBeInTheDocument();
       expect(screen.getByText('Ensure charges map cleanly')).toBeInTheDocument();
-      expect(screen.getByText('Passed')).toBeInTheDocument();
+      expect(screen.getAllByText('Passed').length).toBeGreaterThan(0);
       
       expect(screen.getByText('Process Payment Decline')).toBeInTheDocument();
-      expect(screen.getByText('Failed')).toBeInTheDocument();
+      expect(screen.getAllByText('Failed').length).toBeGreaterThan(0);
 
       // Check author mapping
       expect(screen.getAllByText('pranav').length).toBeGreaterThan(0);

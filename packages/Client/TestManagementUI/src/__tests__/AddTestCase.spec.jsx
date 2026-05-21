@@ -72,6 +72,7 @@ describe('AddTestCase Component Spec', () => {
       prerequisite: 'User created',
       versionid: 'v3',
       statusid: 3,
+      tag: '',
       author: 2
     });
 
